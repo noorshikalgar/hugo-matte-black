@@ -24,7 +24,11 @@
   if (!searchInput) return;
 
   /* ── Main sections set (from Hugo params) ────────────────────── */
-  const mainSections = new Set(window.searchSections || []);
+  const _rawSections = window.searchSections || [];
+  const _parsedSections = typeof _rawSections === 'string'
+    ? (function () { try { return JSON.parse(_rawSections); } catch (e) { return []; } })()
+    : _rawSections;
+  const mainSections = new Set(_parsedSections);
 
   function isChapter(page) {
     return mainSections.size > 0 && !mainSections.has(page.section);
