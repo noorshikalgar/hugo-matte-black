@@ -33,23 +33,24 @@
   let loadError     = false;
 
   /* ── Load index ──────────────────────────────────────────────── */
-  function loadIndex() {
+  /* silent=true: fetch in background without showing the spinner  */
+  function loadIndex(silent) {
     const indexURL = (window.searchIndexURL) || '/index.json';
-    showLoading(true);
-    fetch(indexURL, { credentials: 'same-origin' })
+    if (!silent) showLoading(true);
+    fetch(indexURL)
       .then(function (r) {
         if (!r.ok) throw new Error('fetch failed');
         return r.json();
       })
       .then(function (data) {
         index = data;
-        showLoading(false);
+        if (!silent) showLoading(false);
         if (query) runSearch();
       })
       .catch(function () {
         loadError = true;
-        showLoading(false);
-        showError('Could not load search index.');
+        if (!silent) showLoading(false);
+        if (!silent) showError('Could not load search index.');
       });
   }
 
@@ -94,7 +95,7 @@
 
   /* ── Run search ──────────────────────────────────────────────── */
   function runSearch() {
-    if (!index) { loadIndex(); return; }
+    if (!index) { loadIndex(false); return; }
 
     const q     = query.trim();
     const terms = q.split(/\s+/).filter(Boolean);
@@ -316,8 +317,8 @@
   });
 
   /* ── Init ─────────────────────────────────────────────────────── */
-  // Pre-load index silently
-  loadIndex();
+  // Pre-load index silently in background (consumes preload hint)
+  loadIndex(true);
 
   // Handle URL query param ?q=...
   const urlParams = new URLSearchParams(window.location.search);

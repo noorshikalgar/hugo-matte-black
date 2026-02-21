@@ -60,7 +60,7 @@
 
 <!-- Search index preload on search/home page -->
 {{- if or .IsHome (eq .Type "search") }}
-<link rel="preload" href="{{ "index.json" | relURL }}" as="fetch" crossorigin>
+<link rel="preload" href="{{ "index.json" | relURL }}" as="fetch">
 {{- end }}
 
 <!-- Google Analytics (reads [services.googleAnalytics] from hugo.toml) -->
