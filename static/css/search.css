@@ -192,10 +192,20 @@
 .search-result-item:hover { background: var(--mb-surface-1); }
 
 .result-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 0.72rem;
   font-family: "JetBrains Mono", monospace;
   color: var(--mb-text-faint);
   margin-bottom: 0.25rem;
+}
+
+.result-read-time {
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  flex-shrink: 0;
 }
 
 .result-title {

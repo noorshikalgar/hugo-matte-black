@@ -210,7 +210,17 @@
 
       const path = document.createElement('div');
       path.className = 'result-path';
-      path.textContent = page.section + (page.date ? ' · ' + page.date : '');
+
+      const pathLeft = document.createElement('span');
+      pathLeft.textContent = page.section + (page.date ? ' · ' + page.date : '');
+      path.appendChild(pathLeft);
+
+      if (page.readingTime) {
+        const rt = document.createElement('span');
+        rt.className   = 'result-read-time';
+        rt.textContent = page.readingTime + ' min';
+        path.appendChild(rt);
+      }
 
       const title = document.createElement('div');
       title.className = 'result-title';
@@ -231,13 +241,6 @@
           t.textContent = tag;
           footer.appendChild(t);
         });
-      }
-
-      if (page.readingTime) {
-        const rt = document.createElement('span');
-        rt.className   = 'meta-text';
-        rt.textContent = page.readingTime + ' min';
-        footer.appendChild(rt);
       }
 
       a.appendChild(path);
