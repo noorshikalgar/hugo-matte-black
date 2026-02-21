@@ -253,7 +253,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 0;
-  border: 1px solid var(--mb-border);
+  /* border: 1px solid var(--mb-border); */
   border-radius: var(--pico-border-radius);
   overflow: hidden;
 }
