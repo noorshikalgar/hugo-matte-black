@@ -34,19 +34,18 @@
       {{- range $filterSections }}
         <button class="filter-chip" data-filter="section" data-value="{{ . }}">{{ . }}</button>
       {{- end }}
-      <span class="filter-label" style="margin-left:0.5rem;">sort:</span>
-      <select class="sort-select" id="sort-select">
-        <option value="relevance">relevance</option>
-        <option value="date-desc">newest</option>
-        <option value="date-asc">oldest</option>
-        <option value="title-asc">a → z</option>
-      </select>
     </div>
   </div>
 
   <!-- Results meta bar -->
   <div class="search-meta-bar" id="results-meta" style="display:none">
     <span class="results-count" id="results-count"></span>
+    <select class="sort-select" id="sort-select">
+      <option value="relevance">relevance</option>
+      <option value="date-desc">newest</option>
+      <option value="date-asc">oldest</option>
+      <option value="title-asc">a → z</option>
+    </select>
   </div>
 
   <!-- Results container -->
