@@ -270,6 +270,7 @@ body {
   gap: 1.2rem;
   margin-bottom: 1.2rem;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 .section-header-title {
   display: flex;
