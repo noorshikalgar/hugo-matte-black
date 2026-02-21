@@ -1,0 +1,45 @@
+{{- if .Page.Store.Get "hasMermaid" -}}
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode:         true,
+      background:       '#121212',
+      primaryColor:     '#212121',
+      primaryTextColor: '#EAEAEA',
+      primaryBorderColor: '#333333',
+      lineColor:        '#F59E0B',
+      secondaryColor:   '#1a1a1a',
+      tertiaryColor:    '#262626',
+      edgeLabelBackground: '#121212',
+      textColor:        '#bebebe',
+      clusterBkg:       '#1a1a1a',
+      clusterBorder:    '#333333',
+      titleColor:       '#F59E0B',
+      nodeBorder:       '#333333',
+      mainBkg:          '#212121',
+      nodeTextColor:    '#EAEAEA',
+      labelBackground:  '#212121'
+    }
+  });
+
+  // Make SVGs responsive
+  document.querySelectorAll('.mermaid').forEach(function(div) {
+    var observer = new MutationObserver(function() {
+      var svg = div.querySelector('svg');
+      if (svg) {
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        svg.style.width  = '100%';
+        svg.style.height = 'auto';
+        observer.disconnect();
+      }
+    });
+    observer.observe(div, { childList: true, subtree: true });
+  });
+});
+</script>
+{{- end -}}

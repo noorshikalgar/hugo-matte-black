@@ -1,0 +1,486 @@
+/**
+ * components.css — UI Components
+ * ═══════════════════════════════════════════════════════════════
+ * Post cards, badges, tags, pagination, TOC, breadcrumbs,
+ * lightbox, copy buttons. All flat. 1px borders. No shadows.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Post Card ────────────────────────────────────────────── */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-right: 1px solid var(--mb-border);
+  border-bottom: 1px solid var(--mb-border);
+  background: var(--mb-bg);
+  transition: background 0.1s;
+}
+.post-card:hover { background: var(--mb-surface-1); }
+
+/* Remove double borders on grid */
+.posts-grid .post-card:nth-child(n) { border-right: 1px solid var(--mb-border); }
+.posts-grid .post-card:last-child    { border-bottom: none; }
+
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.post-date {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--mb-text-faint);
+}
+
+.post-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.4;
+}
+.post-card-title a {
+  color: var(--mb-text);
+  text-decoration: none;
+}
+.post-card-title a:hover { color: var(--mb-accent); }
+
+.post-card-summary {
+  font-size: 0.85rem;
+  color: var(--mb-text-muted);
+  line-height: 1.55;
+  flex: 1;
+  margin-bottom: 0.75rem;
+}
+
+.post-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.read-more {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--mb-accent);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+.read-more:hover { color: var(--mb-accent-bright); }
+
+/* ── 2. Status Badges (NEW / RECENT) ─────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.65rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: var(--pico-border-radius-sm);
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.badge-new {
+  color: var(--mb-accent);
+  border-color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+}
+
+.badge-recent {
+  color: var(--mb-text-faint);
+  border-color: var(--mb-border);
+  background: transparent;
+}
+
+.badge-section {
+  color: var(--mb-green);
+  border-color: var(--mb-green);
+  background: var(--mb-green-bg);
+}
+
+/* ── 3. Tag Chips ────────────────────────────────────────────── */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-chip {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  text-decoration: none;
+  line-height: 1.5;
+}
+.tag-chip:hover {
+  color: var(--mb-accent);
+  border-color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+}
+
+/* ── 4. Breadcrumbs ──────────────────────────────────────────── */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.breadcrumbs a {
+  color: var(--mb-text-faint);
+  text-decoration: none;
+}
+.breadcrumbs a:hover { color: var(--mb-accent); }
+.breadcrumbs .sep { color: var(--mb-border-focus); }
+.breadcrumbs .current { color: var(--mb-text-muted); }
+
+/* ── 5. Table of Contents ────────────────────────────────────── */
+.toc-section {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: var(--mb-surface-1);
+  border-bottom: 1px solid var(--mb-border);
+  cursor: pointer;
+  user-select: none;
+}
+.toc-header h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  color: var(--mb-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  padding: 0;
+}
+.toc-header h3::before { content: "// "; color: var(--mb-border-focus); }
+
+.toc-toggle {
+  font-size: 0.7rem;
+  color: var(--mb-text-faint);
+}
+
+.toc-content {
+  padding: 0.75rem 0.9rem;
+  background: var(--mb-bg);
+}
+.toc-content.collapsed { display: none; }
+
+.toc-content nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.toc-content nav > ul > li { margin: 0.3rem 0; }
+.toc-content nav ul ul { padding-left: 1rem; margin-top: 0.2rem; }
+
+.toc-content nav a {
+  font-size: 0.83rem;
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  display: block;
+  padding: 0.1rem 0;
+}
+.toc-content nav a:hover { color: var(--mb-accent); }
+
+/* ── 6. Pagination ───────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--mb-border);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  background: transparent;
+}
+.pagination-btn:hover {
+  background: var(--mb-surface-2);
+  color: var(--mb-text);
+  border-color: var(--mb-border-focus);
+}
+.pagination-btn.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.pagination-info {
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+}
+
+/* ── 7. Post Meta Header (single.html) ───────────────────────── */
+.post-meta-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.post-meta-date {
+  font-size: 0.78rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+}
+
+.post-title-single {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: var(--mb-text);
+}
+
+/* ── 8. Copy Code Button ─────────────────────────────────────── */
+.copy-button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  color: var(--mb-text-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s, color 0.1s;
+}
+pre:hover .copy-button { opacity: 1; }
+.copy-button:hover { color: var(--mb-accent); border-color: var(--mb-border-focus); }
+.copy-button.copied { color: var(--mb-green); border-color: var(--mb-green); }
+
+/* ── 9. Image Lightbox ───────────────────────────────────────── */
+.image-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.image-lightbox.open { display: flex; }
+
+.lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  cursor: pointer;
+}
+
+.lightbox-content {
+  position: relative;
+  z-index: 1;
+  max-width: 90vw;
+  max-height: 90vh;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  background: var(--mb-surface-1);
+  overflow: hidden;
+}
+
+.lightbox-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--mb-border);
+  background: var(--mb-surface-2);
+  font-size: 0.8rem;
+}
+
+.lightbox-close,
+.lightbox-zoom-in,
+.lightbox-zoom-out,
+.lightbox-zoom-reset {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  background: transparent;
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+}
+.lightbox-close:hover,
+.lightbox-zoom-in:hover,
+.lightbox-zoom-out:hover,
+.lightbox-zoom-reset:hover {
+  color: var(--mb-text);
+  background: var(--mb-surface-3);
+  border-color: var(--mb-border-focus);
+}
+
+.lightbox-image-container {
+  overflow: hidden;
+  cursor: grab;
+}
+.lightbox-image-container:active { cursor: grabbing; }
+.lightbox-image-container img {
+  display: block;
+  max-width: 85vw;
+  max-height: 80vh;
+  object-fit: contain;
+  transform-origin: center;
+}
+
+/* ── 10. Layout toggle controls ──────────────────────────────── */
+.posts-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ── 11. Stats bar (homepage) ────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.75rem 1rem;
+  border-right: 1px solid var(--mb-border);
+  text-align: center;
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-number {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-accent);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--mb-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── 12. MCQ Quiz ────────────────────────────────────────────── */
+.mcq-question {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--mb-surface-1);
+}
+
+.question-number {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--mb-text-faint);
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.question-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--mb-text);
+}
+
+.option-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  margin-bottom: 0.35rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--mb-text-muted);
+}
+.option-label:hover { background: var(--mb-surface-2); color: var(--mb-text); }
+.option-label input { margin-top: 0.1rem; flex-shrink: 0; }
+
+.question-feedback {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--pico-border-radius-sm);
+  font-size: 0.85rem;
+  font-family: "JetBrains Mono", monospace;
+  border: 1px solid;
+}
+.question-feedback.correct {
+  color: var(--mb-green-bright);
+  border-color: var(--mb-green);
+  background: var(--mb-green-bg);
+}
+.question-feedback.incorrect {
+  color: var(--mb-red);
+  border-color: var(--mb-red);
+  background: var(--mb-red-bg);
+}
+
+.mcq-results {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  padding: 1.25rem;
+  margin-top: 1rem;
+  background: var(--mb-surface-1);
+  text-align: center;
+}
+.mcq-score {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-accent);
+}

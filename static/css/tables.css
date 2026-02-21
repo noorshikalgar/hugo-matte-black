@@ -1,0 +1,113 @@
+/**
+ * tables.css — Table Styles
+ * ═══════════════════════════════════════════════════════════════
+ * GitHub-style flat tables. 1px borders, zebra striping,
+ * sortable column headers. No shadows.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Base Table ───────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--mb-border);
+  font-size: 0.9rem;
+  color: var(--mb-text);
+  background: var(--mb-bg);
+  margin-bottom: 1.5rem;
+}
+
+thead {
+  background: var(--mb-surface-2);
+  border-bottom: 1px solid var(--mb-border);
+}
+
+thead th {
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mb-text-muted);
+  border-right: 1px solid var(--mb-border);
+  white-space: nowrap;
+}
+thead th:last-child { border-right: none; }
+
+tbody tr {
+  border-bottom: 1px solid var(--mb-border);
+}
+tbody tr:last-child { border-bottom: none; }
+
+tbody tr:nth-child(even) {
+  background: var(--mb-surface-1);
+}
+
+tbody tr:hover {
+  background: var(--mb-surface-2);
+}
+
+tbody td {
+  padding: 0.55rem 0.9rem;
+  border-right: 1px solid var(--mb-border);
+  vertical-align: top;
+}
+tbody td:last-child { border-right: none; }
+
+/* ── 2. Tags Table (tags/list.html) ──────────────────────────── */
+.tags-table-container {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.tags-table {
+  margin-bottom: 0;
+  border: none;
+}
+
+.tag-name a {
+  color: var(--mb-accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+}
+.tag-name a:hover { color: var(--mb-accent-bright); }
+
+.tag-count {
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+/* Sortable header */
+thead th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+thead th[data-sort]:hover {
+  color: var(--mb-accent);
+  background: var(--mb-surface-3);
+}
+thead th[data-sort]::after {
+  content: " ↕";
+  font-size: 0.7em;
+  opacity: 0.4;
+}
+thead th[data-sort="asc"]::after  { content: " ↑"; opacity: 0.8; }
+thead th[data-sort="desc"]::after { content: " ↓"; opacity: 0.8; }
+
+/* ── 3. Responsive scroll wrapper ────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  margin-bottom: 1.5rem;
+}
+.table-wrapper table {
+  margin-bottom: 0;
+  border: none;
+}

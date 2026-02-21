@@ -1,0 +1,56 @@
+{{- $title := .Title -}}
+{{- if .IsHome -}}{{- $title = .Site.Title -}}{{- end -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>{{ $title }}{{ if not .IsHome }} · {{ .Site.Title }}{{ end }}</title>
+
+{{- with .Description }}<meta name="description" content="{{ . }}">
+{{- else with .Site.Params.description }}<meta name="description" content="{{ . }}">
+{{- end }}
+
+<meta name="robots" content="index, follow">
+
+{{- with .Params.tags }}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end }}
+
+<!-- Canonical -->
+<link rel="canonical" href="{{ .Permalink }}">
+
+<!-- Open Graph -->
+<meta property="og:type"        content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title"       content="{{ $title }}">
+<meta property="og:url"         content="{{ .Permalink }}">
+<meta property="og:site_name"   content="{{ .Site.Title }}">
+{{- with .Description }}<meta property="og:description" content="{{ . }}">{{- end }}
+{{- with .Site.Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{- end }}
+
+<!-- Twitter Card -->
+<meta name="twitter:card"  content="summary">
+<meta name="twitter:title" content="{{ $title }}">
+{{- with .Description }}<meta name="twitter:description" content="{{ . }}">{{- end }}
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="icon" type="image/png"     href="{{ "favicon.png" | relURL }}">
+
+<!-- Pico CSS -->
+<link rel="stylesheet" href="{{ "css/pico/pico.min.css" | relURL }}">
+
+<!-- Theme CSS — modular, in load order -->
+<link rel="stylesheet" href="{{ "css/colors.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/typography.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/layout.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/components.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/tables.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/code.css"       | relURL }}">
+<link rel="stylesheet" href="{{ "css/search.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/animations.css" | relURL }}">
+
+{{- block "head" . }}{{- end }}
+
+<!-- Search index preload on search/home page -->
+{{- if or .IsHome (eq .Type "search") }}
+<link rel="preload" href="{{ "index.json" | relURL }}" as="fetch" crossorigin>
+{{- end }}

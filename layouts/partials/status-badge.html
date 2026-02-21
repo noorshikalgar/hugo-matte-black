@@ -1,0 +1,7 @@
+{{- $now := now -}}
+{{- $ageSeconds := sub $now.Unix .Date.Unix -}}
+{{- if le $ageSeconds 604800 -}}
+  <span class="badge badge-new">new</span>
+{{- else if eq ($now.Format "2006-01") (.Date.Format "2006-01") -}}
+  <span class="badge badge-recent">recent</span>
+{{- end -}}

@@ -1,0 +1,68 @@
+/**
+ * animations.css — Motion & Transitions
+ * ═══════════════════════════════════════════════════════════════
+ * Minimal. Only functional transitions: no bounce, no scale,
+ * no glow. Fade-in on page load, instant interactive feedback.
+ * Respects prefers-reduced-motion.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Respect user motion preference ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── 2. Page fade-in ─────────────────────────────────────────── */
+body {
+  animation: pageFadeIn 0.15s ease-in;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── 3. Search results appear ────────────────────────────────── */
+.search-result-item {
+  animation: resultFadeIn 0.1s ease-in both;
+}
+.search-result-item:nth-child(1)  { animation-delay: 0ms; }
+.search-result-item:nth-child(2)  { animation-delay: 20ms; }
+.search-result-item:nth-child(3)  { animation-delay: 40ms; }
+.search-result-item:nth-child(4)  { animation-delay: 60ms; }
+.search-result-item:nth-child(5)  { animation-delay: 80ms; }
+.search-result-item:nth-child(n+6) { animation-delay: 100ms; }
+
+@keyframes resultFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── 4. Expandable TOC collapse ──────────────────────────────── */
+.toc-content {
+  overflow: hidden;
+  transition: max-height 0.15s ease;
+}
+
+/* ── 5. Copy button feedback ─────────────────────────────────── */
+@keyframes copyFlash {
+  0%   { background: var(--mb-green-bg); }
+  100% { background: transparent; }
+}
+.copy-button.copied {
+  animation: copyFlash 0.6s ease-out;
+}
+
+/* ── 6. Scroll to top visibility ─────────────────────────────── */
+.scroll-to-top {
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+/* ── 7. Lightbox open/close ──────────────────────────────────── */
+.image-lightbox {
+  transition: opacity 0.1s ease;
+}

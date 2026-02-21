@@ -1,0 +1,189 @@
+/**
+ * colors.css — Matte Black Theme
+ * ═══════════════════════════════════════════════════════════════
+ * EDIT THIS FILE to change the entire site's color scheme.
+ * All colors are defined as CSS custom properties consumed by
+ * every other CSS module.
+ *
+ * Design principle: GitHub-like minimal. 1px borders only.
+ * No box-shadows. No hover glow. Flat, fast, readable.
+ *
+ * Based on the "Matte Black" Zed Editor theme by Taha YVR.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Design Token Palette ─────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --mb-bg:          #121212;   /* Main page background       */
+  --mb-surface-1:   #1a1a1a;   /* Cards, code blocks         */
+  --mb-surface-2:   #212121;   /* Element bg, active line    */
+  --mb-surface-3:   #262626;   /* Hover states               */
+
+  /* Borders */
+  --mb-border:        #333333;   /* Default border color       */
+  --mb-border-focus:  #8a8a8d;   /* Focused / selected border  */
+  --mb-border-accent: #F59E0B55; /* Accent-tinted border       */
+
+  /* Text */
+  --mb-text:          #EAEAEA;   /* Primary text               */
+  --mb-text-muted:    #bebebe;   /* Secondary / subdued text   */
+  --mb-text-faint:    #8a8a8d;   /* Placeholders, disabled     */
+  --mb-text-disabled: #333333;   /* Disabled labels            */
+
+  /* Accent — Amber/Gold (primary interactive color) */
+  --mb-accent:        #F59E0B;   /* Primary accent             */
+  --mb-accent-dark:   #D97706;   /* Hover accent               */
+  --mb-accent-bright: #FBBF24;   /* Active / highlighted       */
+  --mb-accent-dim:    #BF9903;   /* Dimmer accent              */
+  --mb-accent-bg:     #F59E0B1A; /* Accent tinted background   */
+  --mb-accent-bg-sel: #F59E0B33; /* Selected item bg           */
+
+  /* Semantic — Green (success, keywords) */
+  --mb-green:         #059669;
+  --mb-green-bright:  #22C55E;
+  --mb-green-bg:      #05966920;
+
+  /* Semantic — Red (error, delete) */
+  --mb-red:           #DC2626;
+  --mb-red-bright:    #e62222;
+  --mb-red-bg:        #DC262620;
+
+  /* Semantic — Blue (info, directives) */
+  --mb-blue:          #3B82F6;
+  --mb-blue-bright:   #3c71f6;
+  --mb-blue-bg:       #3B82F620;
+
+  /* Semantic — Warning */
+  --mb-warning:       #D97706;
+  --mb-warning-bg:    #D9770620;
+
+  /* Semantic — Info / Created */
+  --mb-info:          #EFBF04;
+  --mb-info-bg:       #EFBF0430;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #333333;
+  --mb-scrollbar-hover: #8a8a8d;
+
+  /* Elevation — always flat, no shadows, no glow */
+  --mb-shadow-sm:    none;
+  --mb-shadow:       none;
+  --mb-shadow-lg:    none;
+  --mb-glow:         none;
+  --mb-glow-hover:   none;
+
+  /* Border — 1px only, no thick decorative borders */
+  --mb-border-width: 1px;
+}
+
+/* ── 2. Override Pico CSS Variables (Dark Theme) ─────────────── */
+/* Pico is forced to dark mode via data-theme="dark" on <html>    */
+
+[data-theme="dark"],
+:root {
+  /* Pico core backgrounds */
+  --pico-background-color:          var(--mb-bg);
+  --pico-card-background-color:     var(--mb-surface-1);
+  --pico-card-sectioning-background-color: var(--mb-surface-2);
+
+  /* Pico text */
+  --pico-color:                     var(--mb-text);
+  --pico-muted-color:               var(--mb-text-muted);
+  --pico-muted-border-color:        var(--mb-border);
+
+  /* Pico primary (accent) */
+  --pico-primary:                   var(--mb-accent);
+  --pico-primary-background:        var(--mb-accent);
+  --pico-primary-border:            var(--mb-accent);
+  --pico-primary-underline:         var(--mb-accent);
+  --pico-primary-hover:             var(--mb-accent-bright);
+  --pico-primary-hover-background:  var(--mb-accent-dark);
+  --pico-primary-hover-border:      var(--mb-accent-bright);
+  --pico-primary-focus:             var(--mb-accent-bg-sel);
+  --pico-primary-inverse:           var(--mb-bg);
+
+  /* Pico secondary */
+  --pico-secondary:                 var(--mb-text-faint);
+  --pico-secondary-background:      var(--mb-surface-2);
+  --pico-secondary-border:          var(--mb-border);
+  --pico-secondary-hover:           var(--mb-text-muted);
+  --pico-secondary-hover-background: var(--mb-surface-3);
+  --pico-secondary-hover-border:    var(--mb-border-focus);
+  --pico-secondary-focus:           var(--mb-border-focus);
+  --pico-secondary-inverse:         var(--mb-text);
+
+  /* Pico borders */
+  --pico-border-color:              var(--mb-border);
+
+  /* Pico forms */
+  --pico-form-element-background-color:        var(--mb-surface-2);
+  --pico-form-element-selected-background-color: var(--mb-surface-3);
+  --pico-form-element-border-color:            var(--mb-border);
+  --pico-form-element-color:                   var(--mb-text);
+  --pico-form-element-placeholder-color:       var(--mb-text-faint);
+  --pico-form-element-active-background-color: var(--mb-surface-3);
+  --pico-form-element-active-border-color:     var(--mb-accent);
+  --pico-form-element-focus-color:             var(--mb-accent-bg-sel);
+  --pico-form-element-disabled-background-color: var(--mb-surface-1);
+  --pico-form-element-disabled-border-color:   var(--mb-border);
+  --pico-form-element-disabled-opacity:        0.5;
+  --pico-form-element-invalid-border-color:    var(--mb-red);
+  --pico-form-element-valid-border-color:      var(--mb-green);
+
+  /* Pico code */
+  --pico-code-background-color:   var(--mb-surface-1);
+  --pico-code-color:              var(--mb-accent-bright);
+  --pico-code-kbd-background-color: var(--mb-surface-2);
+  --pico-code-kbd-color:            var(--mb-text);
+  --pico-code-tag-color:            var(--mb-green);
+  --pico-code-property-color:       var(--mb-accent);
+  --pico-code-value-color:          var(--mb-text-muted);
+  --pico-code-comment-color:        var(--mb-text-faint);
+
+  /* Pico table */
+  --pico-table-border-color:        var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+
+  /* Pico modal / dialog */
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.7);
+
+  /* Pico tooltip */
+  --pico-tooltip-background-color: var(--mb-surface-2);
+  --pico-tooltip-color:            var(--mb-text);
+
+  /* Pico progress */
+  --pico-progress-background-color: var(--mb-border);
+  --pico-progress-color:            var(--mb-accent);
+
+  /* Pico switch */
+  --pico-switch-background-color:         var(--mb-border);
+  --pico-switch-checked-background-color: var(--mb-accent);
+  --pico-switch-color:                    var(--mb-bg);
+  --pico-switch-thumb-box-shadow:         var(--mb-shadow-sm);
+
+  /* Pico mark / highlight */
+  --pico-mark-background-color: var(--mb-accent-bg-sel);
+  --pico-mark-color:            var(--mb-bg);
+
+  /* Pico ins / del */
+  --pico-ins-color:  var(--mb-green);
+  --pico-del-color:  var(--mb-red);
+
+  /* Pico accordion */
+  --pico-accordion-border-color:        var(--mb-border);
+  --pico-accordion-active-summary-color: var(--mb-accent);
+  --pico-accordion-open-summary-color:   var(--mb-text);
+  --pico-accordion-close-summary-color:  var(--mb-accent);
+
+  /* Pico nav */
+  --pico-nav-element-spacing-vertical:   0.5rem;
+  --pico-nav-element-spacing-horizontal: 0.5rem;
+
+  /* Pico dropdown */
+  --pico-dropdown-background-color:    var(--mb-surface-2);
+  --pico-dropdown-border-color:        var(--mb-border);
+  --pico-dropdown-box-shadow:          none;
+  --pico-dropdown-color:               var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+}

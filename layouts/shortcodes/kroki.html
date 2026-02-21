@@ -1,0 +1,12 @@
+{{- $type    := .Get "type"    | default "graphviz" -}}
+{{- $caption := .Get "caption" -}}
+{{- $id      := .Get "id"      -}}
+{{- $diagram := trim .Inner "\n\r " -}}
+
+<div class="kroki-shortcode"{{ with $id }} id="{{ . }}"{{ end }} data-type="{{ $type }}">
+  {{- with $caption }}
+    <div class="kroki-caption">{{ . }}</div>
+  {{- end }}
+  <pre style="display:none;"><code>{{ $diagram }}</code></pre>
+  <div class="kroki-loading">loading diagram…</div>
+</div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}" data-theme="dark">
+  <head>
+    {{- partial "head.html" . -}}
+  </head>
+  <body>
+    {{- partial "header.html" . -}}
+
+    <main class="site-main">
+      {{- block "main" . }}{{- end }}
+    </main>
+
+    {{- partial "footer.html" . -}}
+
+    <!-- Scroll to top -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top" title="Back to top">↑</button>
+
+    <!-- Image lightbox -->
+    <div id="image-lightbox" class="image-lightbox" role="dialog" aria-modal="true">
+      <div class="lightbox-overlay" id="lightbox-overlay"></div>
+      <div class="lightbox-content">
+        <div class="lightbox-controls">
+          <button class="lightbox-zoom-out" id="lb-zoom-out">−</button>
+          <button class="lightbox-zoom-reset" id="lb-zoom-reset">⊙</button>
+          <button class="lightbox-zoom-in" id="lb-zoom-in">+</button>
+          <button class="lightbox-close" id="lb-close">✕ close</button>
+        </div>
+        <div class="lightbox-image-container" id="lb-image-container">
+          <img id="lb-image" src="" alt="">
+        </div>
+      </div>
+    </div>
+
+    <!-- Core scripts -->
+    <script src="{{ "js/main.js" | relURL }}" defer></script>
+
+    {{- if .Site.Params.kroki.enabled }}
+    <script>
+      window.krokiConfig = {
+        endpoint: {{ .Site.Params.kroki.endpoint | default "https://kroki.io" | jsonify }},
+        cache:     {{ .Site.Params.kroki.cache     | default true  | jsonify }},
+        lazyLoad:  {{ .Site.Params.kroki.lazyLoad  | default true  | jsonify }},
+        timeout:   {{ .Site.Params.kroki.timeout   | default 10000 | jsonify }},
+        retryCount:{{ .Site.Params.kroki.retryCount| default 1     | jsonify }}
+      };
+    </script>
+    <script src="{{ "js/kroki.js" | relURL }}" defer></script>
+    {{- end }}
+
+    {{- partial "mermaid.html" . -}}
+
+    {{- block "scripts" . }}{{- end }}
+  </body>
+</html>

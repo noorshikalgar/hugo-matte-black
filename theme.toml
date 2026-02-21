@@ -1,0 +1,14 @@
+# Hugo Pico Theme
+
+name = "Hugo Pico"
+license = "MIT"
+licenselink = "https://github.com/example/hugo-pico/blob/main/LICENSE"
+description = "A modern Hugo theme using Pico CSS with a Matte Black dark aesthetic. Fast, clean, search-first."
+homepage = ""
+tags = ["dark", "blog", "docs", "pico", "search", "minimal"]
+features = ["search", "mermaid", "kroki", "mcq", "toc", "tags"]
+min_version = "0.120.0"
+
+[author]
+  name = ""
+  homepage = ""

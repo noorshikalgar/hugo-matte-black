@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{- $topicSlug := .Title | urlize -}}
+{{- $allPages := where .Site.RegularPages "Params.topic" $topicSlug -}}
+
+<div>
+  <div class="section-header">
+    <h1>{{ .Title | humanize }}</h1>
+    <span class="meta-text">{{ len $allPages }} articles</span>
+  </div>
+
+  <div class="posts-grid" id="posts-container">
+    {{- range $allPages.ByDate.Reverse }}
+      <article class="post-card">
+        <div class="post-card-meta">
+          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          {{- partial "status-badge.html" . -}}
+        </div>
+        <div class="post-card-title">
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </div>
+        {{- with .Params.tags }}
+          <ul class="tag-list" style="margin-bottom:0.4rem;">
+            {{- range first 3 . }}
+              <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+            {{- end }}
+          </ul>
+        {{- end }}
+        <div class="post-card-summary">
+          {{- if .Params.description -}}{{ .Params.description | truncate 140 }}
+          {{- else -}}{{ .Summary | plainify | truncate 140 }}{{- end }}
+        </div>
+        <div class="post-card-footer">
+          <a href="{{ .RelPermalink }}" class="read-more">read →</a>
+        </div>
+      </article>
+    {{- end }}
+  </div>
+</div>
+{{ end }}

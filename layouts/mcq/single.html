@@ -1,0 +1,133 @@
+{{ define "main" }}
+<div class="content-layout no-sidebar">
+
+  <article>
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+      <a href="{{ "/" | relURL }}">home</a>
+      <span class="sep">/</span>
+      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
+      <span class="sep">/</span>
+      <span class="current">quiz</span>
+    </nav>
+
+    <div class="post-meta-header">
+      <span class="post-meta-date">{{ .Date.Format "2006.01.02" }}</span>
+      <span class="badge badge-section">quiz</span>
+      <span class="meta-text">{{ len .Params.questions }} questions</span>
+    </div>
+
+    <h1 class="post-title-single">{{ .Title }}</h1>
+
+    {{- with .Description }}
+      <p style="color:var(--mb-text-muted);margin-bottom:1.5rem;">{{ . }}</p>
+    {{- end }}
+
+    {{ .Content }}
+
+    <!-- MCQ Form -->
+    <form id="mcq-form" class="mcq-form" autocomplete="off" novalidate>
+      {{- range $i, $q := .Params.questions }}
+        <div class="mcq-question"
+             data-question-id="q{{ add $i 1 }}"
+             data-answer="{{ $q.correct_answer }}">
+          <span class="question-number">Question {{ add $i 1 }}</span>
+          <div class="question-text">{{ $q.question }}</div>
+          <div class="options-group">
+            {{- range $j, $opt := $q.options }}
+              <label class="option-label">
+                <input
+                  type="checkbox"
+                  class="option-checkbox"
+                  data-option-value="{{ $opt.value }}"
+                  data-question-id="q{{ add $i 1 }}"
+                  name="question_{{ add $i 1 }}"
+                >
+                <span class="option-text">{{ $opt.value }}. {{ $opt.text }}</span>
+              </label>
+            {{- end }}
+          </div>
+          <div class="question-feedback" style="display:none;"></div>
+        </div>
+      {{- end }}
+
+      <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+        <button type="button" id="submit-btn">Submit Answers</button>
+        <button type="button" id="reset-btn" style="display:none;" class="secondary">Try Again</button>
+      </div>
+    </form>
+
+    <!-- Results -->
+    <div id="mcq-results" class="mcq-results" style="display:none;">
+      <div class="mcq-score" id="mcq-score-pct"></div>
+      <p style="color:var(--mb-text-muted);font-size:0.85rem;margin:0.25rem 0 0;">
+        <span id="mcq-correct"></span> / <span id="mcq-total"></span> correct
+      </p>
+    </div>
+
+  </article>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+(function() {
+  const form      = document.getElementById('mcq-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const resetBtn  = document.getElementById('reset-btn');
+  const results   = document.getElementById('mcq-results');
+  let submitted   = false;
+
+  submitBtn.addEventListener('click', function() {
+    if (submitted) return;
+    submitted = true;
+
+    const questions = form.querySelectorAll('.mcq-question');
+    let correct = 0;
+
+    questions.forEach(qEl => {
+      const answer   = qEl.dataset.answer;
+      const selected = Array.from(qEl.querySelectorAll('input:checked'))
+                            .map(cb => cb.dataset.optionValue);
+      const isRight  = selected.length === 1 && selected[0] === answer;
+      if (isRight) correct++;
+
+      const fb = qEl.querySelector('.question-feedback');
+      fb.style.display = 'block';
+      fb.classList.add(isRight ? 'correct' : 'incorrect');
+      fb.textContent = isRight
+        ? '✓ Correct!'
+        : `✗ Incorrect — answer: ${answer}`;
+
+      // Disable all checkboxes
+      qEl.querySelectorAll('input').forEach(i => i.disabled = true);
+    });
+
+    const total = questions.length;
+    const pct   = Math.round((correct / total) * 100);
+
+    document.getElementById('mcq-score-pct').textContent = pct + '%';
+    document.getElementById('mcq-correct').textContent   = correct;
+    document.getElementById('mcq-total').textContent     = total;
+    results.style.display    = 'block';
+    submitBtn.style.display  = 'none';
+    resetBtn.style.display   = 'inline-block';
+    results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  resetBtn.addEventListener('click', function() {
+    form.reset();
+    submitted = false;
+    form.querySelectorAll('.question-feedback').forEach(fb => {
+      fb.style.display = 'none';
+      fb.className = 'question-feedback';
+      fb.textContent = '';
+    });
+    form.querySelectorAll('input').forEach(i => i.disabled = false);
+    results.style.display   = 'none';
+    submitBtn.style.display = 'inline-block';
+    resetBtn.style.display  = 'none';
+  });
+})();
+</script>
+{{ end }}

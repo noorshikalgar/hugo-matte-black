@@ -1,0 +1,184 @@
+/**
+ * code.css — Code Block & Syntax Styles
+ * ═══════════════════════════════════════════════════════════════
+ * Inline code, fenced code blocks, copy button, line numbers,
+ * and Mermaid/Kroki diagram containers.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Inline Code ──────────────────────────────────────────── */
+code:not(pre > code) {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82em;
+  padding: 0.1em 0.35em;
+  background: var(--mb-surface-2);
+  color: var(--mb-accent-bright);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+}
+
+/* ── 2. Code Blocks ──────────────────────────────────────────── */
+pre {
+  position: relative;
+  background: var(--mb-surface-1) !important;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  padding: 1rem 1rem 1rem 1rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: inherit;
+  color: var(--mb-text) !important;
+  border-radius: 0 !important;
+}
+
+/* Language label */
+pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 2.5rem;
+  font-size: 0.65rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  padding: 0.2rem 0.4rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--mb-border);
+  border-left: 1px solid var(--mb-border);
+  background: var(--mb-surface-2);
+  border-radius: 0 0 0 var(--pico-border-radius-sm);
+}
+
+/* ── 3. Syntax Highlighting (Chroma / Hugo) ──────────────────── */
+/* Maps Matte Black Zed syntax colors to Hugo/Chroma classes */
+
+/* Keywords → green */
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kn,
+.chroma .kp, .chroma .kr, .chroma .kt {
+  color: #059669;
+}
+
+/* Strings → text (eaeaea) */
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc,
+.chroma .dl, .chroma .sd, .chroma .s2, .chroma .se,
+.chroma .sh, .chroma .si, .chroma .sx, .chroma .sr,
+.chroma .s1, .chroma .ss {
+  color: #EAEAEA;
+}
+
+/* Numbers → gold/info */
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh,
+.chroma .mi, .chroma .il, .chroma .mo {
+  color: #EFBF04;
+}
+
+/* Functions → amber */
+.chroma .nf, .chroma .fm { color: #F59E0B; }
+
+/* Types → bright amber */
+.chroma .nc, .chroma .nn { color: #FBBF24; }
+
+/* Variables → amber dark */
+.chroma .n, .chroma .nb, .chroma .bp { color: #D97706; }
+
+/* Operators → muted */
+.chroma .o, .chroma .ow { color: #bebebe; }
+
+/* Comments → faint italic */
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .c1,
+.chroma .cs, .chroma .cp, .chroma .cpf {
+  color: #8A8A8D;
+  font-style: italic;
+}
+
+/* Tags (HTML/XML) → green */
+.chroma .nt { color: #059669; }
+
+/* Attributes → amber dark italic */
+.chroma .na { color: #D97706; font-style: italic; }
+
+/* Punctuation → muted */
+.chroma .p, .chroma .pi { color: #8A8A8D; }
+
+/* Preprocessor / directives → blue */
+.chroma .cp, .chroma .bp { color: #3B82F6; }
+
+/* Error */
+.chroma .err { color: #DC2626; }
+
+/* Code block background */
+.chroma { background: var(--mb-surface-1) !important; }
+
+/* ── 4. Keyboard shortcut */
+kbd {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75em;
+  padding: 0.15em 0.4em;
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border);
+  border-bottom-width: 2px;
+  border-radius: var(--pico-border-radius-sm);
+  color: var(--mb-text);
+}
+
+/* ── 5. Mermaid Diagrams ─────────────────────────────────────── */
+.mermaid {
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  text-align: center;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── 6. Kroki Diagrams ───────────────────────────────────────── */
+.kroki-shortcode {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  padding: 1rem;
+  margin: 1.25rem 0;
+  background: var(--mb-surface-1);
+  overflow-x: auto;
+  text-align: center;
+}
+
+.kroki-caption {
+  font-size: 0.78rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.kroki-shortcode svg { max-width: 100%; height: auto; }
+
+.kroki-loading {
+  color: var(--mb-text-faint);
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  padding: 1rem;
+}
+
+.kroki-error {
+  color: var(--mb-red);
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  border: 1px solid var(--mb-red);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--pico-border-radius-sm);
+  background: var(--mb-red-bg);
+}

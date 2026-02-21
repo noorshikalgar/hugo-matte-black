@@ -1,0 +1,21 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>
+      &copy; {{ now.Format "2006" }} {{ .Site.Title }}
+      {{- with .Site.Params.footerNote }} &mdash; {{ . | safeHTML }}{{ end }}
+    </span>
+    <nav class="footer-links" aria-label="Footer navigation">
+      {{- range .Site.Menus.footer -}}
+        <a href="{{ .URL | relURL }}"
+           {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+          {{- .Name -}}
+        </a>
+      {{- end -}}
+      {{- if not .Site.Menus.footer -}}
+        <a href="{{ "/privacy-policy/" | relURL }}">Privacy</a>
+        <a href="{{ "/disclaimer/"     | relURL }}">Disclaimer</a>
+        <a href="{{ "/tags/"           | relURL }}">Tags</a>
+      {{- end -}}
+    </nav>
+  </div>
+</footer>

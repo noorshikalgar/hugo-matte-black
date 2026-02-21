@@ -1,0 +1,20 @@
+{{- $pages := where .Site.RegularPages "Params.noindex" "ne" true -}}
+[
+  {{- range $i, $p := $pages }}
+  {{- if $i }},{{ end }}
+  {
+    "title":       {{ $p.Title       | jsonify }},
+    "permalink":   {{ $p.Permalink   | jsonify }},
+    "date":        {{ $p.Date.Format "2006-01-02" | jsonify }},
+    "section":     {{ $p.Section     | jsonify }},
+    "description": {{ $p.Params.description | default $p.Summary | plainify | truncate 200 | jsonify }},
+    "tags":        {{ $p.Params.tags | default slice | jsonify }},
+    "categories":  {{ $p.Params.categories | default slice | jsonify }},
+    "topic":       {{ $p.Params.topic | default "" | jsonify }},
+    "difficulty":  {{ $p.Params.difficulty | default "" | jsonify }},
+    "contentType": {{ $p.Params.contentType | default $p.Section | jsonify }},
+    "readingTime": {{ $p.ReadingTime | jsonify }},
+    "content":     {{ $p.Plain | truncate 1500 | jsonify }}
+  }
+  {{- end }}
+]

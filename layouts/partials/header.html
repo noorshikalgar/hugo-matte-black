@@ -1,0 +1,62 @@
+{{- $currentPage := . -}}
+{{- $menuItems := .Site.Menus.main -}}
+<header class="site-header">
+  <div class="header-container">
+
+    <!-- Logo / Site title -->
+    <a href="{{ "/" | relURL }}" class="site-logo">
+      {{- with .Site.Params.logo -}}
+        <img src="{{ . | relURL }}" alt="{{ $.Site.Title }}" height="22" style="vertical-align:middle;margin-right:0.4rem;">
+      {{- end -}}
+      {{ .Site.Params.shortName | default .Site.Title }}<span class="logo-dot">.</span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav class="nav-desktop" aria-label="Main navigation">
+      {{- range $menuItems -}}
+        <a href="{{ .URL | relURL }}"
+           class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}"
+           {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+          {{- .Name -}}
+        </a>
+      {{- end -}}
+    </nav>
+
+    <div class="header-spacer"></div>
+
+    <!-- Controls -->
+    <div class="header-controls">
+      <!-- Layout toggle (grid ↔ list) — only on list pages -->
+      {{- if .IsSection }}
+      <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
+        <span id="layout-icon">⊞</span>
+      </button>
+      {{- end }}
+
+      <!-- Search -->
+      <a href="{{ "/" | relURL }}" class="header-icon-btn" title="Search" aria-label="Search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="6.5" cy="6.5" r="4.5"/>
+          <path d="M10.5 10.5L14 14"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+
+  <!-- Mobile navigation -->
+  <nav class="nav-mobile" id="mobile-nav" aria-label="Mobile navigation">
+    <a href="{{ "/" | relURL }}">Search</a>
+    {{- range $menuItems -}}
+      <a href="{{ .URL | relURL }}"
+         {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+        {{- .Name -}}
+      </a>
+    {{- end -}}
+  </nav>
+</header>

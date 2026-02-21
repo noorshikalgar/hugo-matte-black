@@ -1,0 +1,10 @@
+{{- if eq .Type "mermaid" -}}
+  {{- .Page.Store.Set "hasMermaid" true -}}
+  <div class="mermaid">
+{{ .Inner }}
+  </div>
+{{- else -}}
+  <div class="highlight">
+    <pre class="language-{{ .Type }}"{{ with .Options.lineNos }} data-ln="1"{{ end }}{{ with .Type }} data-lang="{{ . }}"{{ end }}><code class="language-{{ .Type }}">{{- .Inner -}}</code></pre>
+  </div>
+{{- end -}}

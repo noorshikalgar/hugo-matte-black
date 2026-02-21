@@ -1,0 +1,68 @@
+{{ define "main" }}
+<div class="content-layout">
+
+  <!-- Main article -->
+  <article>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ "/" | relURL }}">home</a>
+      <span class="sep">/</span>
+      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
+      <span class="sep">/</span>
+      <span class="current">{{ .Title | truncate 40 }}</span>
+    </nav>
+
+    <!-- Post meta -->
+    <div class="post-meta-header">
+      <span class="post-meta-date">{{ .Date.Format "2006.01.02" }}</span>
+      {{- partial "status-badge.html" . -}}
+      {{- with .Params.difficulty }}
+        <span class="badge badge-section">{{ . }}</span>
+      {{- end }}
+      {{- with .ReadingTime }}
+        <span class="meta-text">{{ . }} min read</span>
+      {{- end }}
+    </div>
+
+    <!-- Title -->
+    <h1 class="post-title-single">{{ .Title }}</h1>
+
+    <!-- Tags -->
+    {{- with .Params.tags }}
+      <ul class="tag-list" style="margin-bottom:1.25rem;">
+        {{- range . }}
+          <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+        {{- end }}
+      </ul>
+    {{- end }}
+
+    <!-- Featured image -->
+    {{- with .Params.image }}
+      <div class="post-featured-image" style="margin-bottom:1.5rem;">
+        <img src="{{ . | relURL }}" alt="{{ $.Title }}" loading="lazy">
+      </div>
+    {{- end }}
+
+    <!-- TOC -->
+    {{- partial "toc.html" . -}}
+
+    <!-- Content -->
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+
+    <!-- Post navigation -->
+    {{- partial "post-nav.html" . -}}
+
+  </article>
+
+  <!-- Sidebar (TOC on large screens, section links) -->
+  <aside>
+    <div style="position:sticky;top:70px;">
+      {{- partial "sidebar-toc.html" . -}}
+    </div>
+  </aside>
+
+</div>
+{{ end }}

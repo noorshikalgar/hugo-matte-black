@@ -1,0 +1,311 @@
+/**
+ * search.css — Search Page Styles
+ * ═══════════════════════════════════════════════════════════════
+ * The landing page IS the search page. Clean, minimal,
+ * GitHub-issue-search aesthetic. No decorations.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Search Page Layout ───────────────────────────────────── */
+.search-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.search-header {
+  margin-bottom: 1.5rem;
+}
+
+.search-header h1 {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--mb-text-faint);
+  margin: 0 0 1rem 0;
+  border: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.search-header h1 .site-name { color: var(--mb-accent); }
+
+/* ── 2. Search Input ─────────────────────────────────────────── */
+.search-form {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  background: var(--mb-surface-1);
+  transition: border-color 0.1s;
+}
+.search-form:focus-within {
+  border-color: var(--mb-border-focus);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--mb-text);
+  font-family: var(--pico-font-family-sans-serif);
+  min-width: 0;
+}
+.search-input::placeholder { color: var(--mb-text-faint); }
+
+.search-submit {
+  padding: 0 1rem;
+  background: var(--mb-surface-2);
+  border: none;
+  border-left: 1px solid var(--mb-border);
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: "JetBrains Mono", monospace;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.search-submit:hover {
+  background: var(--mb-surface-3);
+  color: var(--mb-accent);
+}
+
+/* ── 3. Search Filters Bar ───────────────────────────────────── */
+.search-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--mb-border);
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  margin-right: 0.25rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  cursor: pointer;
+  background: transparent;
+  user-select: none;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.filter-chip:hover,
+.filter-chip.active {
+  color: var(--mb-accent);
+  border-color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+}
+
+/* ── 4. Sort & Results Count Bar ─────────────────────────────── */
+.search-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+}
+
+.results-count { flex-shrink: 0; }
+.results-count strong { color: var(--mb-text-muted); }
+
+.sort-select {
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  color: var(--mb-text-muted);
+  font-size: 0.78rem;
+  font-family: "JetBrains Mono", monospace;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+.sort-select:focus {
+  border-color: var(--mb-border-focus);
+  outline: none;
+}
+
+/* ── 5. Search Tabs ──────────────────────────────────────────── */
+.search-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--mb-border);
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  gap: 0;
+}
+
+.search-tab {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.82rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color 0.1s;
+}
+.search-tab:hover { color: var(--mb-text-muted); }
+.search-tab.active {
+  color: var(--mb-text);
+  border-bottom-color: var(--mb-accent);
+}
+
+/* ── 6. Search Results List ──────────────────────────────────── */
+.search-results {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+}
+
+.search-result-item {
+  display: block;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--mb-border);
+  text-decoration: none;
+  background: var(--mb-bg);
+  transition: background 0.1s;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--mb-surface-1); }
+
+.result-path {
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  margin-bottom: 0.25rem;
+}
+
+.result-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--mb-text);
+  margin-bottom: 0.3rem;
+  line-height: 1.35;
+}
+
+.result-excerpt {
+  font-size: 0.83rem;
+  color: var(--mb-text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+/* Highlight matched text */
+.result-title mark,
+.result-excerpt mark {
+  background: var(--mb-accent-bg-sel);
+  color: var(--mb-accent-bright);
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ── 7. Search Empty / Loading States ────────────────────────── */
+.search-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+}
+.search-empty .empty-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.4;
+}
+
+.search-loading {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+}
+
+/* ── 8. Homepage quick-nav sections (below search) ───────────── */
+.quick-nav {
+  margin-top: 1.5rem;
+}
+
+.quick-nav-title {
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.75rem;
+}
+
+.quick-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+}
+
+.quick-nav-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  border-right: 1px solid var(--mb-border);
+  border-bottom: 1px solid var(--mb-border);
+  text-decoration: none;
+  background: var(--mb-bg);
+  transition: background 0.1s;
+}
+.quick-nav-item:hover { background: var(--mb-surface-1); }
+.quick-nav-item:nth-child(n):last-child { border-bottom: none; }
+
+.quick-nav-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mb-text);
+  margin-bottom: 0.2rem;
+}
+.quick-nav-count {
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+}
+
+@media (max-width: 480px) {
+  .search-page { padding: 1rem 0.75rem; }
+  .quick-nav-grid { grid-template-columns: 1fr 1fr; }
+}

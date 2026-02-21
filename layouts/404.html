@@ -1,0 +1,13 @@
+{{ define "main" }}
+<div style="max-width:480px;margin:4rem auto;text-align:center;padding:0 1rem;">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--mb-text-faint);margin-bottom:0.5rem;">HTTP 404</p>
+  <h1 style="font-size:2.5rem;color:var(--mb-accent);margin-bottom:0.5rem;font-family:'JetBrains Mono',monospace;">not found</h1>
+  <p style="color:var(--mb-text-muted);margin-bottom:2rem;">
+    The page you're looking for doesn't exist or was moved.
+  </p>
+  <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+    <a href="{{ "/" | relURL }}">← Back to Search</a>
+    <a href="{{ "/tags/" | relURL }}" style="color:var(--mb-text-muted);">Browse Tags</a>
+  </div>
+</div>
+{{ end }}

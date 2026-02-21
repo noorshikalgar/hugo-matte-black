@@ -1,0 +1,284 @@
+/**
+ * layout.css — Page Layout & Structural Styles
+ * ═══════════════════════════════════════════════════════════════
+ * Header, footer, sidebar, main container, responsive grid.
+ * Minimal GitHub structure — no decorative backgrounds.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── 1. Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--mb-bg);
+  color: var(--mb-text);
+}
+
+/* ── 2. Header ───────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--mb-bg);
+  border-bottom: 1px solid var(--mb-border);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  height: 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.site-logo {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--mb-text);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.site-logo:hover { color: var(--mb-accent); text-decoration: none; }
+.site-logo .logo-dot { color: var(--mb-accent); }
+
+.header-spacer { flex: 1; }
+
+/* Desktop nav */
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+.nav-desktop a {
+  display: block;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.875rem;
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  border-radius: var(--pico-border-radius-sm);
+}
+.nav-desktop a:hover {
+  color: var(--mb-text);
+  background: var(--mb-surface-2);
+}
+.nav-desktop a.active {
+  color: var(--mb-accent);
+}
+
+/* Header controls (search icon, etc.) */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.header-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  background: transparent;
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.1s, border-color 0.1s, background 0.1s;
+}
+.header-icon-btn:hover {
+  color: var(--mb-text);
+  background: var(--mb-surface-2);
+  border-color: var(--mb-border-focus);
+}
+
+/* Hamburger (mobile) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  cursor: pointer;
+  padding: 0;
+}
+.hamburger span {
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--mb-text-muted);
+  transition: background 0.1s;
+}
+.hamburger:hover span { background: var(--mb-text); }
+
+/* Mobile nav */
+.nav-mobile {
+  display: none;
+  flex-direction: column;
+  border-top: 1px solid var(--mb-border);
+  background: var(--mb-bg);
+}
+.nav-mobile.active { display: flex; }
+.nav-mobile a {
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--mb-border);
+}
+.nav-mobile a:hover {
+  background: var(--mb-surface-2);
+  color: var(--mb-text);
+}
+.nav-mobile a:last-child { border-bottom: none; }
+
+/* ── 3. Main Content ─────────────────────────────────────────── */
+.site-main {
+  padding: 2rem 1rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Content + sidebar layout */
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 1024px) {
+  .content-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+  .content-layout.no-sidebar {
+    grid-template-columns: 1fr;
+    max-width: 860px;
+  }
+}
+
+/* ── 4. Footer ───────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--mb-border);
+  padding: 1.25rem 1rem;
+  background: var(--mb-bg);
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.footer-inner a {
+  color: var(--mb-text-faint);
+  text-decoration: none;
+}
+.footer-inner a:hover { color: var(--mb-accent); }
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ── 5. Posts Grid ───────────────────────────────────────────── */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+}
+
+.posts-grid.single-column {
+  grid-template-columns: 1fr;
+}
+
+/* ── 6. Section header ───────────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--mb-border);
+}
+.section-header h1,
+.section-header h2 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1.1rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.section-header h1::before,
+.section-header h2::before { content: "// "; color: var(--mb-border-focus); }
+
+/* ── 7. Scroll to top ────────────────────────────────────────── */
+.scroll-to-top {
+  display: none;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  background: var(--mb-surface-2);
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  text-decoration: none;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.scroll-to-top.show { display: flex; }
+.scroll-to-top:hover {
+  background: var(--mb-surface-3);
+  color: var(--mb-accent);
+  border-color: var(--mb-border-focus);
+}
+
+/* ── 8. Responsive breakpoints ───────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-desktop  { display: none; }
+  .hamburger    { display: flex; }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-main { padding: 1rem 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .header-container { height: 48px; }
+  .site-logo { font-size: 0.9rem; }
+}

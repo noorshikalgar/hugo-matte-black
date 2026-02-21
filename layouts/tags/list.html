@@ -1,0 +1,94 @@
+{{ define "main" }}
+<div>
+  <!-- Header -->
+  <div class="section-header">
+    <h1>Tags</h1>
+    <span class="meta-text">{{ len .Site.Taxonomies.tags }} tags</span>
+  </div>
+
+  <!-- Controls -->
+  <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+    <input
+      type="search"
+      id="tag-search"
+      placeholder="filter tags…"
+      style="flex:1;min-width:160px;background:var(--mb-surface-1);border:1px solid var(--mb-border);border-radius:var(--pico-border-radius-sm);padding:0.35rem 0.6rem;color:var(--mb-text);font-family:'JetBrains Mono',monospace;font-size:0.82rem;"
+      aria-label="Filter tags"
+    >
+    <select id="tag-sort" class="sort-select">
+      <option value="count-desc" selected>count ↓</option>
+      <option value="count-asc">count ↑</option>
+      <option value="name-asc">a → z</option>
+      <option value="name-desc">z → a</option>
+    </select>
+  </div>
+
+  <!-- Tags table -->
+  <div class="tags-table-container">
+    <table class="tags-table" id="tags-table" aria-label="Tags list">
+      <thead>
+        <tr>
+          <th data-sort="name" class="tag-name-col">tag</th>
+          <th data-sort="count" class="tag-count-col" style="text-align:right;width:100px;">articles</th>
+        </tr>
+      </thead>
+      <tbody id="tags-tbody">
+        {{- range $name, $taxonomy := .Site.Taxonomies.tags }}
+          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $taxonomy }}">
+            <td class="tag-name">
+              <a href="{{ "/tags/" | relURL }}{{ $name | urlize }}/">{{ $name }}</a>
+            </td>
+            <td class="tag-count">{{ len $taxonomy }}</td>
+          </tr>
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+(function() {
+  const searchInput = document.getElementById('tag-search');
+  const sortSelect  = document.getElementById('tag-sort');
+  const tbody       = document.getElementById('tags-tbody');
+
+  function getRows() {
+    return Array.from(tbody.querySelectorAll('.tag-row'));
+  }
+
+  function filterRows(rows) {
+    const q = searchInput.value.toLowerCase().trim();
+    rows.forEach(r => {
+      r.style.display = r.dataset.name.includes(q) ? '' : 'none';
+    });
+  }
+
+  function sortRows(rows) {
+    const val = sortSelect.value;
+    rows.sort((a, b) => {
+      const aName  = a.dataset.name;
+      const bName  = b.dataset.name;
+      const aCount = +a.dataset.count;
+      const bCount = +b.dataset.count;
+      if (val === 'name-asc')   return aName.localeCompare(bName);
+      if (val === 'name-desc')  return bName.localeCompare(aName);
+      if (val === 'count-asc')  return aCount - bCount;
+      return bCount - aCount; // count-desc default
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  function update() {
+    const rows = getRows();
+    sortRows(rows);
+    filterRows(rows);
+  }
+
+  searchInput.addEventListener('input', update);
+  sortSelect.addEventListener('change', update);
+  update();
+})();
+</script>
+{{ end }}
