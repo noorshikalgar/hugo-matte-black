@@ -1,7 +1,7 @@
 /**
  * search.js — Site search for 1200+ SSG pages
  * Loads /index.json, debounces input, scores results by
- * title/tag/content, supports section filters and sorting.
+ * title/tag/section (default) or +content via content:term syntax.
  * No external dependencies.
  */
 
@@ -82,14 +82,19 @@
   }
 
   /* ── Scoring ─────────────────────────────────────────────────── */
-  /** Simple multi-term scoring. Returns score >= 0; 0 = no match. */
-  function score(page, terms) {
+  /**
+   * Score a page against terms.
+   * includeContent=false (default): match title, tags, section only.
+   * includeContent=true: also match description and content body.
+   * Returns 0 if any single term has no match anywhere (AND logic).
+   */
+  function score(page, terms, includeContent) {
     let total = 0;
-    const title   = (page.title       || '').toLowerCase();
-    const tags    = (page.tags        || []).join(' ').toLowerCase();
-    const section = (page.section     || '').toLowerCase();
-    const desc    = (page.description || '').toLowerCase();
-    const content = (page.content     || '').toLowerCase();
+    const title   = (page.title   || '').toLowerCase();
+    const tags    = (page.tags    || []).join(' ').toLowerCase();
+    const section = (page.section || '').toLowerCase();
+    const desc    = includeContent ? (page.description || '').toLowerCase() : '';
+    const content = includeContent ? (page.content     || '').toLowerCase() : '';
 
     for (const term of terms) {
       if (!term) continue;
@@ -98,8 +103,8 @@
       const inTitle   = title.indexOf(t);
       const inTags    = tags.indexOf(t) !== -1;
       const inSection = section.indexOf(t) !== -1;
-      const inDesc    = desc.indexOf(t)  !== -1;
-      const inContent = content.indexOf(t) !== -1;
+      const inDesc    = desc    && desc.indexOf(t)    !== -1;
+      const inContent = content && content.indexOf(t) !== -1;
 
       if (inTitle !== -1) {
         // Bonus for match at start of title
@@ -110,12 +115,9 @@
       if (inDesc)    total += 30;
       if (inContent) total += 10;
 
-      // If nothing matches this term, kill the result
-      if (!inTitle !== true || inTitle === -1) {
-        if (!inTags && !inSection && !inDesc && !inContent) {
-          return 0; // ALL terms must match somewhere
-        }
-      }
+      // ALL terms must match at least one field
+      const matched = inTitle !== -1 || inTags || inSection || inDesc || inContent;
+      if (!matched) return 0;
     }
     return total;
   }
