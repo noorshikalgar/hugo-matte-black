@@ -130,8 +130,16 @@
   function runSearch() {
     if (!index) { loadIndex(false); return; }
 
-    const q     = query.trim();
-    const terms = q.split(/\s+/).filter(Boolean);
+    const raw   = query.trim();
+    let   q     = raw;
+    let   includeContent = false;
+
+    if (raw.toLowerCase().startsWith('content:')) {
+      includeContent = true;
+      q = raw.slice('content:'.length).trim();
+    }
+
+    const terms = q.split(/[\s,]+/).filter(Boolean);
 
     if (!q && !activeSection) {
       showBrowse(true);
@@ -145,7 +153,7 @@
     // All term-matching results (no section filter yet)
     const allMatches = index.filter(function (page) {
       if (!terms.length) return true;
-      return score(page, terms) > 0;
+      return score(page, terms, includeContent) > 0;
     });
 
     // Per-section counts; non-main pages bucket into 'chapters'
@@ -169,7 +177,7 @@
     function sortArr(arr) {
       if (terms.length) {
         return arr.map(function (p) {
-          return { page: p, score: score(p, terms) };
+          return { page: p, score: score(p, terms, includeContent) };
         }).sort(function (a, b) {
           if (activeSort === 'relevance') return b.score - a.score;
           if (activeSort === 'date-desc') return (b.page.date || '') > (a.page.date || '') ? 1 : -1;
@@ -196,7 +204,7 @@
       results = sortArr(filtered);
     }
 
-    renderResults(results, q, sectionCounts);
+    renderResults(results, q, sectionCounts, includeContent);
   }
 
   /* ── Chip counts ─────────────────────────────────────────────── */
@@ -215,7 +223,7 @@
   }
 
   /* ── Render ──────────────────────────────────────────────────── */
-  function renderResults(results, q, sectionCounts) {
+  function renderResults(results, q, sectionCounts, includeContent) {
     updateChipCounts(sectionCounts || {});
 
     if (!results.length) {
@@ -269,7 +277,11 @@
 
       const excerpt = document.createElement('div');
       excerpt.className = 'result-excerpt';
-      excerpt.innerHTML = highlight(page.description || '', q);
+      if (includeContent) {
+        excerpt.innerHTML = highlight(page.description || '', q);
+      } else {
+        excerpt.textContent = page.description || '';
+      }
 
       const footer = document.createElement('div');
       footer.className = 'result-footer';
