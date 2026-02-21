@@ -19,10 +19,28 @@
   const resultsCount  = document.getElementById('results-count');
   const browseSection = document.getElementById('browse-section');
   const sortSelect    = document.getElementById('sort-select');
-  const filterChips   = document.querySelectorAll('.filter-chip[data-filter="section"]');
-
+  const filtersContainer = document.getElementById('search-filters');
 
   if (!searchInput) return;
+
+  /* ── Main sections set (from Hugo params) ────────────────────── */
+  const mainSections = new Set(window.searchSections || []);
+
+  function isChapter(page) {
+    return mainSections.size > 0 && !mainSections.has(page.section);
+  }
+
+  /* Inject a "chapters" chip dynamically once the index is loaded  */
+  function injectChaptersChip() {
+    if (!filtersContainer) return;
+    if (filtersContainer.querySelector('[data-value="chapters"]')) return;
+    const chip = document.createElement('button');
+    chip.className     = 'filter-chip';
+    chip.dataset.filter = 'section';
+    chip.dataset.value  = 'chapters';
+    chip.textContent    = 'chapters';
+    filtersContainer.appendChild(chip);
+  }
 
   /* ── State ───────────────────────────────────────────────────── */
   let index         = null;
@@ -51,6 +69,7 @@
       .then(function (data) {
         index = data;
         isLoading = false;
+        injectChaptersChip();
         if (!silent) showLoading(false);
         if (query || activeSection) runSearch();
       })
@@ -117,36 +136,43 @@
 
     showBrowse(false);
 
-    // All term-matching results (ignoring section) — used for per-chip counts
-    let allMatches = index.filter(function (page) {
+    // All term-matching results (no section filter yet)
+    const allMatches = index.filter(function (page) {
       if (!terms.length) return true;
       return score(page, terms) > 0;
     });
 
-    // Per-section counts across ALL matches (so inactive chips show their count too)
+    // Per-section counts; non-main pages bucket into 'chapters'
     const sectionCounts = {};
     allMatches.forEach(function (page) {
-      sectionCounts[page.section] = (sectionCounts[page.section] || 0) + 1;
+      const key = isChapter(page) ? 'chapters' : page.section;
+      sectionCounts[key] = (sectionCounts[key] || 0) + 1;
     });
 
-    // Apply section filter for actual display
-    let results = activeSection
-      ? allMatches.filter(function (page) { return page.section === activeSection; })
-      : allMatches.slice();
-
-    // Score + sort
-    if (terms.length) {
-      results = results.map(function (page) {
-        return { page: page, score: score(page, terms) };
-      }).sort(function (a, b) {
-        if (activeSort === 'relevance') return b.score - a.score;
-        if (activeSort === 'date-desc') return (b.page.date || '') > (a.page.date || '') ? 1 : -1;
-        if (activeSort === 'date-asc')  return (a.page.date || '') > (b.page.date || '') ? 1 : -1;
-        if (activeSort === 'title-asc') return (a.page.title || '').localeCompare(b.page.title || '');
-        return 0;
-      }).map(function (r) { return r.page; });
+    // Apply active filter
+    let filtered;
+    if (activeSection === 'chapters') {
+      filtered = allMatches.filter(isChapter);
+    } else if (activeSection) {
+      filtered = allMatches.filter(function (p) { return p.section === activeSection; });
     } else {
-      results.sort(function (a, b) {
+      filtered = allMatches.slice();
+    }
+
+    // Sort helper
+    function sortArr(arr) {
+      if (terms.length) {
+        return arr.map(function (p) {
+          return { page: p, score: score(p, terms) };
+        }).sort(function (a, b) {
+          if (activeSort === 'relevance') return b.score - a.score;
+          if (activeSort === 'date-desc') return (b.page.date || '') > (a.page.date || '') ? 1 : -1;
+          if (activeSort === 'date-asc')  return (a.page.date || '') > (b.page.date || '') ? 1 : -1;
+          if (activeSort === 'title-asc') return (a.page.title || '').localeCompare(b.page.title || '');
+          return 0;
+        }).map(function (r) { return r.page; });
+      }
+      return arr.slice().sort(function (a, b) {
         if (activeSort === 'date-desc') return (b.date || '') > (a.date || '') ? 1 : -1;
         if (activeSort === 'date-asc')  return (a.date || '') > (b.date || '') ? 1 : -1;
         if (activeSort === 'title-asc') return (a.title || '').localeCompare(b.title || '');
@@ -154,21 +180,30 @@
       });
     }
 
+    // When showing all: main section pages first, chapters appended after
+    let results;
+    if (!activeSection) {
+      const mainR    = filtered.filter(function (p) { return !isChapter(p); });
+      const chapterR = filtered.filter(isChapter);
+      results = sortArr(mainR).concat(sortArr(chapterR));
+    } else {
+      results = sortArr(filtered);
+    }
+
     renderResults(results, q, sectionCounts);
   }
 
   /* ── Chip counts ─────────────────────────────────────────────── */
   function updateChipCounts(sectionCounts) {
-    filterChips.forEach(function (chip) {
+    document.querySelectorAll('.filter-chip[data-filter="section"]').forEach(function (chip) {
       const sec   = chip.dataset.value;
       const count = sectionCounts[sec] || 0;
-      const base  = sec;
-      chip.textContent = count ? base + ' · ' + count : base;
+      chip.textContent = count ? sec + ' · ' + count : sec;
     });
   }
 
   function resetChipCounts() {
-    filterChips.forEach(function (chip) {
+    document.querySelectorAll('.filter-chip[data-filter="section"]').forEach(function (chip) {
       chip.textContent = chip.dataset.value;
     });
   }
@@ -328,21 +363,25 @@
     });
   }
 
-  // Section filter chips
-  filterChips.forEach(function (chip) {
-    chip.addEventListener('click', function () {
-      const val = this.dataset.value;
+  // Section filter chips — event delegation handles dynamic chips too
+  if (filtersContainer) {
+    filtersContainer.addEventListener('click', function (e) {
+      const chip = e.target.closest('.filter-chip[data-filter="section"]');
+      if (!chip) return;
+      const val = chip.dataset.value;
       if (activeSection === val) {
         activeSection = '';
-        this.classList.remove('active');
+        chip.classList.remove('active');
       } else {
-        filterChips.forEach(function (c) { c.classList.remove('active'); });
+        document.querySelectorAll('.filter-chip[data-filter="section"]').forEach(function (c) {
+          c.classList.remove('active');
+        });
         activeSection = val;
-        this.classList.add('active');
+        chip.classList.add('active');
       }
       runSearch();
     });
-  });
+  }
 
   /* ── Init ─────────────────────────────────────────────────────── */
   // Pre-load index silently in background (consumes preload hint)
