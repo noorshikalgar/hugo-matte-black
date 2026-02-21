@@ -130,6 +130,7 @@
 .results-count strong { color: var(--mb-text-muted); }
 
 .sort-select {
+  width: auto;
   background: var(--mb-surface-2);
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius-sm);
