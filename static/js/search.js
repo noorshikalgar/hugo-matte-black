@@ -93,16 +93,12 @@
    */
   function matchPhrase(page, phrase, includeContent) {
     const p = phrase.toLowerCase();
-    const title   = (page.title   || '').toLowerCase();
-    const section = includeContent ? (page.section || '').toLowerCase()          : '';
-    const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
-    const content = includeContent ? (page.content     || '').toLowerCase()      : '';
-    // Only match tags if you want, but user requested to remove tag matching
+    const title = (page.title || '').toLowerCase();
+    const desc  = (page.description || '').toLowerCase();
+    // content: now means title OR description only
     return (
-      title.indexOf(p)   !== -1 ||
-      section.indexOf(p) !== -1 ||
-      desc.indexOf(p)    !== -1 ||
-      content.indexOf(p) !== -1
+      title.indexOf(p) !== -1 ||
+      desc.indexOf(p)  !== -1
     );
   }
 
