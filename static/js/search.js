@@ -87,43 +87,57 @@
 
   /* ── Scoring ─────────────────────────────────────────────────── */
   /**
-   * Score a page against terms.
-   * includeContent=false (default): match TITLE ONLY.
-   * includeContent=true: match title + tags + section + description + content.
-   * Returns 0 if any single term has no match anywhere (AND logic).
+   * Check if a page matches a single phrase (array of words, all must match).
+   * includeContent=false: title only. true: title+tags+section+desc+content.
    */
-  function score(page, terms, includeContent) {
-    let total = 0;
+  function matchPhrase(page, words, includeContent) {
     const title   = (page.title   || '').toLowerCase();
     const tags    = includeContent ? (page.tags    || []).join(' ').toLowerCase() : '';
     const section = includeContent ? (page.section || '').toLowerCase()          : '';
     const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
     const content = includeContent ? (page.content     || '').toLowerCase()      : '';
 
-    for (const term of terms) {
-      if (!term) continue;
-      const t = term.toLowerCase();
-
-      const inTitle   = title.indexOf(t);
-      const inTags    = tags.indexOf(t) !== -1;
-      const inSection = section.indexOf(t) !== -1;
-      const inDesc    = desc    && desc.indexOf(t)    !== -1;
-      const inContent = content && content.indexOf(t) !== -1;
-
-      if (inTitle !== -1) {
-        // Bonus for match at start of title
-        total += inTitle === 0 ? 120 : 80;
-      }
-      if (inTags)    total += 40;
-      if (inSection) total += 20;
-      if (inDesc)    total += 30;
-      if (inContent) total += 10;
-
-      // ALL terms must match at least one field
-      const matched = inTitle !== -1 || inTags || inSection || inDesc || inContent;
-      if (!matched) return 0;
+    for (const word of words) {
+      const w = word.toLowerCase();
+      const matched = title.indexOf(w) !== -1 || tags.indexOf(w) !== -1 ||
+                      section.indexOf(w) !== -1 || desc.indexOf(w) !== -1 ||
+                      content.indexOf(w) !== -1;
+      if (!matched) return false; // all words in phrase must match
     }
-    return total;
+    return true;
+  }
+
+  /**
+   * Score a page against OR-groups.
+   * groups = [['react','native'], ['angular']]  → page matches if ANY group matches.
+   * Returns score > 0 if matched.
+   */
+  function score(page, groups, includeContent) {
+    const title   = (page.title   || '').toLowerCase();
+    const tags    = includeContent ? (page.tags    || []).join(' ').toLowerCase() : '';
+    const section = includeContent ? (page.section || '').toLowerCase()          : '';
+    const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
+    const content = includeContent ? (page.content     || '').toLowerCase()      : '';
+
+    let total = 0;
+    let anyGroupMatched = false;
+
+    for (const words of groups) {
+      if (!matchPhrase(page, words, includeContent)) continue;
+      anyGroupMatched = true;
+      // Score based on first word of phrase for simplicity
+      for (const word of words) {
+        const w = word.toLowerCase();
+        const inTitle = title.indexOf(w);
+        if (inTitle !== -1) total += inTitle === 0 ? 120 : 80;
+        if (tags.indexOf(w)    !== -1) total += 40;
+        if (section.indexOf(w) !== -1) total += 20;
+        if (desc.indexOf(w)    !== -1) total += 30;
+        if (content.indexOf(w) !== -1) total += 10;
+      }
+    }
+
+    return anyGroupMatched ? total || 1 : 0;
   }
 
   /* ── Run search ──────────────────────────────────────────────── */
@@ -139,7 +153,15 @@
       q = raw.slice('content:'.length).trim();
     }
 
-    const terms = q.split(/[\s,]+/).filter(Boolean);
+    // comma = OR groups, space = phrase words within a group
+    // e.g. "react native, angular" → [['react','native'], ['angular']]
+    const groups = q.split(',').map(function (g) {
+      return g.trim().split(/\s+/).filter(Boolean);
+    }).filter(function (g) { return g.length > 0; });
+
+    // flat list of all unique words (for highlight)
+    const terms = [];
+    groups.forEach(function (g) { g.forEach(function (w) { if (terms.indexOf(w) === -1) terms.push(w); }); });
 
     if (!q && !activeSection) {
       showBrowse(true);
@@ -152,7 +174,7 @@
 
     // All term-matching results (no section filter yet)
     const allMatches = index.filter(function (page) {
-      if (!terms.length) return true;
+      if (!groups.length) return true;
       return score(page, terms, includeContent) > 0;
     });
 
@@ -175,7 +197,7 @@
 
     // Sort helper
     function sortArr(arr) {
-      if (terms.length) {
+      if (groups.length) {
         return arr.map(function (p) {
           return { page: p, score: score(p, terms, includeContent) };
         }).sort(function (a, b) {
@@ -311,7 +333,7 @@
   /* ── Helpers ─────────────────────────────────────────────────── */
   function highlight(text, q) {
     if (!q || !text) return escHtml(text || '');
-    const terms = q.trim().split(/\s+/).filter(Boolean);
+    const terms = q.trim().split(/[\s,]+/).filter(Boolean);
     let result  = escHtml(text);
     terms.forEach(function (term) {
       const re = new RegExp('(' + regEsc(escHtml(term)) + ')', 'gi');
