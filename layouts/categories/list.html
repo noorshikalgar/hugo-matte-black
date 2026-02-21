@@ -1,0 +1,49 @@
+{{ define "main" }}
+<div>
+  <!-- Header -->
+  <div class="section-header">
+    <h1>Categories</h1>
+    <span class="meta-text">{{ len .Site.Taxonomies.categories }} categories</span>
+  </div>
+
+  <!-- Controls -->
+  <div class="tags-controls" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+    <input
+      type="search"
+      id="category-search"
+      placeholder="filter categories…"
+      class="input"
+      aria-label="Filter categories"
+      style="flex:1; min-width:180px; max-width:350px;"
+    >
+    <select id="category-sort" class="select sort-select" style="min-width:120px;">
+      <option value="count-desc" selected>count ↓</option>
+      <option value="count-asc">count ↑</option>
+      <option value="name-asc">a → z</option>
+      <option value="name-desc">z → a</option>
+    </select>
+  </div>
+
+  <!-- Categories table -->
+  <div class="tags-table-container">
+    <table class="tags-table" id="categories-table" aria-label="Categories list">
+      <thead>
+        <tr>
+          <th data-sort="name" class="tag-name-col">category</th>
+          <th data-sort="count" class="tag-count-col" style="text-align:right;width:100px;">articles</th>
+        </tr>
+      </thead>
+      <tbody id="categories-tbody">
+        {{- range $name, $taxonomy := .Site.Taxonomies.categories }}
+          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $taxonomy }}">
+            <td class="tag-name">
+              <a href="{{ "/categories/" | relURL }}{{ $name | urlize }}/">{{ $name }}</a>
+            </td>
+            <td class="tag-count">{{ len $taxonomy }}</td>
+          </tr>
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{ end }}

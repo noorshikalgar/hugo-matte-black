@@ -7,15 +7,16 @@
   </div>
 
   <!-- Controls -->
-  <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+  <div class="tags-controls" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
     <input
       type="search"
       id="tag-search"
       placeholder="filter tags…"
-      style="flex:1;min-width:160px;background:var(--mb-surface-1);border:1px solid var(--mb-border);border-radius:var(--pico-border-radius-sm);padding:0.35rem 0.6rem;color:var(--mb-text);font-family:'JetBrains Mono',monospace;font-size:0.82rem;"
+      class="input"
       aria-label="Filter tags"
+      style="flex:1; min-width:180px; max-width:350px;"
     >
-    <select id="tag-sort" class="sort-select">
+    <select id="tag-sort" class="select sort-select" style="min-width:120px;">
       <option value="count-desc" selected>count ↓</option>
       <option value="count-asc">count ↑</option>
       <option value="name-asc">a → z</option>
