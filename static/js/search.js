@@ -88,17 +88,17 @@
   /* ── Scoring ─────────────────────────────────────────────────── */
   /**
    * Score a page against terms.
-   * includeContent=false (default): match title, tags, section only.
-   * includeContent=true: also match description and content body.
+   * includeContent=false (default): match TITLE ONLY.
+   * includeContent=true: match title + tags + section + description + content.
    * Returns 0 if any single term has no match anywhere (AND logic).
    */
   function score(page, terms, includeContent) {
     let total = 0;
     const title   = (page.title   || '').toLowerCase();
-    const tags    = (page.tags    || []).join(' ').toLowerCase();
-    const section = (page.section || '').toLowerCase();
-    const desc    = includeContent ? (page.description || '').toLowerCase() : '';
-    const content = includeContent ? (page.content     || '').toLowerCase() : '';
+    const tags    = includeContent ? (page.tags    || []).join(' ').toLowerCase() : '';
+    const section = includeContent ? (page.section || '').toLowerCase()          : '';
+    const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
+    const content = includeContent ? (page.content     || '').toLowerCase()      : '';
 
     for (const term of terms) {
       if (!term) continue;
