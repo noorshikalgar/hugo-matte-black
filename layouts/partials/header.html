@@ -13,7 +13,7 @@
       {{- end -}}
       {{ .Site.Params.shortName | default .Site.Title }}<span class="logo-dot">.</span>
     </a>
-
+    <div class="header-spacer"></div>
     <!-- Desktop navigation: first N items + overflow dropdown -->
     <nav class="nav-desktop" aria-label="Main navigation">
       {{- range $visible -}}
@@ -41,7 +41,7 @@
       {{- end }}
     </nav>
 
-    <div class="header-spacer"></div>
+
 
     <!-- Controls -->
     <div class="header-controls">
