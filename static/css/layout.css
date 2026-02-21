@@ -272,12 +272,21 @@ body {
   flex-wrap: wrap;
 }
 .section-header-title {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
   font-family: "JetBrains Mono", monospace;
   font-size: 1.15rem;
   font-weight: 600;
   color: var(--mb-text);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+.section-header-slash {
+  color: var(--mb-border-focus);
+  font-size: 1.1em;
+  font-family: "JetBrains Mono", monospace;
+  margin-right: 0.5rem;
 }
 .section-header-meta {
   font-size: 0.92rem;
