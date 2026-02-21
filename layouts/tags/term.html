@@ -18,12 +18,22 @@
       </div>
       {{ with .Params.tags }}
         <ul class="tag-list" style="margin-bottom:0.4rem;">
-          {{ range . }}
-            <li class="tag-chip">{{ . }}</li>
-          {{ end }}
+          {{- range first 3 . }}
+            <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+          {{- end }}
         </ul>
       {{ end }}
-      <div class="post-card-desc">{{ .Summary }}</div>
+      <div class="post-card-summary">
+        {{- if .Params.description -}}
+          {{ .Params.description | truncate 140 }}
+        {{- else -}}
+          {{ .Summary | plainify | truncate 140 }}
+        {{- end }}
+      </div>
+      <div class="post-card-footer">
+        <a href="{{ .RelPermalink }}" class="read-more">read →</a>
+        {{- with .ReadingTime }}<span class="meta-text">{{ . }}m</span>{{- end }}
+      </div>
     </article>
   {{ end }}
 </div>
