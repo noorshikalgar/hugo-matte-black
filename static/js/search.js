@@ -86,57 +86,49 @@
   }
 
   /* ── Scoring ─────────────────────────────────────────────────── */
+
   /**
-   * Check if a page matches a single phrase (array of words, all must match).
-   * includeContent=false: title only. true: title+tags+section+desc+content.
+   * Check if a page matches a phrase (exact substring match).
+   * includeContent=false: title only. true: title+section+desc+content.
    */
-  function matchPhrase(page, words, includeContent) {
+  function matchPhrase(page, phrase, includeContent) {
+    const p = phrase.toLowerCase();
     const title   = (page.title   || '').toLowerCase();
-    const tags    = includeContent ? (page.tags    || []).join(' ').toLowerCase() : '';
     const section = includeContent ? (page.section || '').toLowerCase()          : '';
     const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
     const content = includeContent ? (page.content     || '').toLowerCase()      : '';
-
-    for (const word of words) {
-      const w = word.toLowerCase();
-      const matched = title.indexOf(w) !== -1 || tags.indexOf(w) !== -1 ||
-                      section.indexOf(w) !== -1 || desc.indexOf(w) !== -1 ||
-                      content.indexOf(w) !== -1;
-      if (!matched) return false; // all words in phrase must match
-    }
-    return true;
+    // Only match tags if you want, but user requested to remove tag matching
+    return (
+      title.indexOf(p)   !== -1 ||
+      section.indexOf(p) !== -1 ||
+      desc.indexOf(p)    !== -1 ||
+      content.indexOf(p) !== -1
+    );
   }
+
 
   /**
    * Score a page against OR-groups.
-   * groups = [['react','native'], ['angular']]  → page matches if ANY group matches.
+   * groups = ["react native", "angular"]  → page matches if ANY phrase matches.
    * Returns score > 0 if matched.
    */
   function score(page, groups, includeContent) {
-    const title   = (page.title   || '').toLowerCase();
-    const tags    = includeContent ? (page.tags    || []).join(' ').toLowerCase() : '';
-    const section = includeContent ? (page.section || '').toLowerCase()          : '';
-    const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
-    const content = includeContent ? (page.content     || '').toLowerCase()      : '';
-
     let total = 0;
     let anyGroupMatched = false;
-
-    for (const words of groups) {
-      if (!matchPhrase(page, words, includeContent)) continue;
+    for (const phrase of groups) {
+      if (!matchPhrase(page, phrase, includeContent)) continue;
       anyGroupMatched = true;
-      // Score based on first word of phrase for simplicity
-      for (const word of words) {
-        const w = word.toLowerCase();
-        const inTitle = title.indexOf(w);
-        if (inTitle !== -1) total += inTitle === 0 ? 120 : 80;
-        if (tags.indexOf(w)    !== -1) total += 40;
-        if (section.indexOf(w) !== -1) total += 20;
-        if (desc.indexOf(w)    !== -1) total += 30;
-        if (content.indexOf(w) !== -1) total += 10;
-      }
+      // Score based on phrase location
+      const p = phrase.toLowerCase();
+      const title   = (page.title   || '').toLowerCase();
+      const section = includeContent ? (page.section || '').toLowerCase()          : '';
+      const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
+      const content = includeContent ? (page.content     || '').toLowerCase()      : '';
+      if (title.indexOf(p)   !== -1) total += title.indexOf(p) === 0 ? 120 : 80;
+      if (section.indexOf(p) !== -1) total += 20;
+      if (desc.indexOf(p)    !== -1) total += 30;
+      if (content.indexOf(p) !== -1) total += 10;
     }
-
     return anyGroupMatched ? total || 1 : 0;
   }
 
@@ -153,15 +145,15 @@
       q = raw.slice('content:'.length).trim();
     }
 
-    // comma = OR groups, space = phrase words within a group
-    // e.g. "react native, angular" → [['react','native'], ['angular']]
+
+    // comma = OR groups, each group is an exact phrase
+    // e.g. "react native, angular" → ["react native", "angular"]
     const groups = q.split(',').map(function (g) {
-      return g.trim().split(/\s+/).filter(Boolean);
+      return g.trim();
     }).filter(function (g) { return g.length > 0; });
 
-    // flat list of all unique words (for highlight)
-    const terms = [];
-    groups.forEach(function (g) { g.forEach(function (w) { if (terms.indexOf(w) === -1) terms.push(w); }); });
+    // flat list of all phrases for highlight
+    const terms = groups.slice();
 
     if (!q && !activeSection) {
       showBrowse(true);
@@ -333,10 +325,12 @@
   /* ── Helpers ─────────────────────────────────────────────────── */
   function highlight(text, q) {
     if (!q || !text) return escHtml(text || '');
-    const terms = q.trim().split(/[\s,]+/).filter(Boolean);
+    // Highlight each phrase (comma-separated)
+    const phrases = q.split(',').map(function (g) { return g.trim(); }).filter(Boolean);
     let result  = escHtml(text);
-    terms.forEach(function (term) {
-      const re = new RegExp('(' + regEsc(escHtml(term)) + ')', 'gi');
+    phrases.forEach(function (phrase) {
+      if (!phrase) return;
+      const re = new RegExp('(' + regEsc(escHtml(phrase)) + ')', 'gi');
       result = result.replace(re, '<mark>$1</mark>');
     });
     return result;
