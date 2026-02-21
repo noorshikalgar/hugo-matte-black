@@ -117,7 +117,7 @@
 <script>
   window.searchSections = {{ .Site.Params.searchSections | default (slice) | jsonify }};
   window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
-  window.searchIndexURL = {{ "/index.json" | relURL | jsonify }};
+  window.searchIndexURL = '{{ "/index.json" | relURL }}';
 </script>
 <script src="{{ "js/search.js" | relURL }}" defer></script>
 {{ end }}
