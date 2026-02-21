@@ -27,6 +27,7 @@
 
   /* ── State ───────────────────────────────────────────────────── */
   let index         = null;
+  let isLoading     = false;   // guard against duplicate fetches
   let query         = '';
   let activeSection = '';   // '' = all
   let activeSort    = 'relevance';
@@ -35,6 +36,12 @@
   /* ── Load index ──────────────────────────────────────────────── */
   /* silent=true: fetch in background without showing the spinner  */
   function loadIndex(silent) {
+    if (index || isLoading) {
+      // Already loaded or in-flight; if a search is pending, run it now
+      if (index && query) runSearch();
+      return;
+    }
+    isLoading = true;
     const indexURL = (window.searchIndexURL) || '/index.json';
     if (!silent) showLoading(true);
     fetch(indexURL)
@@ -44,11 +51,13 @@
       })
       .then(function (data) {
         index = data;
+        isLoading = false;
         if (!silent) showLoading(false);
-        if (query) runSearch();
+        if (query || activeSection) runSearch();
       })
       .catch(function () {
         loadError = true;
+        isLoading = false;
         if (!silent) showLoading(false);
         if (!silent) showError('Could not load search index.');
       });
