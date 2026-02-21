@@ -34,8 +34,9 @@
 
   /* ── Load index ──────────────────────────────────────────────── */
   function loadIndex() {
+    const indexURL = (window.searchIndexURL) || '/index.json';
     showLoading(true);
-    fetch('/index.json', { credentials: 'same-origin' })
+    fetch(indexURL, { credentials: 'same-origin' })
       .then(function (r) {
         if (!r.ok) throw new Error('fetch failed');
         return r.json();

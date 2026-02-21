@@ -26,6 +26,24 @@
     });
   }
 
+  /* ── "More ▾" overflow nav dropdown ────────────────────────── */
+  const moreBtn      = document.getElementById('nav-more-btn');
+  const moreDropdown = document.getElementById('nav-more-dropdown');
+
+  if (moreBtn && moreDropdown) {
+    moreBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const isOpen = moreDropdown.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', isOpen);
+    });
+    document.addEventListener('click', function (e) {
+      if (!moreDropdown.contains(e.target) && !moreBtn.contains(e.target)) {
+        moreDropdown.classList.remove('open');
+        moreBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
   /* ── Layout toggle (grid ↔ single column) ───────────────────── */
   const layoutToggle = document.getElementById('layout-toggle');
   const layoutIcon   = document.getElementById('layout-icon');

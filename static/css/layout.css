@@ -124,6 +124,43 @@ html, body {
 }
 .hamburger:hover span { background: var(--mb-text); }
 
+/* "More ▾" overflow dropdown */
+.nav-more {
+  position: relative;
+}
+.nav-more-btn {
+  font-size: 0.875rem;
+  font-family: inherit;
+  width: auto;
+  padding: 0.3rem 0.65rem;
+}
+.nav-more-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border);
+  min-width: 160px;
+  z-index: 200;
+  flex-direction: column;
+}
+.nav-more-dropdown.open { display: flex; }
+.nav-more-dropdown a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--mb-border);
+}
+.nav-more-dropdown a:last-child { border-bottom: none; }
+.nav-more-dropdown a:hover {
+  background: var(--mb-surface-2);
+  color: var(--mb-text);
+}
+
 /* Mobile nav */
 .nav-mobile {
   display: none;

@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{- $mainSections := .Site.Params.mainSections | default (slice "guides" "posts") -}}
+{{- $mainSections := .Site.Params.mainSections | default .Site.Params.showCountSections | default (slice "guides" "posts") -}}
 {{- $isMain := in $mainSections .Section -}}
 {{- $pages := .Pages -}}
 {{- if $isMain -}}
@@ -7,7 +7,7 @@
 {{- else -}}
   {{- $pages = .Pages.ByParam "weight" -}}
 {{- end -}}
-{{- $paginator := .Paginate $pages (.Site.Params.paginate | default 30) -}}
+{{- $paginator := .Paginate $pages (.Site.Params.postsPerPage | default .Site.Params.paginate | default 30) -}}
 
 <div>
   <!-- Section header -->

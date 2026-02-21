@@ -1,32 +1,50 @@
 {{- $currentPage := . -}}
 {{- $menuItems := .Site.Menus.main -}}
+{{- $visibleCount := .Site.Params.navVisibleItems | default 5 -}}
+{{- $visible := first $visibleCount $menuItems -}}
+{{- $overflow := after $visibleCount $menuItems -}}
 <header class="site-header">
   <div class="header-container">
 
     <!-- Logo / Site title -->
     <a href="{{ "/" | relURL }}" class="site-logo">
       {{- with .Site.Params.logo -}}
-        <img src="{{ . | relURL }}" alt="{{ $.Site.Title }}" height="22" style="vertical-align:middle;margin-right:0.4rem;">
+        <img src="{{ . | relURL }}" alt="{{ $.Site.Title }}" height="20" style="vertical-align:middle;margin-right:0.4rem;">
       {{- end -}}
       {{ .Site.Params.shortName | default .Site.Title }}<span class="logo-dot">.</span>
     </a>
 
-    <!-- Desktop navigation -->
+    <!-- Desktop navigation: first N items + overflow dropdown -->
     <nav class="nav-desktop" aria-label="Main navigation">
-      {{- range $menuItems -}}
+      {{- range $visible -}}
         <a href="{{ .URL | relURL }}"
            class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}"
            {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
           {{- .Name -}}
         </a>
       {{- end -}}
+
+      {{- if $overflow }}
+      <div class="nav-more" id="nav-more">
+        <button class="nav-more-btn header-icon-btn" id="nav-more-btn" aria-haspopup="true" aria-expanded="false">
+          more ▾
+        </button>
+        <div class="nav-more-dropdown" id="nav-more-dropdown" role="menu">
+          {{- range $overflow -}}
+            <a href="{{ .URL | relURL }}" role="menuitem"
+               {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+              {{- .Name -}}
+            </a>
+          {{- end -}}
+        </div>
+      </div>
+      {{- end }}
     </nav>
 
     <div class="header-spacer"></div>
 
     <!-- Controls -->
     <div class="header-controls">
-      <!-- Layout toggle (grid ↔ list) — only on list pages -->
       {{- if .IsSection }}
       <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
         <span id="layout-icon">⊞</span>
@@ -49,7 +67,7 @@
 
   </div>
 
-  <!-- Mobile navigation -->
+  <!-- Mobile navigation — all items -->
   <nav class="nav-mobile" id="mobile-nav" aria-label="Mobile navigation">
     <a href="{{ "/" | relURL }}">Search</a>
     {{- range $menuItems -}}

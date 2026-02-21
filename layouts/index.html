@@ -1,5 +1,6 @@
 {{ define "main" }}
-{{- $sections := .Site.Params.showCountSections | default (slice "guides" "posts" "cheatsheets") -}}
+{{- $statSections  := .Site.Params.showCountSections | default (slice "guides" "posts" "cheatsheets") -}}
+{{- $filterSections := .Site.Params.searchSections | default $statSections -}}
 
 <div class="search-page">
 
@@ -30,7 +31,7 @@
     <!-- Filter chips -->
     <div class="search-filters" id="search-filters">
       <span class="filter-label">type:</span>
-      {{- range $sections }}
+      {{- range $filterSections }}
         <button class="filter-chip" data-filter="section" data-value="{{ . }}">{{ . }}</button>
       {{- end }}
       <span class="filter-label" style="margin-left:0.5rem;">sort:</span>
@@ -46,7 +47,7 @@
   <!-- Search tabs -->
   <div class="search-tabs" id="search-tabs" style="display:none">
     <button class="search-tab active" data-tab="all">All</button>
-    {{- range $sections }}
+    {{- range $filterSections }}
       <button class="search-tab" data-tab="{{ . }}">{{ . | title }}</button>
     {{- end }}
     <button class="search-tab" data-tab="tags">Tags</button>
@@ -73,15 +74,12 @@
   <div id="browse-section">
     <!-- Stats bar -->
     <div class="stats-bar">
-      {{- range $sections }}
-        {{- $count := 0 }}
-        {{- range $.Site.RegularPages }}
-          {{- if eq .Section $ }}{{- $count = add $count 1 }}{{- end }}
-        {{- end }}
+      {{- range $sec := $statSections }}
+        {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
         <div class="stat-item">
-          <a href="{{ printf "/%s/" $ | relURL }}" style="text-decoration:none;">
-            <span class="stat-number">{{ $count }}+</span>
-            <span class="stat-label">{{ $ }}</span>
+          <a href="{{ printf "/%s/" $sec | relURL }}" style="text-decoration:none;">
+            <span class="stat-number">{{ len $sectionPages }}+</span>
+            <span class="stat-label">{{ $sec }}</span>
           </a>
         </div>
       {{- end }}
@@ -97,11 +95,11 @@
     <div class="quick-nav" style="margin-top:1.25rem;">
       <p class="quick-nav-title">Browse sections</p>
       <div class="quick-nav-grid">
-        {{- range $sections }}
-          {{- $pages := where $.Site.RegularPages "Section" . }}
-          <a href="{{ printf "/%s/" $ | relURL }}" class="quick-nav-item">
-            <span class="quick-nav-name">{{ . | title }}</span>
-            <span class="quick-nav-count">{{ len $pages }} articles</span>
+        {{- range $sec := $statSections }}
+          {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
+          <a href="{{ printf "/%s/" $sec | relURL }}" class="quick-nav-item">
+            <span class="quick-nav-name">{{ $sec | title }}</span>
+            <span class="quick-nav-count">{{ len $sectionPages }} articles</span>
           </a>
         {{- end }}
         <a href="{{ "/tags/" | relURL }}" class="quick-nav-item">
@@ -116,5 +114,10 @@
 {{ end }}
 
 {{ define "scripts" }}
+<script>
+  window.searchSections = {{ .Site.Params.searchSections | default (slice) | jsonify }};
+  window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
+  window.searchIndexURL = {{ "/index.json" | relURL | jsonify }};
+</script>
 <script src="{{ "js/search.js" | relURL }}" defer></script>
 {{ end }}

@@ -9,7 +9,7 @@
 {{- else with .Site.Params.description }}<meta name="description" content="{{ . }}">
 {{- end }}
 
-<meta name="robots" content="index, follow">
+<meta name="robots" content="{{ if .Params.noindex }}noindex, nofollow{{ else }}index, follow{{ end }}">
 
 {{- with .Params.tags }}
 <meta name="keywords" content="{{ delimit . ", " }}">
@@ -24,16 +24,24 @@
 <meta property="og:url"         content="{{ .Permalink }}">
 <meta property="og:site_name"   content="{{ .Site.Title }}">
 {{- with .Description }}<meta property="og:description" content="{{ . }}">{{- end }}
-{{- with .Site.Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{- end }}
+{{- with .Site.Params.ogImage }}<meta property="og:image" content="{{ . | relURL }}">{{- end }}
 
 <!-- Twitter Card -->
 <meta name="twitter:card"  content="summary">
 <meta name="twitter:title" content="{{ $title }}">
 {{- with .Description }}<meta name="twitter:description" content="{{ . }}">{{- end }}
 
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
-<link rel="icon" type="image/png"     href="{{ "favicon.png" | relURL }}">
+<!-- Favicons — reads your params.faviconSvg / faviconPng / appleTouchIcon / webmanifest -->
+<link rel="icon" type="image/svg+xml"
+      href="{{ .Site.Params.faviconSvg | default "favicon.svg" | relURL }}">
+<link rel="icon" type="image/png" sizes="96x96"
+      href="{{ .Site.Params.faviconPng | default "favicon-96x96.png" | relURL }}">
+{{- with .Site.Params.appleTouchIcon }}
+<link rel="apple-touch-icon" href="{{ . | relURL }}">
+{{- end }}
+{{- with .Site.Params.webmanifest }}
+<link rel="manifest" href="{{ . | relURL }}">
+{{- end }}
 
 <!-- Pico CSS -->
 <link rel="stylesheet" href="{{ "css/pico/pico.min.css" | relURL }}">
@@ -54,3 +62,6 @@
 {{- if or .IsHome (eq .Type "search") }}
 <link rel="preload" href="{{ "index.json" | relURL }}" as="fetch" crossorigin>
 {{- end }}
+
+<!-- Google Analytics (reads [services.googleAnalytics] from hugo.toml) -->
+{{- template "_internal/google_analytics.html" . -}}

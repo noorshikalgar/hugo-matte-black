@@ -1,4 +1,4 @@
-{{- $mainSections := .Site.Params.mainSections | default (slice "guides" "posts") -}}
+{{- $mainSections := .Site.Params.mainSections | default .Site.Params.showCountSections | default (slice "guides" "posts") -}}
 {{- $section := .Section -}}
 {{- $isMain := in $mainSections $section -}}
 
