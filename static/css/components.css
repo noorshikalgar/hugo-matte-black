@@ -50,12 +50,11 @@ ul li {
   background: var(--mb-bg);
   transition: background 0.1s;
 }
-  margin: 0 0 0.4rem 0;
-  line-height: 1.4;
-}
+
 .post-card-title a {
   color: var(--mb-text);
   text-decoration: none;
+  margin-bottom: 5px;
 }
 .post-card-title a:hover { color: var(--mb-accent); }
 

@@ -44,6 +44,83 @@
         {{- end }}
       </tbody>
     </table>
+    <nav class="pagination" id="categories-pagination" style="margin-top:1.5rem;"></nav>
   </div>
+{{ define "scripts" }}
+<script>
+(function() {
+  const searchInput = document.getElementById('category-search');
+  const sortSelect  = document.getElementById('category-sort');
+  const tbody       = document.getElementById('categories-tbody');
+  const pagination  = document.getElementById('categories-pagination');
+  const PAGE_SIZE   = 25;
+
+  function getRows() {
+    return Array.from(tbody.querySelectorAll('.tag-row'));
+  }
+
+  function filterRows(rows) {
+    const q = searchInput.value.toLowerCase().trim();
+    return rows.filter(r => r.dataset.name.includes(q));
+  }
+
+  function sortRows(rows) {
+    const val = sortSelect.value;
+    rows.sort((a, b) => {
+      const aName  = a.dataset.name;
+      const bName  = b.dataset.name;
+      const aCount = +a.dataset.count;
+      const bCount = +b.dataset.count;
+      if (val === 'name-asc')   return aName.localeCompare(bName);
+      if (val === 'name-desc')  return bName.localeCompare(aName);
+      if (val === 'count-asc')  return aCount - bCount;
+      return bCount - aCount; // count-desc default
+    });
+    return rows;
+  }
+
+  function renderPage(rows, page) {
+    tbody.innerHTML = '';
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    rows.slice(start, end).forEach(r => tbody.appendChild(r));
+  }
+
+  function renderPagination(total, page) {
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+    let html = '';
+    if (page > 1) html += `<a href="#" class="pagination-btn" data-page="${page-1}">← Prev</a>`;
+    html += `<span class="pagination-info">Page ${page} of ${totalPages}</span>`;
+    if (page < totalPages) html += `<a href="#" class="pagination-btn" data-page="${page+1}">Next →</a>`;
+    pagination.innerHTML = html;
+    Array.from(pagination.querySelectorAll('.pagination-btn')).forEach(btn => {
+      btn.onclick = e => { e.preventDefault(); goToPage(+btn.dataset.page); };
+    });
+  }
+
+  let currentPage = 1;
+  let filteredSortedRows = [];
+
+  function update() {
+    const allRows = getRows();
+    filteredSortedRows = sortRows(filterRows(allRows));
+    currentPage = 1;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
+  }
+
+  function goToPage(page) {
+    currentPage = page;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
+  }
+
+  searchInput.addEventListener('input', update);
+  sortSelect.addEventListener('change', update);
+  update();
+})();
+</script>
+{{ end }}
 </div>
 {{ end }}

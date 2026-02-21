@@ -44,6 +44,7 @@
         {{- end }}
       </tbody>
     </table>
+    <nav class="pagination" id="tags-pagination" style="margin-top:1.5rem;"></nav>
   </div>
 </div>
 {{ end }}
@@ -54,6 +55,8 @@
   const searchInput = document.getElementById('tag-search');
   const sortSelect  = document.getElementById('tag-sort');
   const tbody       = document.getElementById('tags-tbody');
+  const pagination  = document.getElementById('tags-pagination');
+  const PAGE_SIZE   = 25;
 
   function getRows() {
     return Array.from(tbody.querySelectorAll('.tag-row'));
@@ -61,9 +64,7 @@
 
   function filterRows(rows) {
     const q = searchInput.value.toLowerCase().trim();
-    rows.forEach(r => {
-      r.style.display = r.dataset.name.includes(q) ? '' : 'none';
-    });
+    return rows.filter(r => r.dataset.name.includes(q));
   }
 
   function sortRows(rows) {
@@ -78,13 +79,44 @@
       if (val === 'count-asc')  return aCount - bCount;
       return bCount - aCount; // count-desc default
     });
-    rows.forEach(r => tbody.appendChild(r));
+    return rows;
   }
 
+  function renderPage(rows, page) {
+    tbody.innerHTML = '';
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    rows.slice(start, end).forEach(r => tbody.appendChild(r));
+  }
+
+  function renderPagination(total, page) {
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+    let html = '';
+    if (page > 1) html += `<a href="#" class="pagination-btn" data-page="${page-1}">← Prev</a>`;
+    html += `<span class="pagination-info">Page ${page} of ${totalPages}</span>`;
+    if (page < totalPages) html += `<a href="#" class="pagination-btn" data-page="${page+1}">Next →</a>`;
+    pagination.innerHTML = html;
+    Array.from(pagination.querySelectorAll('.pagination-btn')).forEach(btn => {
+      btn.onclick = e => { e.preventDefault(); goToPage(+btn.dataset.page); };
+    });
+  }
+
+  let currentPage = 1;
+  let filteredSortedRows = [];
+
   function update() {
-    const rows = getRows();
-    sortRows(rows);
-    filterRows(rows);
+    const allRows = getRows();
+    filteredSortedRows = sortRows(filterRows(allRows));
+    currentPage = 1;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
+  }
+
+  function goToPage(page) {
+    currentPage = page;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
   }
 
   searchInput.addEventListener('input', update);
