@@ -23,12 +23,12 @@ ul li {
 .post-card:hover { background: var(--mb-surface-1); }
 
 /* Remove double borders on grid */
-.posts-grid {
+/* .posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 5px;
   margin-bottom: 1.5rem;
-}
+} */
 .posts-grid .post-card {
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
