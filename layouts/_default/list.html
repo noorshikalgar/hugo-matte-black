@@ -7,7 +7,7 @@
 {{- else -}}
   {{- $pages = .Pages.ByParam "weight" -}}
 {{- end -}}
-{{- $paginator := .Paginate $pages (.Site.Params.postsPerPage | default .Site.Params.paginate | default 30) -}}
+{{- $paginator := .Paginate $pages (.Site.Params.postsPerPage | default .Site.Params.paginate | default 12) -}}
 
 <div>
   <!-- Section header -->
