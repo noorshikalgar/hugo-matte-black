@@ -19,8 +19,18 @@
 .post-card:hover { background: var(--mb-surface-1); }
 
 /* Remove double borders on grid */
-.posts-grid .post-card:nth-child(n) { border-right: 1px solid var(--mb-border); }
-.posts-grid .post-card:last-child    { border-bottom: none; }
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 5px;
+  margin-bottom: 1.5rem;
+}
+.posts-grid .post-card {
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  margin: 0;
+}
+.posts-grid .post-card:last-child { border-bottom: 1px solid var(--mb-border); }
 
 .post-card-meta {
   display: flex;
@@ -29,15 +39,13 @@
   margin-bottom: 0.4rem;
 }
 
-.post-date {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.75rem;
-  color: var(--mb-text-faint);
+.post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: var(--mb-bg);
+  transition: background 0.1s;
 }
-
-.post-card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
   margin: 0 0 0.4rem 0;
   line-height: 1.4;
 }

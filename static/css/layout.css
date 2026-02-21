@@ -286,6 +286,16 @@ body {
 .section-header h1::before,
 .section-header h2::before { content: "// "; color: var(--mb-border-focus); }
 
+/* Section description */
+.section-description {
+  font-size: 1.05rem;
+  color: var(--mb-text-muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-family: var(--pico-font-family-sans-serif);
+  letter-spacing: 0.01em;
+}
+
 /* ── 7. Scroll to top ────────────────────────────────────────── */
 .scroll-to-top {
   display: none;
