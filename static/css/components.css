@@ -26,7 +26,7 @@
   margin-bottom: 1.5rem;
 }
 .posts-grid .post-card {
-  border: 1px solid var(--mb-border);
+  /* border removed for cleaner grid */
   border-radius: var(--pico-border-radius);
   margin: 0;
 }
