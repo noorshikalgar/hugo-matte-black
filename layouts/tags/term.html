@@ -1,3 +1,4 @@
+{{ define "main" }}
 {{ $paginator := .Paginate (.Pages) }}
 
 <section class="section-header">
@@ -37,4 +38,5 @@
     <a href="{{ $paginator.Next.URL }}" class="pagination-btn">Next →</a>
   {{ end }}
 </nav>
+{{ end }}
 {{ end }}
