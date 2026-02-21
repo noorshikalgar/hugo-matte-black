@@ -44,15 +44,6 @@
     </div>
   </div>
 
-  <!-- Search tabs -->
-  <div class="search-tabs" id="search-tabs" style="display:none">
-    <button class="search-tab active" data-tab="all">All</button>
-    {{- range $filterSections }}
-      <button class="search-tab" data-tab="{{ . }}">{{ . | title }}</button>
-    {{- end }}
-    <button class="search-tab" data-tab="tags">Tags</button>
-  </div>
-
   <!-- Results meta bar -->
   <div class="search-meta-bar" id="results-meta" style="display:none">
     <span class="results-count" id="results-count"></span>

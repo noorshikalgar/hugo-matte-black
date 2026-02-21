@@ -20,8 +20,7 @@
   const browseSection = document.getElementById('browse-section');
   const sortSelect    = document.getElementById('sort-select');
   const filterChips   = document.querySelectorAll('.filter-chip[data-filter="section"]');
-  const tabsEl        = document.getElementById('search-tabs');
-  const tabs          = document.querySelectorAll('.search-tab');
+
 
   if (!searchInput) return;
 
@@ -112,16 +111,28 @@
     if (!q && !activeSection) {
       showBrowse(true);
       clearResults();
+      resetChipCounts();
       return;
     }
 
     showBrowse(false);
 
-    let results = index.filter(function (page) {
-      if (activeSection && page.section !== activeSection) return false;
-      if (!terms.length) return true;          // section filter only
+    // All term-matching results (ignoring section) — used for per-chip counts
+    let allMatches = index.filter(function (page) {
+      if (!terms.length) return true;
       return score(page, terms) > 0;
     });
+
+    // Per-section counts across ALL matches (so inactive chips show their count too)
+    const sectionCounts = {};
+    allMatches.forEach(function (page) {
+      sectionCounts[page.section] = (sectionCounts[page.section] || 0) + 1;
+    });
+
+    // Apply section filter for actual display
+    let results = activeSection
+      ? allMatches.filter(function (page) { return page.section === activeSection; })
+      : allMatches.slice();
 
     // Score + sort
     if (terms.length) {
@@ -135,7 +146,6 @@
         return 0;
       }).map(function (r) { return r.page; });
     } else {
-      // Section-only: sort by sort preference
       results.sort(function (a, b) {
         if (activeSort === 'date-desc') return (b.date || '') > (a.date || '') ? 1 : -1;
         if (activeSort === 'date-asc')  return (a.date || '') > (b.date || '') ? 1 : -1;
@@ -144,11 +154,29 @@
       });
     }
 
-    renderResults(results, q);
+    renderResults(results, q, sectionCounts);
+  }
+
+  /* ── Chip counts ─────────────────────────────────────────────── */
+  function updateChipCounts(sectionCounts) {
+    filterChips.forEach(function (chip) {
+      const sec   = chip.dataset.value;
+      const count = sectionCounts[sec] || 0;
+      const base  = sec;
+      chip.textContent = count ? base + ' · ' + count : base;
+    });
+  }
+
+  function resetChipCounts() {
+    filterChips.forEach(function (chip) {
+      chip.textContent = chip.dataset.value;
+    });
   }
 
   /* ── Render ──────────────────────────────────────────────────── */
-  function renderResults(results, q) {
+  function renderResults(results, q, sectionCounts) {
+    updateChipCounts(sectionCounts || {});
+
     if (!results.length) {
       clearResults();
       if (q || activeSection) {
@@ -156,7 +184,6 @@
         if (emptyQuery) emptyQuery.textContent = q || activeSection;
       }
       if (metaBar) metaBar.style.display = 'none';
-      if (tabsEl)  tabsEl.style.display  = 'none';
       return;
     }
 
@@ -170,7 +197,6 @@
           (q ? ' for "' + escHtml(q) + '"' : '');
       }
     }
-    if (tabsEl) tabsEl.style.display = 'flex';
 
     const frag = document.createDocumentFragment();
 
@@ -311,16 +337,6 @@
         activeSection = val;
         this.classList.add('active');
       }
-      runSearch();
-    });
-  });
-
-  // Tab buttons
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      tabs.forEach(function (t) { t.classList.remove('active'); });
-      this.classList.add('active');
-      activeSection = this.dataset.tab === 'all' ? '' : this.dataset.tab;
       runSearch();
     });
   });
