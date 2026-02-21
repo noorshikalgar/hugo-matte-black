@@ -249,13 +249,26 @@ body {
 }
 
 /* ── 5. Posts Grid ───────────────────────────────────────────── */
+
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 0;
-  /* border: 1px solid var(--mb-border); */
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
   border-radius: var(--pico-border-radius);
   overflow: hidden;
+}
+
+@media (max-width: 1100px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .posts-grid.single-column {
