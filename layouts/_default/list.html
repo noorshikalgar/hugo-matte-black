@@ -11,13 +11,11 @@
 
 <div>
   <!-- Section header -->
+
   <div class="section-header">
-    <h1>{{ .Title | upper }}</h1>
-    <div style="display:flex;align-items:center;gap:0.5rem;">
+    <div class="section-header-title">{{ .Title | upper }}</div>
+    <div class="section-header-meta">
       <span class="meta-text">{{ len .Pages }} articles</span>
-      <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
-        <span id="layout-icon">⊞</span>
-      </button>
     </div>
   </div>
 

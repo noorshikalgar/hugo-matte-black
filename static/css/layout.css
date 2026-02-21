@@ -265,26 +265,40 @@ body {
 /* ── 6. Section header ───────────────────────────────────────── */
 .section-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--mb-border);
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
 }
-.section-header h1,
-.section-header h2 {
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-size: 1.1rem;
+.section-header-title {
   font-family: "JetBrains Mono", monospace;
-  color: var(--mb-text-muted);
-  font-weight: 500;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--mb-text);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
-.section-header h1::before,
-.section-header h2::before { content: "// "; color: var(--mb-border-focus); }
+.section-header-meta {
+  font-size: 0.92rem;
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 0.1rem;
+}
+@media (max-width: 600px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  .section-header-title {
+    font-size: 1rem;
+  }
+  .section-header-meta {
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+  }
+}
 
 /* Section description */
 .section-description {
