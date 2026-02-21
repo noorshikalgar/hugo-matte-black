@@ -6,11 +6,12 @@
   <p style="color:var(--mb-text-muted);font-size:0.9rem;margin-bottom:1.25rem;">Articles tagged with <strong>{{ .Title }}</strong>. Showing {{ $paginator.TotalNumberOfElements }} articles.</p>
 </section>
 
-<div class="posts-grid">
+<div class="posts-grid" id="posts-container">
   {{ range $paginator.Pages }}
     <article class="post-card">
       <div class="post-card-meta">
         <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+        {{- partial "status-badge.html" . -}}
       </div>
       <div class="post-card-title">
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
