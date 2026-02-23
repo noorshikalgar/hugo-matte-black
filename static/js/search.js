@@ -397,6 +397,8 @@
   function clearResults() {
     resultsEl.innerHTML = '';
     emptyEl.style.display = 'none';
+    if (metaBar) metaBar.style.display = 'none';
+    if (resultsCount) resultsCount.textContent = '';
     allResults = [];
     visibleCount = 0;
     if (scrollObserver) { scrollObserver.disconnect(); scrollObserver = null; }
