@@ -12,7 +12,7 @@
     {{- range $allPages.ByDate.Reverse }}
       <article class="post-card">
         <div class="post-card-meta">
-          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
           {{- partial "status-badge.html" . -}}
         </div>
         <div class="post-card-title">
