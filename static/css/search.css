@@ -244,6 +244,12 @@
   border-radius: 0;
 }
 
+/* Infinite scroll sentinel */
+.scroll-sentinel {
+  height: 1px;
+  margin-top: 0.5rem;
+}
+
 /* ── 7. Search Empty / Loading States ────────────────────────── */
 .search-empty {
   padding: 2.5rem 1rem;

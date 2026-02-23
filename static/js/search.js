@@ -54,6 +54,14 @@
   let activeSort    = 'relevance';
   let loadError     = false;
 
+  /* Infinite scroll state */
+  const PAGE_SIZE       = 20;
+  let   allResults      = [];   // full sorted result list for current search
+  let   visibleCount    = 0;    // how many are currently rendered
+  let   currentQ        = '';
+  let   currentInclude  = false;
+  let   scrollObserver  = null;
+
   /* ── Load index ──────────────────────────────────────────────── */
   /* silent=true: fetch in background without showing the spinner  */
   function loadIndex(silent) {
@@ -234,6 +242,92 @@
     });
   }
 
+  /* ── Build a single result card element ─────────────────────── */
+  function buildCard(page, q, includeContent) {
+    const a = document.createElement('a');
+    a.className = 'search-result-item';
+    a.href      = page.permalink;
+
+    const path = document.createElement('div');
+    path.className = 'result-path';
+
+    const pathLeft = document.createElement('span');
+    pathLeft.textContent = page.section + (page.date ? ' · ' + page.date : '');
+    path.appendChild(pathLeft);
+
+    if (page.readingTime) {
+      const rt = document.createElement('span');
+      rt.className   = 'result-read-time';
+      rt.textContent = page.readingTime + ' min';
+      path.appendChild(rt);
+    }
+
+    const title = document.createElement('div');
+    title.className = 'result-title';
+    title.innerHTML = highlight(page.title || 'Untitled', q);
+
+    const excerpt = document.createElement('div');
+    excerpt.className = 'result-excerpt';
+    if (includeContent) {
+      excerpt.innerHTML = highlight(page.description || '', q);
+    } else {
+      excerpt.textContent = page.description || '';
+    }
+
+    const footer = document.createElement('div');
+    footer.className = 'result-footer';
+    if (page.tags && page.tags.length) {
+      page.tags.slice(0, 3).forEach(function (tag) {
+        const t = document.createElement('span');
+        t.className   = 'tag-chip';
+        t.textContent = tag;
+        footer.appendChild(t);
+      });
+    }
+
+    a.appendChild(path);
+    a.appendChild(title);
+    if (page.description) a.appendChild(excerpt);
+    if (footer.children.length) a.appendChild(footer);
+    return a;
+  }
+
+  /* ── Append next PAGE_SIZE cards to the wrapper ─────────────── */
+  function appendNextPage() {
+    const wrapper = resultsEl.querySelector('.search-results');
+    if (!wrapper) return;
+    // Remove sentinel before appending
+    const oldSentinel = document.getElementById('scroll-sentinel');
+    if (oldSentinel) oldSentinel.remove();
+
+    const slice = allResults.slice(visibleCount, visibleCount + PAGE_SIZE);
+    slice.forEach(function (page) {
+      wrapper.appendChild(buildCard(page, currentQ, currentInclude));
+    });
+    visibleCount += slice.length;
+
+    // Re-attach sentinel if there are more results
+    if (visibleCount < allResults.length) {
+      attachSentinel();
+    } else if (scrollObserver) {
+      scrollObserver.disconnect();
+    }
+  }
+
+  /* ── Create & observe the scroll sentinel ────────────────────── */
+  function attachSentinel() {
+    const sentinel = document.createElement('div');
+    sentinel.id        = 'scroll-sentinel';
+    sentinel.className = 'scroll-sentinel';
+    resultsEl.appendChild(sentinel);
+
+    if (scrollObserver) scrollObserver.disconnect();
+    scrollObserver = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) appendNextPage();
+    }, { rootMargin: '100px' });
+    scrollObserver.observe(sentinel);
+  }
+
   /* ── Render ──────────────────────────────────────────────────── */
   function renderResults(results, q, sectionCounts, includeContent) {
     updateChipCounts(sectionCounts || {});
@@ -259,65 +353,20 @@
       }
     }
 
-    const frag = document.createDocumentFragment();
+    // Store full result set and reset visible count
+    allResults     = results;
+    visibleCount   = 0;
+    currentQ       = q;
+    currentInclude = includeContent;
+    if (scrollObserver) scrollObserver.disconnect();
 
     const wrapper = document.createElement('div');
     wrapper.className = 'search-results';
-
-    results.slice(0, 100).forEach(function (page) {
-      const a = document.createElement('a');
-      a.className = 'search-result-item';
-      a.href      = page.permalink;
-
-      const path = document.createElement('div');
-      path.className = 'result-path';
-
-      const pathLeft = document.createElement('span');
-      pathLeft.textContent = page.section + (page.date ? ' · ' + page.date : '');
-      path.appendChild(pathLeft);
-
-      if (page.readingTime) {
-        const rt = document.createElement('span');
-        rt.className   = 'result-read-time';
-        rt.textContent = page.readingTime + ' min';
-        path.appendChild(rt);
-      }
-
-      const title = document.createElement('div');
-      title.className = 'result-title';
-      title.innerHTML = highlight(page.title || 'Untitled', q);
-
-      const excerpt = document.createElement('div');
-      excerpt.className = 'result-excerpt';
-      if (includeContent) {
-        excerpt.innerHTML = highlight(page.description || '', q);
-      } else {
-        excerpt.textContent = page.description || '';
-      }
-
-      const footer = document.createElement('div');
-      footer.className = 'result-footer';
-
-      // Tags (first 3)
-      if (page.tags && page.tags.length) {
-        page.tags.slice(0, 3).forEach(function (tag) {
-          const t = document.createElement('span');
-          t.className   = 'tag-chip';
-          t.textContent = tag;
-          footer.appendChild(t);
-        });
-      }
-
-      a.appendChild(path);
-      a.appendChild(title);
-      if (page.description) a.appendChild(excerpt);
-      if (footer.children.length) a.appendChild(footer);
-      wrapper.appendChild(a);
-    });
-
-    frag.appendChild(wrapper);
     resultsEl.innerHTML = '';
-    resultsEl.appendChild(frag);
+    resultsEl.appendChild(wrapper);
+
+    // Render first page
+    appendNextPage();
   }
 
   /* ── Helpers ─────────────────────────────────────────────────── */
@@ -348,6 +397,9 @@
   function clearResults() {
     resultsEl.innerHTML = '';
     emptyEl.style.display = 'none';
+    allResults = [];
+    visibleCount = 0;
+    if (scrollObserver) { scrollObserver.disconnect(); scrollObserver = null; }
   }
 
   function showBrowse(show) {
