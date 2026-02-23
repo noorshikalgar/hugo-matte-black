@@ -7,23 +7,15 @@
   </div>
 
   <!-- Controls -->
-  <div
-    class="tags-controls"
-    style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;"
-  >
+  <div class="tags-controls">
     <input
-      type="search"
+      type="text"
       id="category-search"
       placeholder="filter categories…"
-      class="input"
+      class="tag-filter-input"
       aria-label="Filter categories"
-      style="flex: 1; min-width: 180px; max-width: 350px;"
     />
-    <select
-      id="category-sort"
-      class="select sort-select"
-      style="min-width: 120px;"
-    >
+    <select id="category-sort" class="sort-select">
       <option value="count-desc" selected>count ↓</option>
       <option value="count-asc">count ↑</option>
       <option value="name-asc">a → z</option>
@@ -61,12 +53,8 @@
         {{- end }}
       </tbody>
     </table>
-    <nav
-      class="pagination"
-      id="categories-pagination"
-      style="margin-top: 1.5rem;"
-    ></nav>
   </div>
+  <nav class="pagination" id="categories-pagination" style="display:none;margin-top:1.25rem;"></nav>
 </div>
 {{ end }}
 
@@ -113,8 +101,10 @@
       const totalPages = Math.ceil(total / PAGE_SIZE);
       if (totalPages <= 1) {
         pagination.innerHTML = "";
+        pagination.style.display = 'none';
         return;
       }
+      pagination.style.display = '';
       let html = "";
       if (page > 1)
         html += `<a href="#" class="pagination-btn" data-page="${

@@ -4,9 +4,14 @@
 
 <div class="search-page">
 
+  <!-- Terminal typewriter (always running) -->
+  <div class="terminal-typewriter">
+    <span id="tw-text"></span><span class="tw-cursor">▊</span>
+  </div>
+
   <!-- Header -->
   <div class="search-header">
-    <h1><span class="site-name">{{ .Site.Params.shortName | default .Site.Title }}</span> / search</h1>
+    <h1><span class="ssh-user">visitor</span><span class="ssh-sep">@</span><span class="site-name">{{ .Site.Params.shortName | default .Site.Title | lower }}</span><span class="ssh-path">:~$</span> <span class="ssh-cmd">./search</span></h1>
 
     <!-- Search form -->
     <form class="search-form" id="search-form" role="search" autocomplete="off">
@@ -89,6 +94,68 @@
   window.searchSections = {{ .Site.Params.searchSections | default (slice) | jsonify | safeJS }};
   window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
   window.searchIndexURL = '{{ "/index.json" | relURL }}';
+</script>
+<script>
+(function() {
+  var PHRASES = [
+    'grep -r "anything" ./knowledge-base/',
+    'ssh root@knowledge — connected',
+    'git clone https://brain.local && cd /answers',
+    'ping 0.0.0.0 — latency: 0ms',
+    'docker run --rm -it knowledge:latest',
+    'find / -name "*.answer" | head -n 10',
+    'curl -s api.brain.local/v1/search | jq .',
+    'nmap -p 443 knowledge.base — open',
+    'traceroute to answer... 1 hop',
+    'cat /etc/motd && echo "ready"',
+    'ls -la ./guides ./cheatsheets ./howto',
+    'export PATH="$PATH:/usr/local/knowledge"',
+    'sudo chmod 777 /your/curiosity',
+    'nc -zv brain.local 1270 — open',
+    'tail -f /var/log/learning.log'
+  ];
+
+  var PREFIX = '$ ';
+  var txtEl  = document.getElementById('tw-text');
+  if (!txtEl) return;
+
+  function shuffle(arr) {
+    return arr.slice().sort(function() { return Math.random() - 0.5; });
+  }
+
+  var queue = shuffle(PHRASES);
+  var qi = 0;
+
+  function next() {
+    var phrase = queue[qi++ % queue.length];
+    var full = PREFIX + phrase;
+    var i = 0;
+
+    // ── type forward ──
+    (function typeStep() {
+      if (i <= full.length) {
+        txtEl.textContent = full.slice(0, i++);
+        setTimeout(typeStep, 42);
+      } else {
+        // hold 1.6s then erase
+        setTimeout(eraseStep, 1600);
+      }
+    })();
+
+    // ── erase backward ──
+    function eraseStep() {
+      if (txtEl.textContent.length > 0) {
+        txtEl.textContent = txtEl.textContent.slice(0, -1);
+        setTimeout(eraseStep, 22);
+      } else {
+        // short gap, then next phrase
+        setTimeout(next, 400);
+      }
+    }
+  }
+
+  next();
+})();
 </script>
 <script src="{{ "js/search.js" | relURL }}" defer></script>
 {{ end }}
