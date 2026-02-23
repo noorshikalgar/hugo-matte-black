@@ -391,6 +391,64 @@ pre:hover .copy-button { opacity: 1; }
   margin-bottom: 1rem;
 }
 
+/* ── 11. Tags Controls ────────────────────────────────────────── */
+.tags-controls {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 1rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  background: var(--mb-surface-1);
+  transition: border-color 0.1s;
+}
+.tags-controls:focus-within { border-color: var(--mb-border-focus); }
+
+.tag-filter-input {
+  flex: 1;
+  min-width: 0;
+  height: 2.25rem;
+  background: transparent;
+  background-image: none !important;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 5px 10px !important;
+  font-size: 0.875rem;
+  color: var(--mb-text);
+  font-family: var(--pico-font-family-sans-serif);
+  --pico-border-radius: 0;
+  --pico-form-element-spacing-vertical: 0;
+  --pico-form-element-spacing-horizontal: 0;
+  border-radius: 0;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-bottom: 0 !important;
+}
+.tag-filter-input::placeholder { color: var(--mb-text-faint); }
+
+.tags-controls .sort-select {
+  flex-shrink: 0;
+  height: 2.25rem;
+  background: var(--mb-surface-2);
+  border: none;
+  border-left: 1px solid var(--mb-border);
+  border-radius: 0;
+  color: var(--mb-text-muted);
+  font-size: 0.82rem;
+  font-family: "JetBrains Mono", monospace;
+  padding: 0 0.75rem;
+  cursor: pointer;
+  outline: none;
+  margin: 0;
+  width: auto;
+  --pico-form-element-spacing-vertical: 0;
+  --pico-form-element-spacing-horizontal: 0;
+  margin-bottom: 0 !important;
+}
+.tags-controls .sort-select:focus { border-left-color: var(--mb-border-focus); }
+
 /* ── 12. MCQ Quiz ────────────────────────────────────────────── */
 .mcq-question {
   border: 1px solid var(--mb-border);

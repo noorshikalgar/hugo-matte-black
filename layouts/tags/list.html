@@ -7,16 +7,15 @@
   </div>
 
   <!-- Controls -->
-  <div class="tags-controls" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+  <div class="tags-controls">
     <input
       type="search"
       id="tag-search"
       placeholder="filter tags…"
-      class="input"
+      class="tag-filter-input"
       aria-label="Filter tags"
-      style="flex:1; min-width:180px; max-width:350px;"
     >
-    <select id="tag-sort" class="select sort-select" style="min-width:120px;">
+    <select id="tag-sort" class="sort-select">
       <option value="count-desc" selected>count ↓</option>
       <option value="count-asc">count ↑</option>
       <option value="name-asc">a → z</option>
@@ -44,8 +43,8 @@
         {{- end }}
       </tbody>
     </table>
-    <nav class="pagination" id="tags-pagination" style="margin-top:1.5rem;"></nav>
   </div>
+  <nav class="pagination" id="tags-pagination" style="display:none;margin-top:1.25rem;"></nav>
 </div>
 {{ end }}
 
@@ -58,13 +57,12 @@
   const pagination  = document.getElementById('tags-pagination');
   const PAGE_SIZE   = 25;
 
-  function getRows() {
-    return Array.from(tbody.querySelectorAll('.tag-row'));
-  }
+  // Cache ALL rows once — never query live DOM after this
+  const allRows = Array.from(tbody.querySelectorAll('.tag-row'));
 
-  function filterRows(rows) {
+  function filterRows() {
     const q = searchInput.value.toLowerCase().trim();
-    return rows.filter(r => r.dataset.name.includes(q));
+    return q ? allRows.filter(r => r.dataset.name.includes(q)) : allRows.slice();
   }
 
   function sortRows(rows) {
@@ -91,7 +89,8 @@
 
   function renderPagination(total, page) {
     const totalPages = Math.ceil(total / PAGE_SIZE);
-    if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+    if (totalPages <= 1) { pagination.innerHTML = ''; pagination.style.display = 'none'; return; }
+    pagination.style.display = '';
     let html = '';
     if (page > 1) html += `<a href="#" class="pagination-btn" data-page="${page-1}">← Prev</a>`;
     html += `<span class="pagination-info">Page ${page} of ${totalPages}</span>`;
@@ -106,8 +105,7 @@
   let filteredSortedRows = [];
 
   function update() {
-    const allRows = getRows();
-    filteredSortedRows = sortRows(filterRows(allRows));
+    filteredSortedRows = sortRows(filterRows());
     currentPage = 1;
     renderPage(filteredSortedRows, currentPage);
     renderPagination(filteredSortedRows.length, currentPage);
