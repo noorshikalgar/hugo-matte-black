@@ -28,8 +28,8 @@
       </button>
     </form>
 
-    <!-- Filter chips -->
-    <div class="search-filters" id="search-filters">
+    <!-- Filter chips (hidden until a search query is active) -->
+    <div class="search-filters" id="search-filters" style="display:none">
       <span class="filter-label">type:</span>
       {{- range $filterSections }}
         <button class="filter-chip" data-filter="section" data-value="{{ . }}">{{ . }}</button>

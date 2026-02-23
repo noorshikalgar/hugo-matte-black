@@ -153,12 +153,14 @@
 
     if (!q && !activeSection) {
       showBrowse(true);
+      showFilters(false);
       clearResults();
       resetChipCounts();
       return;
     }
 
     showBrowse(false);
+    showFilters(true);
 
     // All term-matching results (no section filter yet)
     const allMatches = index.filter(function (page) {
@@ -350,6 +352,10 @@
 
   function showBrowse(show) {
     if (browseSection) browseSection.style.display = show ? '' : 'none';
+  }
+
+  function showFilters(show) {
+    if (filtersContainer) filtersContainer.style.display = show ? '' : 'none';
   }
 
   function showLoading(show) {
