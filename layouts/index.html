@@ -62,25 +62,6 @@
 
   <!-- Stats / Quick nav (shown when no query) -->
   <div id="browse-section">
-    <!-- Stats bar -->
-    <div class="stats-bar">
-      {{- range $sec := $statSections }}
-        {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
-        <div class="stat-item">
-          <a href="{{ printf "/%s/" $sec | relURL }}" style="text-decoration:none;">
-            <span class="stat-number">{{ len $sectionPages }}+</span>
-            <span class="stat-label">{{ $sec }}</span>
-          </a>
-        </div>
-      {{- end }}
-      <div class="stat-item">
-        <a href="{{ "/tags/" | relURL }}" style="text-decoration:none;">
-          <span class="stat-number">{{ len .Site.Taxonomies.tags }}+</span>
-          <span class="stat-label">tags</span>
-        </a>
-      </div>
-    </div>
-
     <!-- Quick nav sections -->
     <div class="quick-nav" style="margin-top:1.25rem;">
       <p class="quick-nav-title">Browse sections</p>
@@ -88,7 +69,7 @@
         {{- range $sec := $statSections }}
           {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
           <a href="{{ printf "/%s/" $sec | relURL }}" class="quick-nav-item">
-            <span class="quick-nav-name">{{ $sec | title }}</span>
+            <span class="quick-nav-name">{{ $sec | humanize }}</span>
             <span class="quick-nav-count">{{ len $sectionPages }} articles</span>
           </a>
         {{- end }}

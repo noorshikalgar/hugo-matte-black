@@ -391,42 +391,6 @@ pre:hover .copy-button { opacity: 1; }
   margin-bottom: 1rem;
 }
 
-/* ── 11. Stats bar (homepage) ────────────────────────────────── */
-.stats-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  border: 1px solid var(--mb-border);
-  border-radius: var(--pico-border-radius);
-  overflow: hidden;
-  margin-top: 1.5rem;
-}
-
-.stat-item {
-  flex: 1;
-  min-width: 100px;
-  padding: 0.75rem 1rem;
-  border-right: 1px solid var(--mb-border);
-  text-align: center;
-}
-.stat-item:last-child { border-right: none; }
-
-.stat-number {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 700;
-  font-family: "JetBrains Mono", monospace;
-  color: var(--mb-accent);
-}
-
-.stat-label {
-  display: block;
-  font-size: 0.7rem;
-  color: var(--mb-text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 /* ── 12. MCQ Quiz ────────────────────────────────────────────── */
 .mcq-question {
   border: 1px solid var(--mb-border);
