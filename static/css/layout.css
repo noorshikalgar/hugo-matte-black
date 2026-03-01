@@ -203,18 +203,19 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  /* Prevent grid children from overflowing on small screens */
+  /* overflow: clip does NOT create a scroll container, so sticky still works */
   min-width: 0;
-  overflow: hidden;
+  overflow: clip;
 }
 /* All direct grid children must not overflow their column */
 .content-layout > * {
   min-width: 0;
   overflow: hidden;
 }
-/* But aside/sidebar should allow visible overflow for sticky */
+/* aside must never have overflow hidden — breaks position: sticky */
 .content-layout > aside {
   overflow: visible;
+  min-width: 0;
 }
 @media (min-width: 1024px) {
   .content-layout {

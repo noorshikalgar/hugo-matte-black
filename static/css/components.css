@@ -196,8 +196,8 @@ ul li {
 
 .toc-sidebar-inner {
   position: sticky;
-  top: 88px;
-  max-height: calc(100vh - 88px);
+  top: calc(var(--site-header-h, 60px) + 12px);
+  max-height: calc(100vh - var(--site-header-h, 60px) - 12px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -446,7 +446,7 @@ ul li {
 .post-content h4,
 .post-content h5,
 .post-content h6 {
-  scroll-margin-top: 72px;
+  scroll-margin-top: calc(var(--site-header-h, 60px) + 16px);
 }
 
 /* ── 6. Pagination ───────────────────────────────────────────── */

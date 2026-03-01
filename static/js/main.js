@@ -145,6 +145,18 @@
     });
   }
 
+  /* ── Measure header height → CSS variable ─────────────────── */
+  const siteHeader = document.querySelector('.site-header');
+  function setHeaderVar() {
+    if (siteHeader) {
+      document.documentElement.style.setProperty(
+        '--site-header-h', siteHeader.getBoundingClientRect().height + 'px'
+      );
+    }
+  }
+  setHeaderVar();
+  window.addEventListener('resize', setHeaderVar);
+
   /* ── TOC smooth scroll (with header offset) ─────────────────── */
   const tocAnchors = document.querySelectorAll(
     '.toc-content a[href^="#"]'
@@ -158,8 +170,9 @@
         const target = document.querySelector(id);
         if (!target) return;
         e.preventDefault();
-        const headerOffset = 78;
-        const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+        const h = siteHeader ? siteHeader.getBoundingClientRect().height : 60;
+        const gap = 16;
+        const y = target.getBoundingClientRect().top + window.scrollY - h - gap;
         window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
         if (history && history.replaceState) history.replaceState(null, '', id);
       });
