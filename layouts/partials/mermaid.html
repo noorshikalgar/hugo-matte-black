@@ -44,22 +44,29 @@ document.addEventListener('DOMContentLoaded', function() {
       var MIN    = 0.25;
       var MAX    = 4;
 
+      // Wrap SVG in an inner scroll container so the toolbar (on the outer
+      // container) stays fixed while only the inner div scrolls.
+      var inner = document.createElement('div');
+      inner.className = 'mermaid-scroll-inner';
+      container.appendChild(inner);
+      inner.appendChild(svg);
+
       function applyScale() {
         svg.style.width  = (scale * 100) + '%';
         svg.style.height = 'auto';
-        container.style.overflow = scale > 1 ? 'auto' : 'visible';
+        inner.style.overflowX = scale > 1 ? 'auto' : 'visible';
       }
 
       applyScale(); // apply initial scale immediately
 
-      // Inject toolbar
+      // Inject toolbar onto outer container (not inner scroll div)
       var bar = document.createElement('div');
       bar.className = 'mermaid-toolbar';
       bar.innerHTML =
         '<button title="Zoom in"  data-action="zoomIn">+</button>'  +
         '<button title="Zoom out" data-action="zoomOut">&minus;</button>' +
         '<button title="Reset"    data-action="reset">&#8635;</button>';
-      container.insertBefore(bar, svg);
+      container.insertBefore(bar, inner);
 
       bar.addEventListener('click', function(e) {
         var btn = e.target.closest('button');

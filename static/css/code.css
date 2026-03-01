@@ -152,11 +152,16 @@ kbd {
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
   margin: 1.25rem 0;
-  /* No fixed height — let SVG dictate height naturally */
-  overflow: auto;        /* scroll only when user zooms in */
+  overflow: visible;     /* outer container never scrolls */
   position: relative;
-  padding: 0.75rem;
+  padding: 2.75rem 0.75rem 0.75rem; /* top room for toolbar */
 }
+
+/* Inner wrapper — this scrolls when SVG is zoomed > 100% */
+.mermaid-scroll-inner {
+  overflow-x: visible;
+}
+
 .mermaid svg {
   /* Natural render: full width, proportional height */
   display: block;
@@ -165,18 +170,17 @@ kbd {
   max-width: none !important; /* override Mermaid 10's inline max-width */
 }
 
-/* Zoom toolbar — fades in on hover */
+/* Zoom toolbar — anchored to outer container, never scrolls */
 .mermaid-toolbar {
-  position: sticky;
+  position: absolute;
   top: 0.4rem;
-  float: right;
+  right: 0.4rem;
   display: flex;
   gap: 0.25rem;
   z-index: 10;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
-  margin-bottom: -2rem;  /* don't push SVG down */
 }
 .mermaid:hover .mermaid-toolbar {
   opacity: 1;
