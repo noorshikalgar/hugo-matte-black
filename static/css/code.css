@@ -160,6 +160,8 @@ kbd {
 /* Inner wrapper — this scrolls when SVG is zoomed > 100% */
 .mermaid-scroll-inner {
   overflow-x: visible;
+  overflow-y: visible;
+  user-select: none; /* prevent text selection while panning */
 }
 
 .mermaid svg {

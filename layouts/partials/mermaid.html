@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
         svg.style.width  = (scale * 100) + '%';
         svg.style.height = 'auto';
         inner.style.overflowX = scale > 1 ? 'auto' : 'visible';
+        inner.style.overflowY = scale > 1 ? 'auto' : 'visible';
+        inner.style.cursor    = scale > 1 ? 'grab' : '';
       }
 
       applyScale(); // apply initial scale immediately
@@ -76,6 +78,50 @@ document.addEventListener('DOMContentLoaded', function() {
         if (action === 'zoomOut') { scale = Math.max(scale - STEP, MIN); applyScale(); }
         if (action === 'reset')   { scale = 0.75; applyScale(); }
       });
+
+      // ── Drag-to-pan on the inner scroll container ──
+      var panning = false, panStartX, panStartY, scrollStartX, scrollStartY;
+
+      inner.addEventListener('mousedown', function(e) {
+        if (scale <= 1) return;
+        panning = true;
+        panStartX    = e.clientX;
+        panStartY    = e.clientY;
+        scrollStartX = inner.scrollLeft;
+        scrollStartY = inner.scrollTop;
+        inner.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!panning) return;
+        inner.scrollLeft = scrollStartX - (e.clientX - panStartX);
+        inner.scrollTop  = scrollStartY - (e.clientY - panStartY);
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (panning) {
+          panning = false;
+          inner.style.cursor = scale > 1 ? 'grab' : '';
+        }
+      });
+
+      // Touch pan
+      var touchStartX, touchStartY, touchScrollX, touchScrollY;
+      inner.addEventListener('touchstart', function(e) {
+        if (scale <= 1 || e.touches.length !== 1) return;
+        touchStartX  = e.touches[0].clientX;
+        touchStartY  = e.touches[0].clientY;
+        touchScrollX = inner.scrollLeft;
+        touchScrollY = inner.scrollTop;
+      }, { passive: true });
+
+      inner.addEventListener('touchmove', function(e) {
+        if (scale <= 1 || e.touches.length !== 1) return;
+        inner.scrollLeft = touchScrollX - (e.touches[0].clientX - touchStartX);
+        inner.scrollTop  = touchScrollY - (e.touches[0].clientY - touchStartY);
+        e.preventDefault();
+      }, { passive: false });
     });
   });
 });
