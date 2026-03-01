@@ -705,10 +705,7 @@ pre:hover .copy-button,
   font-size: 0.8rem;
 }
 
-.lightbox-close,
-.lightbox-zoom-in,
-.lightbox-zoom-out,
-.lightbox-zoom-reset {
+.lightbox-close {
   padding: 0.2rem 0.5rem;
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius-sm);
@@ -718,26 +715,20 @@ pre:hover .copy-button,
   font-family: "JetBrains Mono", monospace;
   font-size: 0.75rem;
 }
-.lightbox-close:hover,
-.lightbox-zoom-in:hover,
-.lightbox-zoom-out:hover,
-.lightbox-zoom-reset:hover {
+.lightbox-close:hover {
   color: var(--mb-text);
   background: var(--mb-surface-3);
   border-color: var(--mb-border-focus);
 }
 
 .lightbox-image-container {
-  overflow: hidden;
-  cursor: grab;
+  overflow: auto;
 }
-.lightbox-image-container:active { cursor: grabbing; }
 .lightbox-image-container img {
   display: block;
   max-width: 85vw;
   max-height: 80vh;
   object-fit: contain;
-  transform-origin: center;
 }
 
 /* ── 10. Layout toggle controls ──────────────────────────────── */

@@ -188,6 +188,11 @@ mark {
   display: block;
   border-radius: var(--pico-border-radius);
   margin-bottom: 1.75rem;
+  cursor: zoom-in;
+  transition: opacity 0.2s ease;
+}
+.post-featured-image img:hover {
+  opacity: 0.92;
 }
 
 /* ── 13. Reading time & meta text ────────────────────────────── */

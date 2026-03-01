@@ -206,29 +206,15 @@
   }
 
   /* ── Image lightbox ─────────────────────────────────────────── */
-  const lightbox     = document.getElementById('image-lightbox');
-  const lbImage      = document.getElementById('lb-image');
-  const lbContainer  = document.getElementById('lb-image-container');
-  const lbOverlay    = document.getElementById('lightbox-overlay');
-  const lbClose      = document.getElementById('lb-close');
-  const lbZoomIn     = document.getElementById('lb-zoom-in');
-  const lbZoomOut    = document.getElementById('lb-zoom-out');
-  const lbZoomReset  = document.getElementById('lb-zoom-reset');
+  const lightbox  = document.getElementById('image-lightbox');
+  const lbImage   = document.getElementById('lb-image');
+  const lbOverlay = document.getElementById('lightbox-overlay');
+  const lbClose   = document.getElementById('lb-close');
 
   if (lightbox && lbImage) {
-    let scale = 1;
-    let tx = 0, ty = 0;
-    let dragging = false, startX, startY;
-
-    function applyTransform() {
-      lbImage.style.transform = `scale(${scale}) translate(${tx}px, ${ty}px)`;
-    }
-
     function openLightbox(src, alt) {
       lbImage.src = src;
       lbImage.alt = alt || '';
-      scale = 1; tx = 0; ty = 0;
-      applyTransform();
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -239,8 +225,8 @@
       lbImage.src = '';
     }
 
-    // Make content images clickable
-    document.querySelectorAll('.post-content img').forEach(function (img) {
+    // Make content images and featured image clickable
+    document.querySelectorAll('.post-content img, .post-featured-image img').forEach(function (img) {
       img.style.cursor = 'zoom-in';
       img.addEventListener('click', function () {
         openLightbox(this.src, this.alt);
@@ -250,41 +236,9 @@
     lbOverlay.addEventListener('click', closeLightbox);
     if (lbClose) lbClose.addEventListener('click', closeLightbox);
 
-    if (lbZoomIn)    lbZoomIn.addEventListener('click',    function () { scale = Math.min(scale + 0.25, 5); applyTransform(); });
-    if (lbZoomOut)   lbZoomOut.addEventListener('click',   function () { scale = Math.max(scale - 0.25, 0.5); tx = 0; ty = 0; applyTransform(); });
-    if (lbZoomReset) lbZoomReset.addEventListener('click', function () { scale = 1; tx = 0; ty = 0; applyTransform(); });
-
-    // Mouse wheel zoom
-    lbContainer.addEventListener('wheel', function (e) {
-      e.preventDefault();
-      scale = e.deltaY < 0
-        ? Math.min(scale + 0.15, 5)
-        : Math.max(scale - 0.15, 0.5);
-      applyTransform();
-    }, { passive: false });
-
-    // Drag pan
-    lbImage.addEventListener('mousedown', function (e) {
-      if (scale <= 1) return;
-      dragging = true; startX = e.clientX - tx; startY = e.clientY - ty;
-      lbImage.style.cursor = 'grabbing';
-    });
-    document.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      tx = e.clientX - startX; ty = e.clientY - startY;
-      applyTransform();
-    });
-    document.addEventListener('mouseup', function () {
-      if (dragging) { dragging = false; lbImage.style.cursor = 'grab'; }
-    });
-
-    // Keyboard
+    // Keyboard: Escape to close
     document.addEventListener('keydown', function (e) {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === '+' || e.key === '=') { scale = Math.min(scale + 0.25, 5); applyTransform(); }
-      if (e.key === '-') { scale = Math.max(scale - 0.25, 0.5); applyTransform(); }
-      if (e.key === '0') { scale = 1; tx = 0; ty = 0; applyTransform(); }
+      if (lightbox.classList.contains('open') && e.key === 'Escape') closeLightbox();
     });
   }
 
