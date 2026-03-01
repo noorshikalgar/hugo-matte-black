@@ -167,6 +167,10 @@ mark {
   max-width: 72ch;
   font-size: 1rem;
   line-height: 1.7;
+  /* Prevent any child from overflowing the content column */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 .post-content img {
   border-radius: var(--pico-border-radius);

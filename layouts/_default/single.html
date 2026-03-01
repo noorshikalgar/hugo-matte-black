@@ -66,11 +66,15 @@
 
   <!-- Sidebar (TOC on large screens) -->
   {{- if $showSidebarToc -}}
-    <aside>
-      <div style="position:sticky;top:70px;">
+    <aside id="toc-sidebar">
+      <div class="toc-sidebar-inner">
         {{- partial "sidebar-toc.html" . -}}
       </div>
     </aside>
+    <!-- Restore button (visible only when sidebar is hidden) -->
+    <button class="sidebar-toc-show" id="sidebar-toc-show" aria-label="Show table of contents" title="Show TOC">
+      <span>&#9776;</span> TOC
+    </button>
   {{- end -}}
 
 </div>

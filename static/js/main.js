@@ -129,6 +129,22 @@
     });
   }
 
+  /* ── Sidebar TOC hide / show ─────────────────────────────────── */
+  const sidebarHideBtn = document.getElementById('sidebar-toc-hide');
+  const sidebarShowBtn = document.getElementById('sidebar-toc-show');
+  const contentLayout  = document.querySelector('.content-layout');
+
+  if (sidebarHideBtn && contentLayout) {
+    sidebarHideBtn.addEventListener('click', function () {
+      contentLayout.classList.add('sidebar-hidden');
+    });
+  }
+  if (sidebarShowBtn && contentLayout) {
+    sidebarShowBtn.addEventListener('click', function () {
+      contentLayout.classList.remove('sidebar-hidden');
+    });
+  }
+
   /* ── TOC smooth scroll (with header offset) ─────────────────── */
   const tocAnchors = document.querySelectorAll(
     '.toc-content a[href^="#"]'

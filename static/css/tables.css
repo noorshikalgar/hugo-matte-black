@@ -17,6 +17,22 @@ table {
   margin-bottom: 1.5rem;
 }
 
+/* Responsive: post-content tables scroll horizontally on small screens */
+.post-content table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  /* Keep table layout but allow scroll container */
+  white-space: nowrap;
+}
+/* Allow cell content to wrap normally inside the scrollable table */
+.post-content table td,
+.post-content table th {
+  white-space: normal;
+  min-width: 120px;
+}
+
 thead {
   background: var(--mb-surface-2);
   border-bottom: 1px solid var(--mb-border);

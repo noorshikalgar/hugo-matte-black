@@ -194,6 +194,8 @@ body {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  /* Contain any overflowing child elements */
+  overflow-x: clip;
 }
 
 /* Content + sidebar layout */
@@ -201,10 +203,25 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
+  /* Prevent grid children from overflowing on small screens */
+  min-width: 0;
+  overflow: hidden;
+}
+/* All direct grid children must not overflow their column */
+.content-layout > * {
+  min-width: 0;
+  overflow: hidden;
+}
+/* But aside/sidebar should allow visible overflow for sticky */
+.content-layout > aside {
+  overflow: visible;
 }
 @media (min-width: 1024px) {
   .content-layout {
     grid-template-columns: minmax(0, 1fr) 260px;
+  }
+  .content-layout .post-content {
+    max-width: none;
   }
   .content-layout.no-sidebar {
     grid-template-columns: 1fr;
