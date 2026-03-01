@@ -53,6 +53,9 @@
       {{ .Content }}
     </div>
 
+    <!-- Ad unit (after article, before nav) -->
+    {{- partial "google-ads.html" . -}}
+
     <!-- Post navigation -->
     {{- partial "post-nav.html" . -}}
 

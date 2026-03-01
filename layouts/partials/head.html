@@ -65,3 +65,8 @@
 
 <!-- Google Analytics (reads [services.googleAnalytics] from hugo.toml) -->
 {{- template "_internal/google_analytics.html" . -}}
+
+<!-- Google AdSense -->
+{{- with .Site.Params.googleAdsClient -}}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>
+{{- end -}}

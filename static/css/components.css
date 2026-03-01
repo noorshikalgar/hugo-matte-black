@@ -574,7 +574,14 @@ h6:hover .heading-anchor { opacity: 1; }
   stroke: currentColor;
 }
 
-/* ── 6. Pagination ───────────────────────────────────────────── */
+/* ── Google AdSense unit ────────────────────────────────────── */
+.post-ad-unit {
+  margin: 2.5rem 0 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--mb-border);
+  min-height: 100px;
+}
+
 .pagination {
   display: flex;
   align-items: center;
