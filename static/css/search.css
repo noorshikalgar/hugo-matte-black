@@ -29,13 +29,14 @@
 }
 
 .tw-cursor {
-  display: inline;
-  font-size: 2.1rem;
-  line-height: 1;
-  color: var(--mb-accent);
-  margin-left: 1px;
+  display: inline-block;
+  width: 0.55em;
+  height: 2px;
+  background-color: var(--mb-accent);
+  margin-left: 2px;
+  vertical-align: -0.15em;
   animation: tw-blink 1s step-end infinite;
-  vertical-align: -0.18em;
+  border-radius: 1px;
 }
 
 @keyframes tw-blink {
@@ -49,18 +50,11 @@
     min-height: 1.5rem;
     margin-bottom: 1.1rem;
   }
-  .tw-cursor {
-    font-size: 1.45rem;
-    vertical-align: -0.13em;
-  }
 }
 @media (max-width: 400px) {
   .terminal-typewriter {
     font-size: 0.93rem;
     min-height: 1.1rem;
-  }
-  .tw-cursor {
-    font-size: 1.1rem;
   }
 }
 
