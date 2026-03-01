@@ -432,6 +432,34 @@
   color: var(--mb-text-faint);
 }
 
+/* ── 9. Fresh this week section ───────────────────────────────── */
+.week-section {
+  margin-top: 2.5rem;
+}
+.week-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--mb-border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.week-section-count {
+  font-size: 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 30%, transparent);
+  border-radius: 999px;
+  padding: 0.1em 0.55em;
+  line-height: 1.6;
+}
+
+/* Cards fill the full row — 1 card = full width, 2 = half each, 3+ = normal grid */
+.week-section .posts-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
 @media (max-width: 480px) {
   .search-page { padding: 1rem 0.75rem; }
   .quick-nav-grid { grid-template-columns: 1fr 1fr; }

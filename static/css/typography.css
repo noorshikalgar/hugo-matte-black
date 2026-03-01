@@ -181,11 +181,13 @@ mark {
   display: block;
   margin: 1.5rem auto;
 }
-.post-content .post-featured-image img {
+.post-featured-image img {
   width: 100%;
-  max-height: 400px;
+  max-height: 420px;
   object-fit: cover;
-  margin-bottom: 2rem;
+  display: block;
+  border-radius: var(--pico-border-radius);
+  margin-bottom: 1.75rem;
 }
 
 /* ── 13. Reading time & meta text ────────────────────────────── */

@@ -75,6 +75,51 @@
         </a>
       </div>
     </div>
+
+    <!-- Fresh this week -->
+    {{- $cutoff := now.AddDate 0 0 -7 -}}
+    {{- $recent := where .Site.RegularPages "Date" "ge" $cutoff -}}
+    {{- $recent  = $recent.ByDate.Reverse -}}
+    {{- if $recent }}
+    <div class="week-section">
+      <div class="week-section-header">
+        <p class="quick-nav-title" style="margin:0;">Fresh this week</p>
+        <span class="week-section-count">{{ len $recent }} new</span>
+      </div>
+      <div class="posts-grid">
+        {{- range $recent }}
+          <article class="post-card">
+            <div class="post-card-meta">
+              <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
+              <span class="badge badge-section">{{ .Section }}</span>
+              {{- partial "status-badge.html" . -}}
+            </div>
+            <div class="post-card-title">
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </div>
+            {{- with .Params.tags }}
+              <ul class="tag-list" style="margin-bottom:0.4rem;">
+                {{- range first 3 . }}
+                  <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+                {{- end }}
+              </ul>
+            {{- end }}
+            <div class="post-card-summary">
+              {{- if .Params.description -}}
+                {{ .Params.description | truncate 140 }}
+              {{- else -}}
+                {{ .Summary | plainify | truncate 140 }}
+              {{- end }}
+            </div>
+            <div class="post-card-footer">
+              <a href="{{ .RelPermalink }}" class="read-more">read →</a>
+              {{- with .ReadingTime }}<span class="meta-text">{{ . }}m</span>{{- end }}
+            </div>
+          </article>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
   </div>
 
 </div>
