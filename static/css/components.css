@@ -143,6 +143,19 @@ ul li {
   background: var(--mb-accent-bg);
 }
 
+/* Tag term page – group headings */
+.tag-group-heading {
+  font-size: 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mb-text-faint);
+  border-bottom: 1px solid var(--mb-border);
+  padding-bottom: 0.35rem;
+  margin: 2rem 0 1rem;
+}
+
 /* ── 4. Breadcrumbs ──────────────────────────────────────────── */
 .breadcrumbs {
   display: flex;
