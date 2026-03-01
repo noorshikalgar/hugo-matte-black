@@ -78,8 +78,14 @@
 
     <!-- Fresh this week -->
     {{- $cutoff := now.AddDate 0 0 -7 -}}
-    {{- $recent := where .Site.RegularPages "Date" "ge" $cutoff -}}
-    {{- $recent  = $recent.ByDate.Reverse -}}
+    {{- $allRecent := where .Site.RegularPages "Date" "ge" $cutoff -}}
+    {{- $allRecent  = $allRecent.ByDate.Reverse -}}
+    {{- $recent := slice -}}
+    {{- range $allRecent -}}
+      {{- if eq .Parent.Kind "section" -}}
+        {{- $recent = $recent | append . -}}
+      {{- end -}}
+    {{- end -}}
     {{- if $recent }}
     <div class="week-section">
       <div class="week-section-header">
