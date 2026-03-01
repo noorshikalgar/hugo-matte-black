@@ -1,9 +1,10 @@
 {{- if .Page.Store.Get "hasMermaid" -}}
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false,
     theme: 'base',
     themeVariables: {
       darkMode:         true,
@@ -26,19 +27,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Make SVGs responsive
-  document.querySelectorAll('.mermaid').forEach(function(div) {
-    var observer = new MutationObserver(function() {
-      var svg = div.querySelector('svg');
-      if (svg) {
-        svg.removeAttribute('width');
-        svg.removeAttribute('height');
-        svg.style.width  = '100%';
-        svg.style.height = 'auto';
-        observer.disconnect();
-      }
+  mermaid.run({ querySelector: '.mermaid' }).then(function() {
+    document.querySelectorAll('.mermaid').forEach(function(container) {
+      var svg = container.querySelector('svg');
+      if (!svg) return;
+
+      // Wrap SVG in a positioned container
+      container.style.position = 'relative';
+
+      var w = container.clientWidth  || 800;
+      var h = container.clientHeight || 450;
+      svg.setAttribute('width',  w);
+      svg.setAttribute('height', h);
+      svg.style.width  = '100%';
+      svg.style.height = '100%';
+
+      var pz = svgPanZoom(svg, {
+        controlIconsEnabled: false,
+        fit:    true,
+        center: true,
+        minZoom: 0.2,
+        maxZoom: 15,
+        zoomScaleSensitivity: 0.4
+      });
+
+      // Inject custom toolbar
+      var bar = document.createElement('div');
+      bar.className = 'mermaid-toolbar';
+      bar.innerHTML =
+        '<button title="Zoom in"  data-action="zoomIn">+</button>'  +
+        '<button title="Zoom out" data-action="zoomOut">&minus;</button>' +
+        '<button title="Reset"    data-action="reset">&#8635;</button>'   +
+        '<button title="Fit"      data-action="fit">&#x26F6;</button>';
+      container.appendChild(bar);
+
+      bar.addEventListener('click', function(e) {
+        var btn = e.target.closest('button');
+        if (!btn) return;
+        var action = btn.dataset.action;
+        if (action === 'zoomIn')  pz.zoomIn();
+        if (action === 'zoomOut') pz.zoomOut();
+        if (action === 'reset')   { pz.resetZoom(); pz.resetPan(); }
+        if (action === 'fit')     { pz.fit(); pz.center(); }
+      });
     });
-    observer.observe(div, { childList: true, subtree: true });
   });
 });
 </script>

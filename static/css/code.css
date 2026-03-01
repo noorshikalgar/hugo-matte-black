@@ -135,14 +135,52 @@ kbd {
   background: var(--mb-surface-1);
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
-  padding: 1rem;
-  overflow-x: auto;
   margin: 1.25rem 0;
-  text-align: center;
+  height: 450px;
+  overflow: hidden;
+  position: relative;
 }
 .mermaid svg {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Custom pan/zoom toolbar */
+.mermaid-toolbar {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  gap: 0.25rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.mermaid:hover .mermaid-toolbar {
+  opacity: 1;
+}
+.mermaid-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border);
+  border-radius: 3px;
+  color: var(--mb-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  outline: none;
+  box-shadow: none;
+}
+.mermaid-toolbar button:hover {
+  color: var(--mb-accent);
+  border-color: var(--mb-accent);
 }
 
 /* ── 6. Kroki Diagrams ───────────────────────────────────────── */
