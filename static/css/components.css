@@ -184,24 +184,82 @@ ul li {
   }
 }
 
-/* Sidebar: hidden on small screens */
+/* ── Sidebar TOC: grid-column tab strip + expandable panel ───── */
+
+/* Hidden on mobile */
 #toc-sidebar {
   display: none;
 }
+
 @media (min-width: 1024px) {
   #toc-sidebar {
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    border: none;
+  }
+
+  /* The tab — a small chip pinned to top of the aside column */
+  .toc-drawer-tab {
+    flex-shrink: 0;
+    width: 52px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+    padding: 0.3rem 0.55rem;
+    background: none;
+    border-top: 1px solid var(--mb-border);
+    border-right: 1px solid var(--mb-border);
+    border-bottom: 1px solid var(--mb-border);
+    border-left: none;
+    border-radius: 2px;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+    color: var(--mb-accent);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+    user-select: none;
+    position: sticky;
+    top: calc(var(--site-header-h, 60px) + 12px);
+    height: fit-content;
+    align-self: start;
+  }
+  .toc-drawer-tab:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .toc-drawer-tab:hover {
+    opacity: 0.75;
+  }
+  /* Hide the tab once the panel is open */
+  .content-layout.toc-open .toc-drawer-tab {
+    display: none;
+  }
+
+  /* The content panel — hidden until .toc-open */
+  .toc-sidebar-inner {
+    display: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.75rem 0.75rem 1.5rem 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mb-border) transparent;
+    position: sticky;
+    top: calc(var(--site-header-h, 60px) + 12px);
+    max-height: calc(100vh - var(--site-header-h, 60px) - 24px);
+    align-self: start;
+  }
+  .content-layout.toc-open .toc-sidebar-inner {
     display: block;
   }
-}
-
-.toc-sidebar-inner {
-  position: sticky;
-  top: calc(var(--site-header-h, 60px) + 12px);
-  max-height: calc(100vh - var(--site-header-h, 60px) - 12px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: var(--mb-border) transparent;
 }
 
 /* Sidebar TOC wrapper */
@@ -226,20 +284,24 @@ ul li {
   letter-spacing: 0.05em;
 }
 
-.sidebar-toc-hide {
+.sidebar-toc-close {
   background: none;
   border: none;
-  padding: 0.1rem 0.3rem;
-  font-size: 0.7rem;
+  outline: none;
+  box-shadow: none;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.75rem;
   color: var(--mb-text-faint);
   cursor: pointer;
-  border-radius: var(--pico-border-radius-sm);
   line-height: 1;
-  transition: color 0.1s, background 0.1s;
+  transition: color 0.15s;
 }
-.sidebar-toc-hide:hover {
-  color: var(--mb-text);
-  background: var(--mb-surface-2);
+.sidebar-toc-close:focus {
+  outline: none;
+  box-shadow: none;
+}
+.sidebar-toc-close:hover {
+  color: var(--mb-accent);
 }
 
 /* Sidebar TOC content (reuses .toc-content styles) */
@@ -250,45 +312,6 @@ ul li {
 .sidebar-toc-content.toc-content {
   max-height: none;
   overflow: visible;
-}
-
-/* Restore button — floats at top-right, only visible when sidebar is hidden */
-.sidebar-toc-show {
-  display: none;
-}
-@media (min-width: 1024px) {
-  .content-layout.sidebar-hidden .sidebar-toc-show {
-    display: flex;
-    position: fixed;
-    top: 80px;
-    right: 1rem;
-    z-index: 100;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
-    font-family: "JetBrains Mono", monospace;
-    background: var(--mb-surface-1);
-    border: 1px solid var(--mb-border);
-    border-radius: var(--pico-border-radius);
-    color: var(--mb-text-muted);
-    cursor: pointer;
-    transition: border-color 0.1s, color 0.1s;
-  }
-  .content-layout.sidebar-hidden .sidebar-toc-show:hover {
-    border-color: var(--mb-accent);
-    color: var(--mb-accent);
-  }
-  /* When sidebar hidden, collapse aside column */
-  .content-layout.sidebar-hidden {
-    grid-template-columns: 1fr;
-  }
-  .content-layout.sidebar-hidden #toc-sidebar {
-    display: none;
-  }
-  .content-layout.sidebar-hidden .post-content {
-    max-width: none;
-  }
 }
 
 .toc-header {

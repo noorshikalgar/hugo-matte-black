@@ -202,33 +202,32 @@ body {
 .content-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
-  /* overflow: clip does NOT create a scroll container, so sticky still works */
+  gap: 0;
   min-width: 0;
   overflow: clip;
 }
-/* All direct grid children must not overflow their column */
 .content-layout > * {
   min-width: 0;
   overflow: hidden;
 }
-/* aside must never have overflow hidden — breaks position: sticky */
 .content-layout > aside {
   overflow: visible;
   min-width: 0;
 }
 @media (min-width: 1024px) {
+  /* Closed: article + tab strip */
   .content-layout {
-    grid-template-columns: minmax(0, 1fr) 260px;
+    grid-template-columns: 1fr 52px;
+  }
+  /* Open: article + full sidebar */
+  .content-layout.toc-open {
+    grid-template-columns: 1fr 260px;
   }
   .content-layout .post-content {
     max-width: none;
   }
   .content-layout.no-sidebar {
     grid-template-columns: 1fr;
-  }
-  .content-layout.no-sidebar .post-content {
-    max-width: none;
   }
 }
 

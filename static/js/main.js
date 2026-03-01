@@ -129,19 +129,20 @@
     });
   }
 
-  /* ── Sidebar TOC hide / show ─────────────────────────────────── */
-  const sidebarHideBtn = document.getElementById('sidebar-toc-hide');
-  const sidebarShowBtn = document.getElementById('sidebar-toc-show');
-  const contentLayout  = document.querySelector('.content-layout');
+  /* ── Sidebar TOC tab toggle ─────────────────────────────────── */
+  const contentLayout = document.querySelector('.content-layout');
+  const drawerTab     = document.getElementById('sidebar-toc-toggle');
 
-  if (sidebarHideBtn && contentLayout) {
-    sidebarHideBtn.addEventListener('click', function () {
-      contentLayout.classList.add('sidebar-hidden');
+  const closeBtn = document.getElementById('sidebar-toc-close');
+
+  if (contentLayout && drawerTab) {
+    drawerTab.addEventListener('click', function () {
+      contentLayout.classList.add('toc-open');
     });
   }
-  if (sidebarShowBtn && contentLayout) {
-    sidebarShowBtn.addEventListener('click', function () {
-      contentLayout.classList.remove('sidebar-hidden');
+  if (contentLayout && closeBtn) {
+    closeBtn.addEventListener('click', function () {
+      contentLayout.classList.remove('toc-open');
     });
   }
 

@@ -64,17 +64,14 @@
 
   </article>
 
-  <!-- Sidebar (TOC on large screens) -->
+  <!-- Sidebar TOC drawer (desktop only, slides in/out from right) -->
   {{- if $showSidebarToc -}}
     <aside id="toc-sidebar">
+      <button class="toc-drawer-tab" id="sidebar-toc-toggle" aria-label="Toggle table of contents" title="Toggle TOC">☰ TOC</button>
       <div class="toc-sidebar-inner">
         {{- partial "sidebar-toc.html" . -}}
       </div>
     </aside>
-    <!-- Restore button (visible only when sidebar is hidden) -->
-    <button class="sidebar-toc-show" id="sidebar-toc-show" aria-label="Show table of contents" title="Show TOC">
-      <span>&#9776;</span> TOC
-    </button>
   {{- end -}}
 
 </div>
