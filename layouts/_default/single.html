@@ -12,13 +12,7 @@
   <article>
 
     <!-- Breadcrumbs -->
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="{{ "/" | relURL }}">home</a>
-      <span class="sep">/</span>
-      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
-      <span class="sep">/</span>
-      <span class="current">{{ .Title | truncate 40 }}</span>
-    </nav>
+    {{ partial "breadcrumbs.html" . }}
 
     <!-- Post meta -->
     <div class="post-meta-header">

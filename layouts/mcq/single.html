@@ -3,13 +3,7 @@
 
   <article>
     <!-- Breadcrumbs -->
-    <nav class="breadcrumbs">
-      <a href="{{ "/" | relURL }}">home</a>
-      <span class="sep">/</span>
-      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
-      <span class="sep">/</span>
-      <span class="current">quiz</span>
-    </nav>
+    {{ partial "breadcrumbs.html" (dict "Page" . "CurrentLabel" "quiz") }}
 
     <div class="post-meta-header">
       <span class="post-meta-date">{{ .Date.Format "2006.01.02" }}</span>

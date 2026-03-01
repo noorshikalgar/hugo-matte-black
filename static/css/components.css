@@ -127,7 +127,9 @@ ul li {
 }
 
 .tag-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
   padding: 0.15rem 0.5rem;
   font-size: 0.75rem;
   font-family: "JetBrains Mono", monospace;
@@ -137,11 +139,29 @@ ul li {
   text-decoration: none;
   line-height: 1.5;
 }
+/* Tag icon — filled price-tag shape, inherits currentColor via mask */
+.tag-chip::before {
+  content: "";
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.41 11.58l-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42zM6.5 8A1.5 1.5 0 1 1 8 6.5 1.5 1.5 0 0 1 6.5 8z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.41 11.58l-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42zM6.5 8A1.5 1.5 0 1 1 8 6.5 1.5 1.5 0 0 1 6.5 8z'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
 .tag-chip:hover {
   color: var(--mb-accent);
   border-color: var(--mb-accent);
   background: var(--mb-accent-bg);
 }
+.tag-chip:hover::before { opacity: 0.85; }
 
 /* Tag term page – group headings */
 .tag-group-heading {
@@ -170,12 +190,41 @@ ul li {
   overflow: visible;
 }
 .breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--mb-text-faint);
   text-decoration: none;
 }
-.breadcrumbs a:hover { color: var(--mb-accent); }
+.breadcrumbs .current {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--mb-text-muted);
+}
 .breadcrumbs .sep { color: var(--mb-border-focus); }
-.breadcrumbs .current { color: var(--mb-text-muted); }
+
+/* Icon wrapper */
+.bc-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.bc-svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+}
+
+/* Folder: show closed by default, open on hover */
+.icon-open { display: none; }
+.breadcrumbs a:hover .icon-open   { display: block; }
+.breadcrumbs a:hover .icon-closed { display: none; }
+
+/* Lift + accent colour on hover */
+.breadcrumbs a:hover            { color: var(--mb-accent); }
+.breadcrumbs a:hover .bc-icon   { transform: translateY(-1.5px); }
 
 /* ── 5. Table of Contents ────────────────────────────────────── */
 .toc-section {
@@ -481,6 +530,31 @@ ul li {
 .post-content h5,
 .post-content h6 {
   scroll-margin-top: calc(var(--site-header-h, 60px) + 16px);
+}
+
+/* Heading anchor links (render-heading.html hook) */
+.heading-anchor {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  margin-left: 0.35em;
+  color: var(--mb-text-faint);
+  text-decoration: none;
+  vertical-align: middle;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+h1:hover .heading-anchor,
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+h4:hover .heading-anchor,
+h5:hover .heading-anchor,
+h6:hover .heading-anchor { opacity: 1; }
+.heading-anchor:hover { color: var(--mb-accent); }
+.heading-icon {
+  width: 0.65em;
+  height: 0.65em;
+  stroke: currentColor;
 }
 
 /* ── 6. Pagination ───────────────────────────────────────────── */
