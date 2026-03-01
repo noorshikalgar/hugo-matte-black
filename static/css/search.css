@@ -293,7 +293,14 @@
   transition: background 0.1s;
 }
 .search-result-item:last-child { border-bottom: none; }
-.search-result-item:hover { background: var(--mb-surface-1); }
+.search-result-item:hover {
+  background: var(--mb-surface-1);
+  text-decoration: none;
+  --pico-text-decoration: none;
+}
+.search-result-item:hover * { text-decoration: none; }
+.search-result-item .result-title:hover { color: var(--mb-accent); }
+.search-result-item .tag-chip:hover { color: var(--mb-accent); border-color: var(--mb-accent); }
 
 .result-path {
   display: flex;
