@@ -18,17 +18,33 @@ code:not(pre > code) {
 }
 
 /* ── 2. Code Blocks ──────────────────────────────────────────── */
+/* Non-scrolling shell — copy button mounts here and stays pinned */
+.pre-copy-wrapper {
+  position: relative;
+  margin: 1.25rem 0;
+}
+
 pre {
   position: relative;
   background: var(--mb-surface-1) !important;
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
   padding: 1rem 1rem 1rem 1rem;
-  overflow-x: auto;
-  margin: 1.25rem 0;
+  overflow-x: auto;     /* scrolls, but button is on the wrapper above */
+  margin: 0;            /* wrapper handles margin */
   font-family: "JetBrains Mono", monospace;
   font-size: 0.83rem;
   line-height: 1.6;
+}
+
+/* .highlight (Hugo chroma wrapper) — never scrolls; button mounts here */
+.highlight {
+  position: relative;
+  margin: 1.25rem 0;
+}
+.highlight pre {
+  overflow-x: auto;
+  margin: 0;
 }
 
 pre code {

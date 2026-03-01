@@ -76,13 +76,39 @@
     });
   }
 
-  /* ── Copy code buttons ──────────────────────────────────────── */
+  /* ── Copy code buttons ──────────────────────────────────────────── */
   function addCopyButtons() {
     document.querySelectorAll('pre code').forEach(function (code) {
       const pre = code.parentNode;
-      if (pre.querySelector('.copy-button')) return; // already added
 
-      const btn  = document.createElement('button');
+      // Determine the mount point — must be a non-scrolling container so the
+      // button stays pinned even when the inner pre scrolls horizontally.
+      //
+      // Priority:
+      //   1. .highlight wrapper (Hugo chroma) — already non-scrolling
+      //   2. .pre-copy-wrapper  — injected below for standalone pres
+      const highlight = pre.closest('.highlight');
+      let mount;
+
+      if (highlight) {
+        mount = highlight;
+      } else {
+        // Wrap standalone pre in a non-scrolling shell (once only)
+        let wrapper = pre.parentNode.classList.contains('pre-copy-wrapper')
+          ? pre.parentNode
+          : null;
+        if (!wrapper) {
+          wrapper = document.createElement('div');
+          wrapper.className = 'pre-copy-wrapper';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+        }
+        mount = wrapper;
+      }
+
+      if (mount.querySelector('.copy-button')) return; // already added
+
+      const btn = document.createElement('button');
       btn.className   = 'copy-button';
       btn.textContent = 'copy';
       btn.setAttribute('aria-label', 'Copy code');
@@ -102,8 +128,7 @@
         }
       });
 
-      pre.style.position = 'relative';
-      pre.appendChild(btn);
+      mount.appendChild(btn);
     });
   }
 

@@ -553,8 +553,12 @@ ul li {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.1s, color 0.1s;
+  /* Ensure button is always above scrolling content */
+  z-index: 2;
 }
-pre:hover .copy-button { opacity: 1; }
+pre:hover .copy-button,
+.highlight:hover .copy-button,
+.pre-copy-wrapper:hover .copy-button { opacity: 1; }
 .copy-button:hover { color: var(--mb-accent); border-color: var(--mb-border-focus); }
 .copy-button.copied { color: var(--mb-green); border-color: var(--mb-green); }
 
