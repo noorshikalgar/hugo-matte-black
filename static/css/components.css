@@ -569,8 +569,8 @@ h5:hover .heading-anchor,
 h6:hover .heading-anchor { opacity: 1; }
 .heading-anchor:hover { color: var(--mb-accent); }
 .heading-icon {
-  width: 0.65em;
-  height: 0.65em;
+  width: 0.9em;
+  height: 0.9em;
   stroke: currentColor;
 }
 
