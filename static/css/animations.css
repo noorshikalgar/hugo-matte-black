@@ -44,7 +44,7 @@ body {
 
 /* ── 4. Expandable TOC collapse ──────────────────────────────── */
 .toc-content {
-  overflow: hidden;
+  overflow: scroll;
   transition: max-height 0.15s ease;
 }
 

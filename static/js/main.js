@@ -129,6 +129,27 @@
     });
   }
 
+  /* ── TOC smooth scroll (with header offset) ─────────────────── */
+  const tocAnchors = document.querySelectorAll(
+    '.toc-content a[href^="#"]'
+  );
+
+  if (tocAnchors.length) {
+    tocAnchors.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        const id = this.getAttribute('href');
+        if (!id || id === '#') return;
+        const target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        const headerOffset = 78;
+        const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+        if (history && history.replaceState) history.replaceState(null, '', id);
+      });
+    });
+  }
+
   /* ── Image lightbox ─────────────────────────────────────────── */
   const lightbox     = document.getElementById('image-lightbox');
   const lbImage      = document.getElementById('lb-image');

@@ -147,12 +147,14 @@ ul li {
 .breadcrumbs {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 0.35rem;
   font-size: 0.8rem;
   font-family: "JetBrains Mono", monospace;
   color: var(--mb-text-faint);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.85rem;
   flex-wrap: wrap;
+  overflow: visible;
 }
 .breadcrumbs a {
   color: var(--mb-text-faint);
@@ -168,17 +170,25 @@ ul li {
   border-radius: var(--pico-border-radius);
   margin-bottom: 1.5rem;
   overflow: hidden;
+  background: linear-gradient(180deg, var(--mb-surface-1) 0%, var(--mb-bg) 100%);
+  box-shadow: none;
 }
 
 .toc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 0.9rem;
+  padding: 0.7rem 0.95rem;
   background: var(--mb-surface-1);
-  border-bottom: 1px solid var(--mb-border);
+  border: 1px solid var(--mb-border);
   cursor: pointer;
   user-select: none;
+  outline: none;
+}
+.toc-header:focus,
+.toc-header:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 .toc-header h3 {
   margin: 0;
@@ -194,32 +204,132 @@ ul li {
 .toc-header h3::before { content: "// "; color: var(--mb-border-focus); }
 
 .toc-toggle {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--mb-text-faint);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.toc-header[aria-expanded="true"] .toc-toggle {
+  color: var(--mb-accent);
+}
+.toc-header[aria-expanded="false"] .toc-toggle {
+  transform: rotate(-90deg);
 }
 
 .toc-content {
-  padding: 0.75rem 0.9rem;
+  padding: 0.75rem 0.85rem 0.85rem;
   background: var(--mb-bg);
+  max-height: 24rem;
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mb-border-focus) transparent;
 }
 .toc-content.collapsed { display: none; }
 
+.toc-content nav {
+  display: block;
+  overflow: visible;
+}
+
 .toc-content nav ul {
+  display: block;
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.toc-content nav > ul > li { margin: 0.3rem 0; }
-.toc-content nav ul ul { padding-left: 1rem; margin-top: 0.2rem; }
+.toc-content nav li {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+.toc-content nav > ul > li {
+  margin: 0.15rem 0 0.8rem;
+}
+.toc-content nav > ul > li + li {
+  padding-top: 0.15rem;
+}
+.toc-content nav ul ul {
+  margin-top: 0.3rem;
+  margin-left: 0.45rem;
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--mb-border);
+}
+.toc-content nav ul ul li {
+  margin: 0.2rem 0;
+}
 
 .toc-content nav a {
-  font-size: 0.83rem;
+  font-size: 0.9rem;
   color: var(--mb-text-muted);
   text-decoration: none;
   display: block;
-  padding: 0.1rem 0;
+  line-height: 1.5;
+  padding: 0.22rem 0.4rem 0.22rem 0.95rem;
+  overflow-wrap: anywhere;
+  border-radius: var(--pico-border-radius-sm);
+  transition: color 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
 }
-.toc-content nav a:hover { color: var(--mb-accent); }
+.toc-content nav > ul > li > a {
+  font-weight: 500;
+  color: var(--mb-text);
+}
+.toc-content nav > ul > li > ul > li > a {
+  font-size: 0.86rem;
+  font-weight: 400;
+  color: var(--mb-text-muted);
+}
+.toc-content nav > ul > li > ul > li > ul > li > a {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--mb-text-faint);
+}
+.toc-content nav a:hover {
+  color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+}
+.toc-content nav a:focus-visible {
+  outline: 1px solid var(--mb-border-focus);
+  outline-offset: 1px;
+  color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+}
+.toc-content::-webkit-scrollbar {
+  width: 7px;
+}
+.toc-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.toc-content::-webkit-scrollbar-thumb {
+  background: var(--mb-border);
+  border-radius: 8px;
+}
+.toc-content::-webkit-scrollbar-thumb:hover {
+  background: var(--mb-border-focus);
+}
+
+@media (max-width: 900px) {
+  .toc-content {
+    max-height: 18rem;
+  }
+  .toc-content nav a {
+    font-size: 0.85rem;
+  }
+  .toc-content nav > ul > li > ul > li > a {
+    font-size: 0.81rem;
+  }
+  .toc-content nav > ul > li > ul > li > ul > li > a {
+    font-size: 0.78rem;
+  }
+}
+
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  scroll-margin-top: 82px;
+}
 
 /* ── 6. Pagination ───────────────────────────────────────────── */
 .pagination {

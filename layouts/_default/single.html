@@ -1,5 +1,12 @@
 {{ define "main" }}
-<div class="content-layout">
+{{- $hasToc := isset .Params "toc" -}}
+{{- $tocValue := "" -}}
+{{- if $hasToc -}}
+  {{- $tocValue = lower (printf "%v" .Params.toc) -}}
+{{- end -}}
+{{- $showSidebarToc := and $hasToc (eq $tocValue "true") (gt (len .TableOfContents) 100) -}}
+
+<div class="content-layout{{ if not $showSidebarToc }} no-sidebar{{ end }}">
 
   <!-- Main article -->
   <article>
@@ -57,12 +64,14 @@
 
   </article>
 
-  <!-- Sidebar (TOC on large screens, section links) -->
-  <aside>
-    <div style="position:sticky;top:70px;">
-      {{- partial "sidebar-toc.html" . -}}
-    </div>
-  </aside>
+  <!-- Sidebar (TOC on large screens) -->
+  {{- if $showSidebarToc -}}
+    <aside>
+      <div style="position:sticky;top:70px;">
+        {{- partial "sidebar-toc.html" . -}}
+      </div>
+    </aside>
+  {{- end -}}
 
 </div>
 {{ end }}
