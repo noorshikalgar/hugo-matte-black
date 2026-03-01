@@ -433,8 +433,16 @@
   /* ── Event listeners ─────────────────────────────────────────── */
   const debouncedSearch = debounce(runSearch, 180);
 
+  function syncUrl(q) {
+    const url = new URL(window.location);
+    if (q) { url.searchParams.set('q', q); }
+    else    { url.searchParams.delete('q'); }
+    history.replaceState(null, '', url);
+  }
+
   searchInput.addEventListener('input', function () {
     query = this.value;
+    syncUrl(query);
     debouncedSearch();
   });
 
@@ -442,6 +450,7 @@
     searchForm.addEventListener('submit', function (e) {
       e.preventDefault();
       query = searchInput.value;
+      syncUrl(query);
       runSearch();
     });
   }
@@ -483,7 +492,7 @@
   if (urlQ) {
     searchInput.value = urlQ;
     query = urlQ;
-    // runSearch will fire once index is loaded
+    runSearch();
   }
 
 })();
