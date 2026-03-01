@@ -26,9 +26,9 @@
   --mb-border-accent: #F59E0B55; /* Accent-tinted border       */
 
   /* Text */
-  --mb-text:          #EAEAEA;   /* Primary text               */
-  --mb-text-muted:    #bebebe;   /* Secondary / subdued text   */
-  --mb-text-faint:    #8a8a8d;   /* Placeholders, disabled     */
+  --mb-text:          #C0C0C0;   /* Primary text               */
+  --mb-text-muted:    #909090;   /* Secondary / subdued text   */
+  --mb-text-faint:    #606066;   /* Placeholders, disabled     */
   --mb-text-disabled: #333333;   /* Disabled labels            */
 
   /* Accent — Amber/Gold (primary interactive color) */

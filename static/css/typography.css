@@ -41,6 +41,23 @@ h4 { font-size: 1.1rem;  margin-bottom: 0.65rem; }
 h5 { font-size: 1rem;    margin-bottom: 0.5rem; }
 h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
 
+/* ── Post content heading overrides ─────────────────────────── */
+.post-content h2 {
+  border-bottom: 1px solid var(--mb-accent-dim);
+  color: var(--mb-text);
+  margin-top: 2rem;
+}
+.post-content h3 {
+  border-left: 3px solid var(--mb-accent);
+  padding-left: 0.65rem;
+  color: var(--mb-text);
+  margin-top: 1.5rem;
+}
+.post-content h4 {
+  color: var(--mb-text-muted);
+  margin-top: 1.25rem;
+}
+
 /* Section headers with terminal-style prefix */
 .section-title,
 .terminal-title {
@@ -90,6 +107,26 @@ li { margin-bottom: 0.25rem; }
 
 ul li::marker { color: var(--mb-accent); }
 ol li::marker { color: var(--mb-accent); font-weight: 600; }
+
+.post-content ul,
+.post-content ol {
+  padding-left: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+.post-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+.post-content ul li::marker {
+  color: var(--mb-accent);
+  font-size: 1.1em;
+}
+.post-content ol li::marker {
+  color: var(--mb-accent);
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+}
 
 /* ── 7. Blockquote ───────────────────────────────────────────── */
 blockquote {
