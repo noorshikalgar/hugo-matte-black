@@ -1,6 +1,5 @@
 {{- if .Page.Store.Get "hasMermaid" -}}
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   mermaid.initialize({
@@ -32,43 +31,43 @@ document.addEventListener('DOMContentLoaded', function() {
       var svg = container.querySelector('svg');
       if (!svg) return;
 
-      // Wrap SVG in a positioned container
-      container.style.position = 'relative';
+      // Strip Mermaid 10's inline max-width / explicit dimensions so CSS controls size
+      svg.style.maxWidth = 'none';
+      svg.style.width    = '100%';
+      svg.style.height   = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
 
-      var w = container.clientWidth  || 800;
-      var h = container.clientHeight || 450;
-      svg.setAttribute('width',  w);
-      svg.setAttribute('height', h);
-      svg.style.width  = '100%';
-      svg.style.height = '100%';
+      // ── Simple scale-based zoom (no fixed container height needed) ──
+      var scale  = 0.75;  // initial: 75% width — fits the diagram without excess scrolling
+      var STEP   = 0.25;
+      var MIN    = 0.25;
+      var MAX    = 4;
 
-      var pz = svgPanZoom(svg, {
-        controlIconsEnabled: false,
-        fit:    true,
-        center: true,
-        minZoom: 0.2,
-        maxZoom: 15,
-        zoomScaleSensitivity: 0.4
-      });
+      function applyScale() {
+        svg.style.width  = (scale * 100) + '%';
+        svg.style.height = 'auto';
+        container.style.overflow = scale > 1 ? 'auto' : 'visible';
+      }
 
-      // Inject custom toolbar
+      applyScale(); // apply initial scale immediately
+
+      // Inject toolbar
       var bar = document.createElement('div');
       bar.className = 'mermaid-toolbar';
       bar.innerHTML =
         '<button title="Zoom in"  data-action="zoomIn">+</button>'  +
         '<button title="Zoom out" data-action="zoomOut">&minus;</button>' +
-        '<button title="Reset"    data-action="reset">&#8635;</button>'   +
-        '<button title="Fit"      data-action="fit">&#x26F6;</button>';
-      container.appendChild(bar);
+        '<button title="Reset"    data-action="reset">&#8635;</button>';
+      container.insertBefore(bar, svg);
 
       bar.addEventListener('click', function(e) {
         var btn = e.target.closest('button');
         if (!btn) return;
         var action = btn.dataset.action;
-        if (action === 'zoomIn')  pz.zoomIn();
-        if (action === 'zoomOut') pz.zoomOut();
-        if (action === 'reset')   { pz.resetZoom(); pz.resetPan(); }
-        if (action === 'fit')     { pz.fit(); pz.center(); }
+        if (action === 'zoomIn')  { scale = Math.min(scale + STEP, MAX); applyScale(); }
+        if (action === 'zoomOut') { scale = Math.max(scale - STEP, MIN); applyScale(); }
+        if (action === 'reset')   { scale = 0.75; applyScale(); }
       });
     });
   });
