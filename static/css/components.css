@@ -166,8 +166,6 @@ ul li {
 
 /* ── 5. Table of Contents ────────────────────────────────────── */
 .toc-section {
-  border: 1px solid var(--mb-border);
-  border-radius: var(--pico-border-radius);
   margin-bottom: 1.5rem;
   overflow: hidden;
   background: linear-gradient(180deg, var(--mb-surface-1) 0%, var(--mb-bg) 100%);
