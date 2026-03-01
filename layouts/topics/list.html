@@ -9,7 +9,7 @@
   </div>
 
   <div class="posts-grid" id="posts-container">
-    {{- range $allPages.ByDate.Reverse }}
+    {{- range $allPages.ByParam "weight" }}
       <article class="post-card">
         <div class="post-card-meta">
           <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
