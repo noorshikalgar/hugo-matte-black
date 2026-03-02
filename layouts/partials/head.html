@@ -43,6 +43,14 @@
 <link rel="manifest" href="{{ . | relURL }}">
 {{- end }}
 
+<!-- Apply saved accent theme before CSS renders (prevents flash) -->
+<script>
+  (function(){
+    var t = localStorage.getItem('accentTheme');
+    if (t) document.documentElement.setAttribute('data-accent', t);
+  })();
+</script>
+
 <!-- Pico CSS -->
 <link rel="stylesheet" href="{{ "css/pico/pico.min.css" | relURL }}">
 
@@ -55,6 +63,7 @@
 <link rel="stylesheet" href="{{ "css/code.css"       | relURL }}">
 <link rel="stylesheet" href="{{ "css/search.css"     | relURL }}">
 <link rel="stylesheet" href="{{ "css/animations.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/themes.css"     | relURL }}">
 
 {{- block "head" . }}{{- end }}
 

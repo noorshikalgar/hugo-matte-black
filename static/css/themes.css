@@ -1,0 +1,431 @@
+/**
+ * themes.css — Accent Color Palettes
+ * ═══════════════════════════════════════════════════════════════
+ * Each theme overrides accent vars on html[data-accent="X"].
+ * Default (amber) lives in colors.css :root — no override needed.
+ * Switched at runtime by theme-toggle button via main.js.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── Amber (default) ─────────────────────────────────────────── */
+/* Defined in colors.css :root — this block just makes it explicit */
+html[data-accent="amber"] {
+  --mb-accent:        #F59E0B;
+  --mb-accent-bright: #FBBF24;
+  --mb-accent-dark:   #D97706;
+  --mb-accent-dim:    #B47409;
+  --mb-accent-bg:     #F59E0B1A;
+  --mb-accent-bg-sel: #F59E0B33;
+  --mb-border-accent: #F59E0B55;
+}
+
+
+/* ── Tokyo Night ─────────────────────────────────────────────── */
+/* Full palette from tokyonight.nvim / VS Code Tokyo Night       */
+html[data-accent="tokyo"] {
+  /* Backgrounds — deep blue-navy */
+  --mb-bg:          #1a1b26;
+  --mb-surface-1:   #24283b;
+  --mb-surface-2:   #2f3549;
+  --mb-surface-3:   #3b4261;
+
+  /* Borders */
+  --mb-border:        #3b4261;
+  --mb-border-focus:  #7aa2f7;
+  --mb-border-accent: #7aa2f755;
+
+  /* Text — lavender hierarchy (fixed: muted was too dark before) */
+  --mb-text-bright:   #c0caf5;   /* H1 — soft lavender white      */
+  --mb-text:          #a9b1d6;   /* body / H2                     */
+  --mb-text-muted:    #9aa5ce;   /* H3 / labels — readable        */
+  --mb-text-faint:    #565f89;   /* H4 / placeholders             */
+  --mb-text-disabled: #2a2f44;
+
+  /* Accent — Tokyo blue + purple bold */
+  --mb-accent:        #7aa2f7;   /* links, icons                  */
+  --mb-accent-bright: #bb9af7;   /* bold text — Tokyo purple      */
+  --mb-accent-dark:   #5d7ec9;   /* tags, pressed                 */
+  --mb-accent-dim:    #4a6ba3;   /* visited links                 */
+  --mb-accent-bg:     #7aa2f71a;
+  --mb-accent-bg-sel: #7aa2f733;
+
+  /* Semantic — Tokyo Night palette colors */
+  --mb-green:         #9ece6a;   /* GUIDES badge, success         */
+  --mb-green-bright:  #b9f27c;
+  --mb-green-bg:      #9ece6a18;
+  --mb-red:           #f7768e;   /* errors, delete                */
+  --mb-red-bright:    #ff9199;
+  --mb-red-bg:        #f7768e18;
+  --mb-blue:          #7dcfff;   /* info, directives              */
+  --mb-blue-bright:   #a9e0ff;
+  --mb-blue-bg:       #7dcfff18;
+  --mb-warning:       #e0af68;   /* warnings                      */
+  --mb-warning-bg:    #e0af6818;
+  --mb-info:          #e0af68;
+  --mb-info-bg:       #e0af6830;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #3b4261;
+  --mb-scrollbar-hover: #7aa2f7;
+
+  /* Subtle depth — Tokyo Night uses soft glows not hard shadows  */
+  --mb-shadow-sm:    0 1px 6px rgba(122, 162, 247, 0.07);
+  --mb-shadow:       0 4px 20px rgba(122, 162, 247, 0.10);
+  --mb-shadow-lg:    0 8px 32px rgba(122, 162, 247, 0.13);
+  --mb-glow-hover:   0 0 16px rgba(122, 162, 247, 0.15);
+}
+
+/* Tokyo Night — element-level depth & glow ─────────────────── */
+/* These selectors only fire when Tokyo Night is active          */
+html[data-accent="tokyo"] .post-card {
+  box-shadow: var(--mb-shadow-sm);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+html[data-accent="tokyo"] .post-card:hover {
+  box-shadow: var(--mb-glow-hover);
+}
+html[data-accent="tokyo"] .search-form {
+  box-shadow: var(--mb-shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+html[data-accent="tokyo"] .search-form:focus-within {
+  box-shadow: 0 0 0 3px rgba(122, 162, 247, 0.18), var(--mb-shadow);
+}
+html[data-accent="tokyo"] .browse-card,
+html[data-accent="tokyo"] .quick-nav-item {
+  box-shadow: var(--mb-shadow-sm);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+html[data-accent="tokyo"] .browse-card:hover,
+html[data-accent="tokyo"] .quick-nav-item:hover {
+  box-shadow: var(--mb-glow-hover);
+}
+
+/* ── Ayu Mirage ──────────────────────────────────────────────── */
+/* Full palette from Ayu Mirage theme                            */
+html[data-accent="ayu"] {
+  /* Backgrounds — dark slate-blue */
+  --mb-bg:          #1f2430;
+  --mb-surface-1:   #242936;
+  --mb-surface-2:   #2d3348;
+  --mb-surface-3:   #343d4f;
+
+  /* Borders */
+  --mb-border:        #3d4a5c;
+  --mb-border-focus:  #ffcc66;
+  --mb-border-accent: #FFCC6655;
+
+  /* Text — warm sandy hierarchy */
+  --mb-text-bright:   #cccac2;   /* H1 — warm off-white           */
+  --mb-text:          #b8b5ac;   /* body / H2                     */
+  --mb-text-muted:    #707a8c;   /* H3 / labels                   */
+  --mb-text-faint:    #4d5566;   /* H4 / placeholders             */
+  --mb-text-disabled: #2e3547;
+
+  /* Accent — Ayu gold */
+  --mb-accent:        #ffcc66;   /* links, icons                  */
+  --mb-accent-bright: #ffd580;   /* bold text — bright gold       */
+  --mb-accent-dark:   #e6b440;   /* tags, pressed                 */
+  --mb-accent-dim:    #c99a2e;   /* visited links                 */
+  --mb-accent-bg:     #ffcc661a;
+  --mb-accent-bg-sel: #ffcc6633;
+}
+
+/* ── Forest (colorhunt #1b211a → #8bae66 → #ebd5ab) ─────────────── */
+html[data-accent="forest"] {
+  /* Backgrounds — very dark forest green */
+  --mb-bg:          #1b211a;
+  --mb-surface-1:   #22291f;
+  --mb-surface-2:   #293027;
+  --mb-surface-3:   #31392e;
+
+  /* Borders */
+  --mb-border:        #3a4535;
+  --mb-border-focus:  #8bae66;
+  --mb-border-accent: #8bae6655;
+
+  /* Text — warm earthy hierarchy */
+  --mb-text-bright:   #ebd5ab;   /* H1 — warm sandy tan            */
+  --mb-text:          #cbb98a;   /* body / H2                     */
+  --mb-text-muted:    #9aa580;   /* H3 / labels                   */
+  --mb-text-faint:    #607055;   /* H4 / placeholders             */
+  --mb-text-disabled: #2e3a2a;
+
+  /* Accent — forest green */
+  --mb-accent:        #8bae66;   /* links, icons                  */
+  --mb-accent-bright: #9ecc76;   /* bold text — bright leaf       */
+  --mb-accent-dark:   #628141;   /* tags, pressed                 */
+  --mb-accent-dim:    #4a6230;   /* visited links                 */
+  --mb-accent-bg:     #8bae661a;
+  --mb-accent-bg-sel: #8bae6633;
+
+  /* Semantic */
+  --mb-green:         #8bae66;
+  --mb-green-bright:  #9ecc76;
+  --mb-green-bg:      #8bae6618;
+  --mb-red:           #c0603a;
+  --mb-red-bright:    #d97050;
+  --mb-red-bg:        #c0603a18;
+  --mb-blue:          #5d9fb5;
+  --mb-blue-bright:   #7abdd0;
+  --mb-blue-bg:       #5d9fb518;
+  --mb-warning:       #c9a84c;
+  --mb-warning-bg:    #c9a84c18;
+  --mb-info:          #ebd5ab;
+  --mb-info-bg:       #ebd5ab20;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #3a4535;
+  --mb-scrollbar-hover: #8bae66;
+}
+
+/* ── Gruvbox Dark Hard ─────────────────────────────────────── */
+/* Faithful port of gruvbox-dark-hard by morhetz                 */
+html[data-accent="gruvbox"] {
+  /* Backgrounds */
+  --mb-bg:          #1d2021;
+  --mb-surface-1:   #282828;
+  --mb-surface-2:   #3c3836;
+  --mb-surface-3:   #504945;
+
+  /* Borders */
+  --mb-border:        #3c3836;
+  --mb-border-focus:  #fe8019;
+  --mb-border-accent: #fe801955;
+
+  /* Text — warm parchment hierarchy */
+  --mb-text-bright:   #ebdbb2;   /* H1 — classic Gruvbox fg      */
+  --mb-text:          #d5c4a1;   /* body / H2                     */
+  --mb-text-muted:    #bdae93;   /* H3 / labels                   */
+  --mb-text-faint:    #928374;   /* H4 / placeholders             */
+  --mb-text-disabled: #32302f;
+
+  /* Accent — Gruvbox orange */
+  --mb-accent:        #fe8019;   /* links, icons                  */
+  --mb-accent-bright: #ffa347;   /* bold text                     */
+  --mb-accent-dark:   #d65d0e;   /* tags, pressed                 */
+  --mb-accent-dim:    #af3a03;   /* visited links                 */
+  --mb-accent-bg:     #fe80191a;
+  --mb-accent-bg-sel: #fe801933;
+
+  /* Semantic — Gruvbox palette */
+  --mb-green:         #b8bb26;
+  --mb-green-bright:  #d3d644;
+  --mb-green-bg:      #b8bb2618;
+  --mb-red:           #fb4934;
+  --mb-red-bright:    #ff6347;
+  --mb-red-bg:        #fb493418;
+  --mb-blue:          #83a598;
+  --mb-blue-bright:   #a3c5be;
+  --mb-blue-bg:       #83a59818;
+  --mb-warning:       #fabd2f;
+  --mb-warning-bg:    #fabd2f18;
+  --mb-info:          #d3869b;
+  --mb-info-bg:       #d3869b20;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #504945;
+  --mb-scrollbar-hover: #fe8019;
+}
+
+/* ── Gray Matter Light ─────────────────────────────────────── */
+/* Minimalist warm-paper light theme inspired by philipbe        */
+html[data-accent="graymatter"] {
+  /* Backgrounds — warm cream paper */
+  --mb-bg:          #f4f3ef;
+  --mb-surface-1:   #eae8e2;
+  --mb-surface-2:   #dedcd5;
+  --mb-surface-3:   #d1cec6;
+
+  /* Borders */
+  --mb-border:        #c5c1b8;
+  --mb-border-focus:  #5b6ec2;
+  --mb-border-accent: #5b6ec255;
+
+  /* Text — near-black on warm paper */
+  --mb-text-bright:   #1a1a1a;   /* H1 — near black               */
+  --mb-text:          #2c2c2c;   /* body / H2                     */
+  --mb-text-muted:    #5a5a5a;   /* H3 / labels                   */
+  --mb-text-faint:    #909090;   /* H4 / placeholders             */
+  --mb-text-disabled: #c0bdb5;
+
+  /* Accent — slate blue (minimal, paper-like) */
+  --mb-accent:        #5b6ec2;   /* links, icons                  */
+  --mb-accent-bright: #7282d4;   /* bold text — brighter blue     */
+  --mb-accent-dark:   #4456b0;   /* tags, pressed                 */
+  --mb-accent-dim:    #3344a0;   /* visited links                 */
+  --mb-accent-bg:     #5b6ec218;
+  --mb-accent-bg-sel: #5b6ec230;
+
+  /* Semantic — muted for light bg */
+  --mb-green:         #3a7d44;
+  --mb-green-bright:  #2d6e37;
+  --mb-green-bg:      #3a7d4415;
+  --mb-red:           #c0392b;
+  --mb-red-bright:    #a93226;
+  --mb-red-bg:        #c0392b15;
+  --mb-blue:          #2980b9;
+  --mb-blue-bright:   #1f6fa0;
+  --mb-blue-bg:       #2980b915;
+  --mb-warning:       #d35400;
+  --mb-warning-bg:    #d3540015;
+  --mb-info:          #5b6ec2;
+  --mb-info-bg:       #5b6ec218;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #c5c1b8;
+  --mb-scrollbar-hover: #5b6ec2;
+
+  /* Pico overrides — force light mode vars */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    var(--mb-accent-dark);
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* Gray Matter — code block overrides for light background ────── */
+/* The main chroma rules use hardcoded dark hex values; scope     */
+/* them here so they're readable on the warm-cream background.   */
+
+/* Code block / inline code background & base text */
+html[data-accent="graymatter"] pre,
+html[data-accent="graymatter"] .chroma {
+  background: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="graymatter"] pre code {
+  color: var(--mb-text) !important;
+}
+html[data-accent="graymatter"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: var(--mb-accent-dark);
+  border-color: var(--mb-border);
+}
+
+/* Keywords — indigo/purple */
+html[data-accent="graymatter"] .chroma .k,
+html[data-accent="graymatter"] .chroma .kc,
+html[data-accent="graymatter"] .chroma .kd,
+html[data-accent="graymatter"] .chroma .kn,
+html[data-accent="graymatter"] .chroma .kp,
+html[data-accent="graymatter"] .chroma .kr,
+html[data-accent="graymatter"] .chroma .kt { color: #5a4fcf; }
+
+/* Strings — forest green */
+html[data-accent="graymatter"] .chroma .s,
+html[data-accent="graymatter"] .chroma .sa,
+html[data-accent="graymatter"] .chroma .sb,
+html[data-accent="graymatter"] .chroma .sc,
+html[data-accent="graymatter"] .chroma .dl,
+html[data-accent="graymatter"] .chroma .sd,
+html[data-accent="graymatter"] .chroma .s2,
+html[data-accent="graymatter"] .chroma .se,
+html[data-accent="graymatter"] .chroma .sh,
+html[data-accent="graymatter"] .chroma .si,
+html[data-accent="graymatter"] .chroma .sx,
+html[data-accent="graymatter"] .chroma .sr,
+html[data-accent="graymatter"] .chroma .s1,
+html[data-accent="graymatter"] .chroma .ss { color: #2e7d51; }
+
+/* Numbers — warm brown */
+html[data-accent="graymatter"] .chroma .m,
+html[data-accent="graymatter"] .chroma .mb,
+html[data-accent="graymatter"] .chroma .mf,
+html[data-accent="graymatter"] .chroma .mh,
+html[data-accent="graymatter"] .chroma .mi,
+html[data-accent="graymatter"] .chroma .il,
+html[data-accent="graymatter"] .chroma .mo { color: #a05c00; }
+
+/* Functions — slate blue (accent) */
+html[data-accent="graymatter"] .chroma .nf,
+html[data-accent="graymatter"] .chroma .fm { color: #4456b0; }
+
+/* Types — darker blue */
+html[data-accent="graymatter"] .chroma .nc,
+html[data-accent="graymatter"] .chroma .nn { color: #3344a0; }
+
+/* Variables — near-black */
+html[data-accent="graymatter"] .chroma .n,
+html[data-accent="graymatter"] .chroma .nb,
+html[data-accent="graymatter"] .chroma .bp { color: #2c2c2c; }
+
+/* Operators — mid gray */
+html[data-accent="graymatter"] .chroma .o,
+html[data-accent="graymatter"] .chroma .ow { color: #5a5a5a; }
+
+/* Comments — muted gray italic */
+html[data-accent="graymatter"] .chroma .c,
+html[data-accent="graymatter"] .chroma .ch,
+html[data-accent="graymatter"] .chroma .cm,
+html[data-accent="graymatter"] .chroma .c1,
+html[data-accent="graymatter"] .chroma .cs,
+html[data-accent="graymatter"] .chroma .cp,
+html[data-accent="graymatter"] .chroma .cpf { color: #909090; font-style: italic; }
+
+/* Tags (HTML/XML) — green */
+html[data-accent="graymatter"] .chroma .nt { color: #2e7d51; }
+
+/* Attributes — warm brown italic */
+html[data-accent="graymatter"] .chroma .na { color: #a05c00; font-style: italic; }
+
+/* Punctuation — mid gray */
+html[data-accent="graymatter"] .chroma .p,
+html[data-accent="graymatter"] .chroma .pi { color: #5a5a5a; }
+
+/* Preprocessor — teal */
+html[data-accent="graymatter"] .chroma .cp,
+html[data-accent="graymatter"] .chroma .bp { color: #2980b9; }
+
+/* Error */
+html[data-accent="graymatter"] .chroma .err { color: #c0392b; }
+/* ── Theme toggle button color indicator ───────────────────── */
+/* The button shows a small dot in the current accent color       */
+#theme-toggle .theme-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--mb-accent);
+  box-shadow: 0 0 4px var(--mb-accent);
+  flex-shrink: 0;
+}
+
+/* ── Theme name tooltip on hover ─────────────────────────────── */
+#theme-toggle {
+  position: relative;
+}
+#theme-toggle::after {
+  content: attr(data-theme-name);
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--mb-surface-2);
+  color: var(--mb-text);
+  border: 1px solid var(--mb-border);
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-family: "JetBrains Mono", monospace;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+#theme-toggle:hover::after {
+  opacity: 1;
+}

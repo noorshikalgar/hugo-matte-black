@@ -45,11 +45,10 @@
 
     <!-- Controls -->
     <div class="header-controls">
-      {{- if .IsSection }}
-      <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
-        <span id="layout-icon">⊞</span>
+      <!-- Theme switcher -->
+      <button id="theme-toggle" class="header-icon-btn" aria-label="Switch accent theme">
+        <span class="theme-dot"></span>
       </button>
-      {{- end }}
 
       <!-- Search -->
       <a href="{{ "/" | relURL }}" class="header-icon-btn" title="Search" aria-label="Search">

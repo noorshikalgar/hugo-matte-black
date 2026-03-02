@@ -26,7 +26,7 @@
 {{ $pageChapters := where $paginator.Pages "Params.contentType" "ne" "guide" }}
 
 {{ if $pageGuides }}
-<h2 class="tag-group-heading">Guides</h2>
+<h2 class="tag-group-heading">Guides &amp; Articles</h2>
 <div class="posts-grid" id="posts-container">
   {{ range $pageGuides }}
     <article class="post-card">
@@ -61,7 +61,7 @@
 {{ end }}
 
 {{ if $pageChapters }}
-<h2 class="tag-group-heading">Chapters &amp; Articles</h2>
+<h2 class="tag-group-heading">Chapters</h2>
 <div class="posts-grid">
   {{ range $pageChapters }}
     <article class="post-card">

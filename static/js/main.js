@@ -44,22 +44,40 @@
     });
   }
 
-  /* ── Layout toggle (grid ↔ single column) ───────────────────── */
-  const layoutToggle = document.getElementById('layout-toggle');
-  const layoutIcon   = document.getElementById('layout-icon');
-  const postsGrid    = document.getElementById('posts-container');
+  /* ── Theme switcher ─────────────────────────────────────────── */
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter'];
+  var THEME_NAMES = {
+    amber:      'Amber',
+    tokyo:      'Tokyo Night',
+    ayu:        'Ayu Mirage',
+    forest:     'Forest',
+    gruvbox:    'Gruvbox Dark',
+    graymatter: 'Gray Matter'
+  };
 
-  if (layoutToggle && postsGrid) {
-    // Restore saved preference
-    if (localStorage.getItem('postsLayout') === 'single') {
-      postsGrid.classList.add('single-column');
-      if (layoutIcon) layoutIcon.textContent = '☰';
+  function applyAccentTheme(name) {
+    document.documentElement.setAttribute('data-accent', name);
+    localStorage.setItem('accentTheme', name);
+    var btn = document.getElementById('theme-toggle');
+    if (btn) btn.setAttribute('data-theme-name', THEME_NAMES[name] || name);
+  }
+
+  var themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    // Ensure a theme is always set
+    var initial = document.documentElement.getAttribute('data-accent') || 'amber';
+    if (!document.documentElement.getAttribute('data-accent')) {
+      applyAccentTheme('amber');
+    } else {
+      // Set tooltip name for whatever was restored from localStorage
+      themeToggle.setAttribute('data-theme-name', THEME_NAMES[initial] || initial);
     }
 
-    layoutToggle.addEventListener('click', function () {
-      const isSingle = postsGrid.classList.toggle('single-column');
-      if (layoutIcon) layoutIcon.textContent = isSingle ? '☰' : '⊞';
-      localStorage.setItem('postsLayout', isSingle ? 'single' : 'multi');
+    themeToggle.addEventListener('click', function () {
+      var current = document.documentElement.getAttribute('data-accent') || 'amber';
+      var idx     = THEMES.indexOf(current);
+      var next    = THEMES[(idx + 1) % THEMES.length];
+      applyAccentTheme(next);
     });
   }
 
