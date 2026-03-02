@@ -80,7 +80,7 @@ h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
   letter-spacing: 0;
 }
 .post-content h4 {
-  color: var(--mb-text-faint);
+  color: var(--mb-text-muted);
   margin-top: 1.25rem;
 }
 .post-content h4::before {

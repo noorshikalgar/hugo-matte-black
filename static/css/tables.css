@@ -17,20 +17,15 @@ table {
   margin-bottom: 1.5rem;
 }
 
-/* Responsive: post-content tables scroll horizontally on small screens */
+/* post-content tables: natural table layout, scroll handled by .table-wrapper */
 .post-content table {
-  display: block;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  max-width: 100%;
-  /* Keep table layout but allow scroll container */
-  white-space: nowrap;
+  width: 100%;
+  min-width: 100%;
 }
-/* Allow cell content to wrap normally inside the scrollable table */
 .post-content table td,
 .post-content table th {
   white-space: normal;
-  min-width: 120px;
+  min-width: 80px;
 }
 
 thead {
