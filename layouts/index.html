@@ -9,7 +9,7 @@
 
   <!-- Header -->
   <div class="search-header">
-    <h1><span class="ssh-user">visitor</span><span class="ssh-sep">@</span><span class="site-name">{{ .Site.Params.shortName | default .Site.Title | lower }}</span><span class="ssh-path">:~$</span> <span class="ssh-cmd">./search</span></h1>
+    <h1><span class="ssh-user">visitor</span><span class="ssh-sep">@</span><span class="site-name">{{ .Site.Params.shortName | default .Site.Title | lower | replaceRE " " "-" }}</span><span class="ssh-path">:~$</span> <span class="ssh-cmd">./search</span></h1>
 
     <!-- Search form -->
     <form class="search-form" id="search-form" role="search" autocomplete="off">
