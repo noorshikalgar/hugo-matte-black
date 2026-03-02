@@ -13,6 +13,9 @@
   <!-- Section header -->
 
   <div class="section-header">
+    {{- with .Title }}
+      <h1 class="section-title">{{ . }}</h1>
+    {{- end }}
     <div class="section-header-meta">
       <span class="meta-text">{{ len .Pages }} articles</span>
     </div>
