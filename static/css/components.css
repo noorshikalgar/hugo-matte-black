@@ -6,7 +6,13 @@
  * ═══════════════════════════════════════════════════════════════
  */
 
-ul li {
+/* Strip bullets from UI component lists (nav, cards, tag-lists, etc.) */
+.tag-list li,
+.nav-desktop li,
+.quick-nav li,
+.post-card li,
+.sidebar-toc li,
+.toc-content li {
   list-style: none !important;
 }
 

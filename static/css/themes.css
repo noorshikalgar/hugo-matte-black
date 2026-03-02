@@ -231,11 +231,11 @@ html[data-accent="gruvbox"] {
 /* ── Gray Matter Light ─────────────────────────────────────── */
 /* Minimalist warm-paper light theme inspired by philipbe        */
 html[data-accent="graymatter"] {
-  /* Backgrounds — warm cream paper */
-  --mb-bg:          #f4f3ef;
-  --mb-surface-1:   #eae8e2;
-  --mb-surface-2:   #dedcd5;
-  --mb-surface-3:   #d1cec6;
+  /* Backgrounds — warm cream paper, lighter towards white */
+  --mb-bg:          #faf9f6;
+  --mb-surface-1:   #f0ede6;
+  --mb-surface-2:   #e4e0d8;
+  --mb-surface-3:   #d6d2c9;
 
   /* Borders */
   --mb-border:        #c5c1b8;
@@ -313,6 +313,15 @@ html[data-accent="graymatter"] code:not(pre > code) {
   color: var(--mb-accent-dark);
   border-color: var(--mb-border);
 }
+/* SVG diagrams: darker bg so white connection lines are visible */
+html[data-accent="graymatter"] .post-content img[src$=".svg"],
+html[data-accent="graymatter"] .post-content object[type="image/svg+xml"] {
+  background: #2e2c2a;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+
 
 /* Keywords — indigo/purple */
 html[data-accent="graymatter"] .chroma .k,

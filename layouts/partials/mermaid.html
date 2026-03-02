@@ -2,28 +2,52 @@
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  var isGrayMatter = document.documentElement.getAttribute('data-accent') === 'graymatter';
+
+  var darkVars = {
+    darkMode:         true,
+    background:       '#121212',
+    primaryColor:     '#212121',
+    primaryTextColor: '#EAEAEA',
+    primaryBorderColor: '#333333',
+    lineColor:        '#F59E0B',
+    secondaryColor:   '#1a1a1a',
+    tertiaryColor:    '#262626',
+    edgeLabelBackground: '#121212',
+    textColor:        '#bebebe',
+    clusterBkg:       '#1a1a1a',
+    clusterBorder:    '#333333',
+    titleColor:       '#F59E0B',
+    nodeBorder:       '#333333',
+    mainBkg:          '#212121',
+    nodeTextColor:    '#EAEAEA',
+    labelBackground:  '#212121'
+  };
+
+  var lightVars = {
+    darkMode:         false,
+    background:       '#faf9f6',
+    primaryColor:     '#e4e0d8',
+    primaryTextColor: '#2c2c2c',
+    primaryBorderColor: '#c5c1b8',
+    lineColor:        '#5b6ec2',
+    secondaryColor:   '#f0ede6',
+    tertiaryColor:    '#d6d2c9',
+    edgeLabelBackground: '#faf9f6',
+    textColor:        '#2c2c2c',
+    clusterBkg:       '#f0ede6',
+    clusterBorder:    '#c5c1b8',
+    titleColor:       '#5b6ec2',
+    nodeBorder:       '#c5c1b8',
+    mainBkg:          '#e4e0d8',
+    nodeTextColor:    '#2c2c2c',
+    labelBackground:  '#faf9f6'
+  };
+
   mermaid.initialize({
     startOnLoad: false,
     theme: 'base',
-    themeVariables: {
-      darkMode:         true,
-      background:       '#121212',
-      primaryColor:     '#212121',
-      primaryTextColor: '#EAEAEA',
-      primaryBorderColor: '#333333',
-      lineColor:        '#F59E0B',
-      secondaryColor:   '#1a1a1a',
-      tertiaryColor:    '#262626',
-      edgeLabelBackground: '#121212',
-      textColor:        '#bebebe',
-      clusterBkg:       '#1a1a1a',
-      clusterBorder:    '#333333',
-      titleColor:       '#F59E0B',
-      nodeBorder:       '#333333',
-      mainBkg:          '#212121',
-      nodeTextColor:    '#EAEAEA',
-      labelBackground:  '#212121'
-    }
+    themeVariables: isGrayMatter ? lightVars : darkVars
   });
 
   mermaid.run({ querySelector: '.mermaid' }).then(function() {

@@ -148,9 +148,33 @@ ol li::marker { color: var(--mb-accent); font-weight: 600; }
   margin-bottom: 0.5rem;
   line-height: 1.7;
 }
-.post-content ul li::marker {
+/* Terminal-style list markers for post content */
+.post-content ul {
+  list-style: none;
+  padding-left: 1.5rem;
+}
+.post-content ul > li {
+  position: relative;
+  padding-left: 1.4rem;
+  list-style: none;
+}
+.post-content ul > li::marker {
+  content: none;
+}
+.post-content ul > li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
   color: var(--mb-accent);
-  font-size: 1.1em;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1em;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+/* Nested ul: use a dimmer marker */
+.post-content ul ul > li::before {
+  content: "–";
+  opacity: 0.5;
 }
 .post-content ol li::marker {
   color: var(--mb-accent);
