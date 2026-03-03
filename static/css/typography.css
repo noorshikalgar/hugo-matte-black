@@ -100,9 +100,15 @@ h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
   font-size: 1.1rem;
   color: var(--mb-accent);
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
-.section-title::before { content: "// "; opacity: 0.5; }
+.section-title {
+  display: flex;
+  align-items: normal;
+  gap: 10px;
+}
+.section-title .bc-icon { transition: transform 0.15s ease; }
+.section-title:hover .bc-icon { transform: translateY(-2px); }
 
 /* ── 4. Body Text ────────────────────────────────────────────── */
 body {

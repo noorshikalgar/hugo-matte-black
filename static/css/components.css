@@ -242,8 +242,10 @@
 
 /* Folder: show closed by default, open on hover */
 .icon-open { display: none; }
-.breadcrumbs a:hover .icon-open   { display: block; }
-.breadcrumbs a:hover .icon-closed { display: none; }
+.breadcrumbs a:hover .icon-open,
+.section-title:hover .icon-open   { display: block; }
+.breadcrumbs a:hover .icon-closed,
+.section-title:hover .icon-closed { display: none; }
 
 /* Lift + accent colour on hover */
 .breadcrumbs a:hover            { color: var(--mb-accent); }

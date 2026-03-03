@@ -17,15 +17,15 @@ table {
   margin-bottom: 1.5rem;
 }
 
-/* post-content tables: natural table layout, scroll handled by .table-wrapper */
+/* post-content tables: let content dictate width, wrapper handles scroll */
 .post-content table {
-  width: 100%;
-  min-width: 100%;
+  width: max-content;  /* size to content — don't squish columns */
+  min-width: 100%;     /* but fill container when content is small */
 }
 .post-content table td,
 .post-content table th {
   white-space: normal;
-  min-width: 80px;
+  min-width: 100px;    /* floor so cells never get tiny */
 }
 
 thead {
@@ -117,8 +117,13 @@ thead th[data-sort="desc"]::after { content: " ↓"; opacity: 0.8; }
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
   margin-bottom: 1.5rem;
+  /* ensure wrapper itself never shrinks past available width */
+  max-width: 100%;
 }
 .table-wrapper table {
   margin-bottom: 0;
   border: none;
+  /* override the base table width: 100% so max-content can work */
+  width: max-content;
+  min-width: 100%;
 }

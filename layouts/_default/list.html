@@ -14,7 +14,14 @@
 
   <div class="section-header">
     {{- with .Title }}
-      <h1 class="section-title">{{ . }}</h1>
+      <h1 class="section-title">
+        <span class="bc-icon">
+          <svg class="bc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.1em;height:1.1em;vertical-align:-0.15em;">
+            <g class="icon-closed"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></g>
+            <g class="icon-open"><path d="M2 9h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9z"/><path d="M2 9l2-4h7l2 2h7a2 2 0 0 1 2 2"/></g>
+          </svg>
+        </span>{{ . }}
+      </h1>
     {{- end }}
     <div class="section-header-meta">
       <span class="meta-text">{{ len .Pages }} articles</span>
