@@ -435,6 +435,7 @@ html[data-accent="graymatter"] .chroma .err { color: #c0392b; }
   transition: opacity 0.15s;
   z-index: 100;
 }
-#theme-toggle:hover::after {
+#theme-toggle:hover::after,
+#theme-toggle.show-label::after {
   opacity: 1;
 }

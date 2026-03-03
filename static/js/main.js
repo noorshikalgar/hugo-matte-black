@@ -78,6 +78,12 @@
       var idx     = THEMES.indexOf(current);
       var next    = THEMES[(idx + 1) % THEMES.length];
       applyAccentTheme(next);
+      // Show label briefly on touch devices (no hover available)
+      themeToggle.classList.add('show-label');
+      clearTimeout(themeToggle._labelTimer);
+      themeToggle._labelTimer = setTimeout(function () {
+        themeToggle.classList.remove('show-label');
+      }, 1800);
     });
   }
 
