@@ -53,6 +53,13 @@ body {
 }
 .site-logo:hover { color: var(--mb-accent); text-decoration: none; }
 .site-logo .logo-dot { color: var(--mb-accent); }
+.site-logo-svg {
+  color: var(--mb-accent);   /* currentColor in SVG picks this up */
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-right: 0.45rem;
+  transition: color 0.2s ease;
+}
 
 .header-spacer { flex: 1; }
 

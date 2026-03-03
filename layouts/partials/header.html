@@ -8,9 +8,17 @@
 
     <!-- Logo / Site title -->
     <a href="{{ "/" | relURL }}" class="site-logo">
-      {{- with .Site.Params.logo -}}
-        <img src="{{ . | relURL }}" alt="{{ $.Site.Title }}" height="20" style="vertical-align:middle;margin-right:0.4rem;">
-      {{- end -}}
+      <svg class="site-logo-svg" width="28" height="28" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+        <rect x="10" y="10" width="180" height="180" rx="20" stroke="currentColor" stroke-width="6"/>
+        <g stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 55C60 55 45 55 45 70C45 85 45 88 45 88C45 88 35 92 35 100C35 108 45 112 45 112C45 112 45 115 45 130C45 145 60 145 60 145"/>
+          <path d="M140 55C140 55 155 55 155 70C155 85 155 88 155 88C155 88 165 92 165 100C165 108 155 112 155 112C155 112 155 115 155 130C155 145 140 145 140 145"/>
+        </g>
+        <g stroke="currentColor" stroke-width="8" stroke-linecap="round">
+          <circle cx="100" cy="100" r="22"/>
+          <line x1="120" y1="80" x2="80" y2="120"/>
+        </g>
+      </svg>
       {{ .Site.Params.shortName | default .Site.Title }}<span class="logo-dot">.</span>
     </a>
     <div class="header-spacer"></div>
