@@ -61,7 +61,7 @@
 /* ── 1. Search Page Layout ───────────────────────────────────── */
 .search-page {
   width: 100%;
-  max-width: 860px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -461,9 +461,15 @@
   line-height: 1.6;
 }
 
-/* Cards fill the full row — 1 card = full width, 2 = half each, 3+ = normal grid */
+/* 3 columns on desktop, matching listing pages */
 .week-section .posts-grid {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px) {
+  .week-section .posts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .week-section .posts-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
