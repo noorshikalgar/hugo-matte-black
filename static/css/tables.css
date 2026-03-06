@@ -17,15 +17,17 @@ table {
   margin-bottom: 1.5rem;
 }
 
-/* post-content tables: let content dictate width, wrapper handles scroll */
+/* post-content tables: fill width, wrap text — no overflow */
 .post-content table {
-  width: max-content;  /* size to content — don't squish columns */
-  min-width: 100%;     /* but fill container when content is small */
+  width: 100%;
+  min-width: 0;
 }
 .post-content table td,
 .post-content table th {
   white-space: normal;
-  min-width: 100px;    /* floor so cells never get tiny */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 thead {
@@ -112,18 +114,37 @@ thead th[data-sort="desc"]::after { content: " ↓"; opacity: 0.8; }
 
 /* ── 3. Responsive scroll wrapper ────────────────────────────── */
 .table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: visible;          /* large + medium: no scroll, wrap text  */
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
   margin-bottom: 1.5rem;
-  /* ensure wrapper itself never shrinks past available width */
   max-width: 100%;
 }
 .table-wrapper table {
   margin-bottom: 0;
   border: none;
-  /* override the base table width: 100% so max-content can work */
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
+  min-width: 0;
+}
+
+/* mobile only: scroll instead of squishing */
+@media (max-width: 600px) {
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-wrapper table {
+    width: max-content;
+    min-width: 100%;
+  }
+  .post-content table {
+    width: max-content;
+    min-width: 100%;
+  }
+  .post-content table td,
+  .post-content table th {
+    white-space: nowrap;
+    word-break: normal;
+    min-width: 80px;
+  }
 }

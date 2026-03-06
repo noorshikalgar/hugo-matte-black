@@ -2,152 +2,237 @@
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var isGrayMatter = document.documentElement.getAttribute('data-accent') === 'graymatter';
 
-  var darkVars = {
-    darkMode:         true,
-    background:       '#121212',
-    primaryColor:     '#212121',
-    primaryTextColor: '#EAEAEA',
-    primaryBorderColor: '#333333',
-    lineColor:        '#F59E0B',
-    secondaryColor:   '#1a1a1a',
-    tertiaryColor:    '#262626',
-    edgeLabelBackground: '#121212',
-    textColor:        '#bebebe',
-    clusterBkg:       '#1a1a1a',
-    clusterBorder:    '#333333',
-    titleColor:       '#F59E0B',
-    nodeBorder:       '#333333',
-    mainBkg:          '#212121',
-    nodeTextColor:    '#EAEAEA',
-    labelBackground:  '#212121'
+  /* ── Per-accent mermaid theme variables ─────────────────────── */
+  var MERMAID_THEMES = {
+    amber: {
+      darkMode: true, background: '#121212',
+      primaryColor: '#212121', primaryTextColor: '#EAEAEA',
+      primaryBorderColor: '#F59E0B', lineColor: '#F59E0B',
+      secondaryColor: '#1a1a1a', tertiaryColor: '#262626',
+      edgeLabelBackground: '#121212', textColor: '#bebebe',
+      clusterBkg: '#1a1a1a', clusterBorder: '#F59E0B55',
+      titleColor: '#F59E0B', nodeBorder: '#F59E0B',
+      mainBkg: '#212121', nodeTextColor: '#EAEAEA', labelBackground: '#212121'
+    },
+    tokyo: {
+      darkMode: true, background: '#1a1b26',
+      primaryColor: '#24283b', primaryTextColor: '#c0caf5',
+      primaryBorderColor: '#7aa2f7', lineColor: '#7aa2f7',
+      secondaryColor: '#1a1b26', tertiaryColor: '#2f3549',
+      edgeLabelBackground: '#1a1b26', textColor: '#a9b1d6',
+      clusterBkg: '#24283b', clusterBorder: '#3b4261',
+      titleColor: '#bb9af7', nodeBorder: '#7aa2f7',
+      mainBkg: '#24283b', nodeTextColor: '#c0caf5', labelBackground: '#24283b'
+    },
+    ayu: {
+      darkMode: true, background: '#1f2430',
+      primaryColor: '#242936', primaryTextColor: '#cccac2',
+      primaryBorderColor: '#ffcc66', lineColor: '#ffcc66',
+      secondaryColor: '#1f2430', tertiaryColor: '#343d4f',
+      edgeLabelBackground: '#1f2430', textColor: '#b8b5ac',
+      clusterBkg: '#242936', clusterBorder: '#3d4a5c',
+      titleColor: '#ffd580', nodeBorder: '#ffcc66',
+      mainBkg: '#242936', nodeTextColor: '#cccac2', labelBackground: '#242936'
+    },
+    forest: {
+      darkMode: true, background: '#1b211a',
+      primaryColor: '#22291f', primaryTextColor: '#ebd5ab',
+      primaryBorderColor: '#8bae66', lineColor: '#8bae66',
+      secondaryColor: '#1b211a', tertiaryColor: '#31392e',
+      edgeLabelBackground: '#1b211a', textColor: '#cbb98a',
+      clusterBkg: '#22291f', clusterBorder: '#3a4535',
+      titleColor: '#9ecc76', nodeBorder: '#8bae66',
+      mainBkg: '#22291f', nodeTextColor: '#ebd5ab', labelBackground: '#22291f'
+    },
+    gruvbox: {
+      darkMode: true, background: '#1d2021',
+      primaryColor: '#282828', primaryTextColor: '#ebdbb2',
+      primaryBorderColor: '#fe8019', lineColor: '#fe8019',
+      secondaryColor: '#1d2021', tertiaryColor: '#3c3836',
+      edgeLabelBackground: '#1d2021', textColor: '#d5c4a1',
+      clusterBkg: '#282828', clusterBorder: '#504945',
+      titleColor: '#ffa347', nodeBorder: '#fe8019',
+      mainBkg: '#282828', nodeTextColor: '#ebdbb2', labelBackground: '#282828'
+    },
+    graymatter: {
+      darkMode: false, background: '#faf9f6',
+      primaryColor: '#e4e0d8', primaryTextColor: '#2c2c2c',
+      primaryBorderColor: '#c5c1b8', lineColor: '#5b6ec2',
+      secondaryColor: '#f0ede6', tertiaryColor: '#d6d2c9',
+      edgeLabelBackground: '#faf9f6', textColor: '#2c2c2c',
+      clusterBkg: '#f0ede6', clusterBorder: '#c5c1b8',
+      titleColor: '#5b6ec2', nodeBorder: '#c5c1b8',
+      mainBkg: '#e4e0d8', nodeTextColor: '#2c2c2c', labelBackground: '#faf9f6'
+    },
+    rosepine: {
+      darkMode: false, background: '#f0e4d4',
+      primaryColor: '#e8d9c6', primaryTextColor: '#2c2a44',
+      primaryBorderColor: '#c4b5a8', lineColor: '#b4637a',
+      secondaryColor: '#f0e4d4', tertiaryColor: '#d0beb0',
+      edgeLabelBackground: '#f0e4d4', textColor: '#3c3a5a',
+      clusterBkg: '#e8d9c6', clusterBorder: '#c4b5a8',
+      titleColor: '#b4637a', nodeBorder: '#c4b5a8',
+      mainBkg: '#e8d9c6', nodeTextColor: '#2c2a44', labelBackground: '#f0e4d4'
+    },
+    rosepinedark: {
+      darkMode: true, background: '#191724',
+      primaryColor: '#1f1d2e', primaryTextColor: '#e0def4',
+      primaryBorderColor: '#403d52', lineColor: '#c4a7e7',
+      secondaryColor: '#191724', tertiaryColor: '#26233a',
+      edgeLabelBackground: '#191724', textColor: '#d4d0ed',
+      clusterBkg: '#1f1d2e', clusterBorder: '#403d52',
+      titleColor: '#c4a7e7', nodeBorder: '#403d52',
+      mainBkg: '#1f1d2e', nodeTextColor: '#e0def4', labelBackground: '#1f1d2e'
+    },
+    slate: {
+      darkMode: false, background: '#eaefef',
+      primaryColor: '#dde5e8', primaryTextColor: '#25343f',
+      primaryBorderColor: '#a4b2bc', lineColor: '#ff9b51',
+      secondaryColor: '#eaefef', tertiaryColor: '#adb9c4',
+      edgeLabelBackground: '#eaefef', textColor: '#354756',
+      clusterBkg: '#dde5e8', clusterBorder: '#a4b2bc',
+      titleColor: '#ff9b51', nodeBorder: '#a4b2bc',
+      mainBkg: '#dde5e8', nodeTextColor: '#25343f', labelBackground: '#eaefef'
+    },
+    naval: {
+      darkMode: true, background: '#252840',
+      primaryColor: '#30364f', primaryTextColor: '#f0f0db',
+      primaryBorderColor: '#4a5278', lineColor: '#acbac4',
+      secondaryColor: '#252840', tertiaryColor: '#3a4060',
+      edgeLabelBackground: '#252840', textColor: '#e1d9bc',
+      clusterBkg: '#30364f', clusterBorder: '#4a5278',
+      titleColor: '#e1d9bc', nodeBorder: '#4a5278',
+      mainBkg: '#30364f', nodeTextColor: '#f0f0db', labelBackground: '#252840'
+    }
   };
 
-  var lightVars = {
-    darkMode:         false,
-    background:       '#faf9f6',
-    primaryColor:     '#e4e0d8',
-    primaryTextColor: '#2c2c2c',
-    primaryBorderColor: '#c5c1b8',
-    lineColor:        '#5b6ec2',
-    secondaryColor:   '#f0ede6',
-    tertiaryColor:    '#d6d2c9',
-    edgeLabelBackground: '#faf9f6',
-    textColor:        '#2c2c2c',
-    clusterBkg:       '#f0ede6',
-    clusterBorder:    '#c5c1b8',
-    titleColor:       '#5b6ec2',
-    nodeBorder:       '#c5c1b8',
-    mainBkg:          '#e4e0d8',
-    nodeTextColor:    '#2c2c2c',
-    labelBackground:  '#faf9f6'
-  };
-
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: 'base',
-    themeVariables: isGrayMatter ? lightVars : darkVars
+  /* ── Save original diagram sources before any rendering ─────── */
+  var mermaidSources = [];
+  document.querySelectorAll('.mermaid').forEach(function(el, i) {
+    mermaidSources[i] = el.textContent.trim();
+    el.dataset.mermaidIdx = String(i);
   });
 
-  mermaid.run({ querySelector: '.mermaid' }).then(function() {
-    document.querySelectorAll('.mermaid').forEach(function(container) {
-      var svg = container.querySelector('svg');
-      if (!svg) return;
+  /* ── Post-process a single rendered mermaid container ────────── */
+  function postProcess(container) {
+    var svg = container.querySelector('svg');
+    if (!svg) return;
 
-      // Strip Mermaid 10's inline max-width / explicit dimensions so CSS controls size
-      svg.style.maxWidth = 'none';
-      svg.style.width    = '100%';
-      svg.style.height   = 'auto';
-      svg.removeAttribute('width');
-      svg.removeAttribute('height');
+    svg.style.maxWidth = 'none';
+    svg.style.width    = '100%';
+    svg.style.height   = 'auto';
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
 
-      // ── Simple scale-based zoom (no fixed container height needed) ──
-      var scale  = 0.75;  // initial: 75% width — fits the diagram without excess scrolling
-      var STEP   = 0.25;
-      var MIN    = 0.25;
-      var MAX    = 4;
+    var scale = 0.75;
+    var STEP  = 0.25;
+    var MIN   = 0.25;
+    var MAX   = 4;
 
-      // Wrap SVG in an inner scroll container so the toolbar (on the outer
-      // container) stays fixed while only the inner div scrolls.
-      var inner = document.createElement('div');
-      inner.className = 'mermaid-scroll-inner';
-      container.appendChild(inner);
-      inner.appendChild(svg);
+    var inner = document.createElement('div');
+    inner.className = 'mermaid-scroll-inner';
+    container.appendChild(inner);
+    inner.appendChild(svg);
 
-      function applyScale() {
-        svg.style.width  = (scale * 100) + '%';
-        svg.style.height = 'auto';
-        inner.style.overflowX = scale > 1 ? 'auto' : 'visible';
-        inner.style.overflowY = scale > 1 ? 'auto' : 'visible';
-        inner.style.cursor    = scale > 1 ? 'grab' : '';
-      }
+    function applyScale() {
+      svg.style.width       = (scale * 100) + '%';
+      svg.style.height      = 'auto';
+      inner.style.overflowX = scale > 1 ? 'auto' : 'visible';
+      inner.style.overflowY = scale > 1 ? 'auto' : 'visible';
+      inner.style.cursor    = scale > 1 ? 'grab' : '';
+    }
 
-      applyScale(); // apply initial scale immediately
+    applyScale();
 
-      // Inject toolbar onto outer container (not inner scroll div)
-      var bar = document.createElement('div');
-      bar.className = 'mermaid-toolbar';
-      bar.innerHTML =
-        '<button title="Zoom in"  data-action="zoomIn">+</button>'  +
-        '<button title="Zoom out" data-action="zoomOut">&minus;</button>' +
-        '<button title="Reset"    data-action="reset">&#8635;</button>';
-      container.insertBefore(bar, inner);
+    var bar = document.createElement('div');
+    bar.className = 'mermaid-toolbar';
+    bar.innerHTML =
+      '<button title="Zoom in"  data-action="zoomIn">+</button>'  +
+      '<button title="Zoom out" data-action="zoomOut">&minus;</button>' +
+      '<button title="Reset"    data-action="reset">&#8635;</button>';
+    container.insertBefore(bar, inner);
 
-      bar.addEventListener('click', function(e) {
-        var btn = e.target.closest('button');
-        if (!btn) return;
-        var action = btn.dataset.action;
-        if (action === 'zoomIn')  { scale = Math.min(scale + STEP, MAX); applyScale(); }
-        if (action === 'zoomOut') { scale = Math.max(scale - STEP, MIN); applyScale(); }
-        if (action === 'reset')   { scale = 0.75; applyScale(); }
-      });
-
-      // ── Drag-to-pan on the inner scroll container ──
-      var panning = false, panStartX, panStartY, scrollStartX, scrollStartY;
-
-      inner.addEventListener('mousedown', function(e) {
-        if (scale <= 1) return;
-        panning = true;
-        panStartX    = e.clientX;
-        panStartY    = e.clientY;
-        scrollStartX = inner.scrollLeft;
-        scrollStartY = inner.scrollTop;
-        inner.style.cursor = 'grabbing';
-        e.preventDefault();
-      });
-
-      document.addEventListener('mousemove', function(e) {
-        if (!panning) return;
-        inner.scrollLeft = scrollStartX - (e.clientX - panStartX);
-        inner.scrollTop  = scrollStartY - (e.clientY - panStartY);
-      });
-
-      document.addEventListener('mouseup', function() {
-        if (panning) {
-          panning = false;
-          inner.style.cursor = scale > 1 ? 'grab' : '';
-        }
-      });
-
-      // Touch pan
-      var touchStartX, touchStartY, touchScrollX, touchScrollY;
-      inner.addEventListener('touchstart', function(e) {
-        if (scale <= 1 || e.touches.length !== 1) return;
-        touchStartX  = e.touches[0].clientX;
-        touchStartY  = e.touches[0].clientY;
-        touchScrollX = inner.scrollLeft;
-        touchScrollY = inner.scrollTop;
-      }, { passive: true });
-
-      inner.addEventListener('touchmove', function(e) {
-        if (scale <= 1 || e.touches.length !== 1) return;
-        inner.scrollLeft = touchScrollX - (e.touches[0].clientX - touchStartX);
-        inner.scrollTop  = touchScrollY - (e.touches[0].clientY - touchStartY);
-        e.preventDefault();
-      }, { passive: false });
+    bar.addEventListener('click', function(e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var action = btn.dataset.action;
+      if (action === 'zoomIn')  { scale = Math.min(scale + STEP, MAX); applyScale(); }
+      if (action === 'zoomOut') { scale = Math.max(scale - STEP, MIN); applyScale(); }
+      if (action === 'reset')   { scale = 0.75; applyScale(); }
     });
-  });
+
+    var panning = false, panStartX, panStartY, scrollStartX, scrollStartY;
+    inner.addEventListener('mousedown', function(e) {
+      if (scale <= 1) return;
+      panning = true;
+      panStartX = e.clientX; panStartY = e.clientY;
+      scrollStartX = inner.scrollLeft; scrollStartY = inner.scrollTop;
+      inner.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (!panning) return;
+      inner.scrollLeft = scrollStartX - (e.clientX - panStartX);
+      inner.scrollTop  = scrollStartY - (e.clientY - panStartY);
+    });
+    document.addEventListener('mouseup', function() {
+      if (panning) { panning = false; inner.style.cursor = scale > 1 ? 'grab' : ''; }
+    });
+
+    var touchStartX, touchStartY, touchScrollX, touchScrollY;
+    inner.addEventListener('touchstart', function(e) {
+      if (scale <= 1 || e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+      touchScrollX = inner.scrollLeft;    touchScrollY = inner.scrollTop;
+    }, { passive: true });
+    inner.addEventListener('touchmove', function(e) {
+      if (scale <= 1 || e.touches.length !== 1) return;
+      inner.scrollLeft = touchScrollX - (e.touches[0].clientX - touchStartX);
+      inner.scrollTop  = touchScrollY - (e.touches[0].clientY - touchStartY);
+      e.preventDefault();
+    }, { passive: false });
+  }
+
+  /* ── Render (or re-render) all diagrams with a given accent ─── */
+  function renderAll(accent) {
+    var vars = MERMAID_THEMES[accent] || MERMAID_THEMES['amber'];
+
+    /* Reset each container back to its original source text */
+    document.querySelectorAll('.mermaid').forEach(function(el) {
+      var toolbar = el.querySelector('.mermaid-toolbar');
+      if (toolbar) toolbar.remove();
+      var inner = el.querySelector('.mermaid-scroll-inner');
+      if (inner) {
+        /* Hoist any remaining children (svg) before removing wrapper */
+        while (inner.firstChild) el.appendChild(inner.firstChild);
+        inner.remove();
+      }
+      var svg = el.querySelector('svg');
+      if (svg) svg.remove();
+      el.textContent = mermaidSources[el.dataset.mermaidIdx] || '';
+      el.removeAttribute('data-processed');
+    });
+
+    mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables: vars });
+    mermaid.run({ querySelector: '.mermaid' }).then(function() {
+      document.querySelectorAll('.mermaid').forEach(postProcess);
+    });
+  }
+
+  /* ── Initial render ─────────────────────────────────────────── */
+  renderAll(document.documentElement.getAttribute('data-accent') || 'amber');
+
+  /* ── Re-render whenever the accent theme changes ────────────── */
+  new MutationObserver(function(mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].attributeName === 'data-accent') {
+        renderAll(document.documentElement.getAttribute('data-accent') || 'amber');
+        break;
+      }
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-accent'] });
+
 });
 </script>
 {{- end -}}

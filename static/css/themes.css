@@ -399,6 +399,773 @@ html[data-accent="graymatter"] .chroma .bp { color: #2980b9; }
 
 /* Error */
 html[data-accent="graymatter"] .chroma .err { color: #c0392b; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Solarized Light ─────────────────────────────────────────── */
+/* Classic warm cream theme by Ethan Schoonover                  */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="solarized"] {
+  color-scheme: light;
+
+  /* Backgrounds — warm cream */
+  --mb-bg:          #fdf6e3;
+  --mb-surface-1:   #eee8d5;
+  --mb-surface-2:   #e5dfc9;
+  --mb-surface-3:   #dbd5be;
+
+  /* Borders */
+  --mb-border:        #cec9b2;
+  --mb-border-focus:  #2aa198;
+  --mb-border-accent: #2aa19844;
+
+  /* Text — Solarized content hierarchy */
+  --mb-text-bright:   #586e75;   /* base01 — emphasized        */
+  --mb-text:          #657b83;   /* base00 — body              */
+  --mb-text-muted:    #839496;   /* base0 — secondary          */
+  --mb-text-faint:    #93a1a1;   /* base1 — faint              */
+  --mb-text-disabled: #c9c5ad;
+
+  /* Accent — Solarized cyan */
+  --mb-accent:        #2aa198;
+  --mb-accent-bright: #35bab2;
+  --mb-accent-dark:   #1a8077;
+  --mb-accent-dim:    #0f6060;
+  --mb-accent-bg:     #2aa1981a;
+  --mb-accent-bg-sel: #2aa19830;
+
+  /* Semantic */
+  --mb-green:         #859900;
+  --mb-green-bright:  #9aad00;
+  --mb-green-bg:      #85990015;
+  --mb-red:           #dc322f;
+  --mb-red-bright:    #e04545;
+  --mb-red-bg:        #dc322f15;
+  --mb-blue:          #268bd2;
+  --mb-blue-bright:   #3899e0;
+  --mb-blue-bg:       #268bd215;
+  --mb-warning:       #cb4b16;
+  --mb-warning-bg:    #cb4b1615;
+  --mb-info:          #6c71c4;
+  --mb-info-bg:       #6c71c420;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #cec9b2;
+  --mb-scrollbar-hover: #2aa198;
+
+  /* Pico overrides — force light mode */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    #cb4b16;
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* Solarized — code block overrides ──────────────────────────── */
+html[data-accent="solarized"] pre,
+html[data-accent="solarized"] .chroma {
+  background: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="solarized"] pre code { color: var(--mb-text) !important; }
+html[data-accent="solarized"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #cb4b16;
+  border-color: var(--mb-border);
+}
+/* Keywords — solarized green */
+html[data-accent="solarized"] .chroma .k,
+html[data-accent="solarized"] .chroma .kc,
+html[data-accent="solarized"] .chroma .kd,
+html[data-accent="solarized"] .chroma .kn,
+html[data-accent="solarized"] .chroma .kp,
+html[data-accent="solarized"] .chroma .kr,
+html[data-accent="solarized"] .chroma .kt { color: #859900; }
+/* Strings — cyan */
+html[data-accent="solarized"] .chroma .s,
+html[data-accent="solarized"] .chroma .sa,
+html[data-accent="solarized"] .chroma .sb,
+html[data-accent="solarized"] .chroma .sc,
+html[data-accent="solarized"] .chroma .dl,
+html[data-accent="solarized"] .chroma .s2,
+html[data-accent="solarized"] .chroma .se,
+html[data-accent="solarized"] .chroma .s1,
+html[data-accent="solarized"] .chroma .ss { color: #2aa198; }
+/* Numbers — blue */
+html[data-accent="solarized"] .chroma .m,
+html[data-accent="solarized"] .chroma .mb,
+html[data-accent="solarized"] .chroma .mf,
+html[data-accent="solarized"] .chroma .mh,
+html[data-accent="solarized"] .chroma .mi,
+html[data-accent="solarized"] .chroma .il,
+html[data-accent="solarized"] .chroma .mo { color: #268bd2; }
+/* Functions — blue */
+html[data-accent="solarized"] .chroma .nf,
+html[data-accent="solarized"] .chroma .fm { color: #268bd2; }
+/* Types — yellow */
+html[data-accent="solarized"] .chroma .nc,
+html[data-accent="solarized"] .chroma .nn { color: #b58900; }
+/* Variables */
+html[data-accent="solarized"] .chroma .n,
+html[data-accent="solarized"] .chroma .nb,
+html[data-accent="solarized"] .chroma .bp { color: #586e75; }
+/* Operators */
+html[data-accent="solarized"] .chroma .o,
+html[data-accent="solarized"] .chroma .ow { color: #839496; }
+/* Comments — italic faint */
+html[data-accent="solarized"] .chroma .c,
+html[data-accent="solarized"] .chroma .ch,
+html[data-accent="solarized"] .chroma .cm,
+html[data-accent="solarized"] .chroma .c1,
+html[data-accent="solarized"] .chroma .cs,
+html[data-accent="solarized"] .chroma .cp,
+html[data-accent="solarized"] .chroma .cpf { color: #93a1a1; font-style: italic; }
+/* Tags */
+html[data-accent="solarized"] .chroma .nt { color: #268bd2; }
+/* Attributes */
+html[data-accent="solarized"] .chroma .na { color: #b58900; font-style: italic; }
+/* Punctuation */
+html[data-accent="solarized"] .chroma .p,
+html[data-accent="solarized"] .chroma .pi { color: #839496; }
+/* Error */
+html[data-accent="solarized"] .chroma .err { color: #dc322f; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Rose Piné Dawn ─────────────────────────────────────────── */
+/* Rosy warm parchment — deeper tint reduces eye strain          */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="rosepine"] {
+  color-scheme: light;
+
+  /* Backgrounds — deep warm amber-parchment (less glaring than near-white) */
+  --mb-bg:          #f0e4d4;   /* deeper warm parchment        */
+  --mb-surface-1:   #e8d9c6;   /* cards, sidebars              */
+  --mb-surface-2:   #decca;    /* inputs, code bg              */
+  --mb-surface-3:   #d0beb0;   /* hover states                 */
+
+  /* Borders */
+  --mb-border:        #c4b5a8;
+  --mb-border-focus:  #b4637a;
+  --mb-border-accent: #b4637a44;
+
+  /* Text — darkened for better contrast on amber bg */
+  --mb-text-bright:   #2c2a44;   /* near-dark mauve — high contrast */
+  --mb-text:          #3c3a5a;   /* body                            */
+  --mb-text-muted:    #6a6686;   /* secondary labels                */
+  --mb-text-faint:    #908caa;   /* placeholders                    */
+  --mb-text-disabled: #c8bfb8;
+
+  /* Accent — rose */
+  --mb-accent:        #d7827a;
+  --mb-accent-bright: #e89691;
+  --mb-accent-dark:   #b46a64;
+  --mb-accent-dim:    #9a504a;
+  --mb-accent-bg:     #d7827a1a;
+  --mb-accent-bg-sel: #d7827a30;
+
+  /* Semantic — Rose Piné palette */
+  --mb-green:         #56949f;   /* foam */
+  --mb-green-bright:  #6aadb8;
+  --mb-green-bg:      #56949f15;
+  --mb-red:           #b4637a;   /* love */
+  --mb-red-bright:    #c87e94;
+  --mb-red-bg:        #b4637a15;
+  --mb-blue:          #286983;   /* pine */
+  --mb-blue-bright:   #357d9b;
+  --mb-blue-bg:       #28698315;
+  --mb-warning:       #ea9d34;   /* gold */
+  --mb-warning-bg:    #ea9d3415;
+  --mb-info:          #907aa9;   /* iris */
+  --mb-info-bg:       #907aa920;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #dfdad9;
+  --mb-scrollbar-hover: #d7827a;
+
+  /* Pico overrides */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-2);
+  --pico-code-color:                    #b4637a;
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* Rose Piné Dawn — code block overrides ─────────────────────── */
+html[data-accent="rosepine"] pre,
+html[data-accent="rosepine"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="rosepine"] pre code { color: var(--mb-text) !important; }
+html[data-accent="rosepine"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #b4637a;
+  border-color: var(--mb-border);
+}
+/* Keywords — pine */
+html[data-accent="rosepine"] .chroma .k,
+html[data-accent="rosepine"] .chroma .kc,
+html[data-accent="rosepine"] .chroma .kd,
+html[data-accent="rosepine"] .chroma .kn,
+html[data-accent="rosepine"] .chroma .kp,
+html[data-accent="rosepine"] .chroma .kr,
+html[data-accent="rosepine"] .chroma .kt { color: #286983; }
+/* Strings — foam */
+html[data-accent="rosepine"] .chroma .s,
+html[data-accent="rosepine"] .chroma .sa,
+html[data-accent="rosepine"] .chroma .sb,
+html[data-accent="rosepine"] .chroma .sc,
+html[data-accent="rosepine"] .chroma .dl,
+html[data-accent="rosepine"] .chroma .s2,
+html[data-accent="rosepine"] .chroma .se,
+html[data-accent="rosepine"] .chroma .s1,
+html[data-accent="rosepine"] .chroma .ss { color: #56949f; }
+/* Numbers — gold */
+html[data-accent="rosepine"] .chroma .m,
+html[data-accent="rosepine"] .chroma .mb,
+html[data-accent="rosepine"] .chroma .mf,
+html[data-accent="rosepine"] .chroma .mh,
+html[data-accent="rosepine"] .chroma .mi,
+html[data-accent="rosepine"] .chroma .il,
+html[data-accent="rosepine"] .chroma .mo { color: #ea9d34; }
+/* Functions — iris */
+html[data-accent="rosepine"] .chroma .nf,
+html[data-accent="rosepine"] .chroma .fm { color: #907aa9; }
+/* Types — love */
+html[data-accent="rosepine"] .chroma .nc,
+html[data-accent="rosepine"] .chroma .nn { color: #b4637a; }
+/* Variables */
+html[data-accent="rosepine"] .chroma .n,
+html[data-accent="rosepine"] .chroma .nb,
+html[data-accent="rosepine"] .chroma .bp { color: #575279; }
+/* Operators */
+html[data-accent="rosepine"] .chroma .o,
+html[data-accent="rosepine"] .chroma .ow { color: #797593; }
+/* Comments */
+html[data-accent="rosepine"] .chroma .c,
+html[data-accent="rosepine"] .chroma .ch,
+html[data-accent="rosepine"] .chroma .cm,
+html[data-accent="rosepine"] .chroma .c1,
+html[data-accent="rosepine"] .chroma .cs,
+html[data-accent="rosepine"] .chroma .cp,
+html[data-accent="rosepine"] .chroma .cpf { color: #9893a5; font-style: italic; }
+/* Tags */
+html[data-accent="rosepine"] .chroma .nt { color: #286983; }
+/* Attributes */
+html[data-accent="rosepine"] .chroma .na { color: #ea9d34; font-style: italic; }
+/* Punctuation */
+html[data-accent="rosepine"] .chroma .p,
+html[data-accent="rosepine"] .chroma .pi { color: #797593; }
+/* Error */
+html[data-accent="rosepine"] .chroma .err { color: #b4637a; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Rose Piné (Dark) ───────────────────────────────────────── */
+/* Deep plum dark theme — the original Rose Piné main palette    */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="rosepinedark"] {
+  /* Backgrounds — deep plum */
+  --mb-bg:          #191724;
+  --mb-surface-1:   #1f1d2e;
+  --mb-surface-2:   #26233a;
+  --mb-surface-3:   #312840;
+
+  /* Borders */
+  --mb-border:        #403d52;
+  --mb-border-focus:  #c4a7e7;
+  --mb-border-accent: #c4a7e744;
+
+  /* Text */
+  --mb-text-bright:   #e0def4;   /* text                       */
+  --mb-text:          #d4d0ed;   /* body                       */
+  --mb-text-muted:    #908caa;   /* subtle                     */
+  --mb-text-faint:    #6e6a86;   /* muted                      */
+  --mb-text-disabled: #2a2737;
+
+  /* Accent — iris (purple) */
+  --mb-accent:        #c4a7e7;
+  --mb-accent-bright: #d9c2f8;
+  --mb-accent-dark:   #9e7dd4;
+  --mb-accent-dim:    #7a5cb0;
+  --mb-accent-bg:     #c4a7e71a;
+  --mb-accent-bg-sel: #c4a7e730;
+
+  /* Semantic — Rose Piné dark palette */
+  --mb-green:         #9ccfd8;   /* foam                       */
+  --mb-green-bright:  #b5e4ed;
+  --mb-green-bg:      #9ccfd818;
+  --mb-red:           #eb6f92;   /* love                       */
+  --mb-red-bright:    #f08aaa;
+  --mb-red-bg:        #eb6f9218;
+  --mb-blue:          #31748f;   /* pine                       */
+  --mb-blue-bright:   #4a8fa8;
+  --mb-blue-bg:       #31748f18;
+  --mb-warning:       #f6c177;   /* gold                       */
+  --mb-warning-bg:    #f6c17718;
+  --mb-info:          #ebbcba;   /* rose                       */
+  --mb-info-bg:       #ebbcba20;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #403d52;
+  --mb-scrollbar-hover: #c4a7e7;
+}
+/* Rose Piné Dark — code block overrides ──────────────────────── */
+html[data-accent="rosepinedark"] pre,
+html[data-accent="rosepinedark"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="rosepinedark"] pre code { color: var(--mb-text) !important; }
+html[data-accent="rosepinedark"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #eb6f92;
+  border-color: var(--mb-border);
+}
+html[data-accent="rosepinedark"] .chroma .k,
+html[data-accent="rosepinedark"] .chroma .kc,
+html[data-accent="rosepinedark"] .chroma .kd,
+html[data-accent="rosepinedark"] .chroma .kn,
+html[data-accent="rosepinedark"] .chroma .kp,
+html[data-accent="rosepinedark"] .chroma .kr,
+html[data-accent="rosepinedark"] .chroma .kt { color: #31748f; }
+html[data-accent="rosepinedark"] .chroma .s,
+html[data-accent="rosepinedark"] .chroma .sa,
+html[data-accent="rosepinedark"] .chroma .sb,
+html[data-accent="rosepinedark"] .chroma .sc,
+html[data-accent="rosepinedark"] .chroma .dl,
+html[data-accent="rosepinedark"] .chroma .s2,
+html[data-accent="rosepinedark"] .chroma .se,
+html[data-accent="rosepinedark"] .chroma .s1,
+html[data-accent="rosepinedark"] .chroma .ss { color: #9ccfd8; }
+html[data-accent="rosepinedark"] .chroma .m,
+html[data-accent="rosepinedark"] .chroma .mb,
+html[data-accent="rosepinedark"] .chroma .mf,
+html[data-accent="rosepinedark"] .chroma .mh,
+html[data-accent="rosepinedark"] .chroma .mi,
+html[data-accent="rosepinedark"] .chroma .il,
+html[data-accent="rosepinedark"] .chroma .mo { color: #f6c177; }
+html[data-accent="rosepinedark"] .chroma .nf,
+html[data-accent="rosepinedark"] .chroma .fm { color: #c4a7e7; }
+html[data-accent="rosepinedark"] .chroma .nc,
+html[data-accent="rosepinedark"] .chroma .nn { color: #eb6f92; }
+html[data-accent="rosepinedark"] .chroma .n,
+html[data-accent="rosepinedark"] .chroma .nb,
+html[data-accent="rosepinedark"] .chroma .bp { color: #e0def4; }
+html[data-accent="rosepinedark"] .chroma .o,
+html[data-accent="rosepinedark"] .chroma .ow { color: #908caa; }
+html[data-accent="rosepinedark"] .chroma .c,
+html[data-accent="rosepinedark"] .chroma .ch,
+html[data-accent="rosepinedark"] .chroma .cm,
+html[data-accent="rosepinedark"] .chroma .c1,
+html[data-accent="rosepinedark"] .chroma .cs,
+html[data-accent="rosepinedark"] .chroma .cp,
+html[data-accent="rosepinedark"] .chroma .cpf { color: #6e6a86; font-style: italic; }
+html[data-accent="rosepinedark"] .chroma .nt { color: #31748f; }
+html[data-accent="rosepinedark"] .chroma .na { color: #f6c177; font-style: italic; }
+html[data-accent="rosepinedark"] .chroma .p,
+html[data-accent="rosepinedark"] .chroma .pi { color: #908caa; }
+html[data-accent="rosepinedark"] .chroma .err { color: #eb6f92; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Slate ──────────────────────────────────────────────────── */
+/* Light blue-gray — #EAEFEF · #BFC9D1 · #25343F · #FF9B51       */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="slate"] {
+  color-scheme: light;
+
+  /* Backgrounds — very light blue-gray */
+  --mb-bg:          #eaefef;
+  --mb-surface-1:   #dde5e8;
+  --mb-surface-2:   #bfc9d1;
+  --mb-surface-3:   #adb9c4;
+
+  /* Borders */
+  --mb-border:        #a4b2bc;
+  --mb-border-focus:  #ff9b51;
+  --mb-border-accent: #ff9b5144;
+
+  /* Text — dark navy on light gray */
+  --mb-text-bright:   #25343f;   /* palette dark navy          */
+  --mb-text:          #354756;   /* body                       */
+  --mb-text-muted:    #5e7280;   /* secondary                  */
+  --mb-text-faint:    #8da0ad;   /* placeholders               */
+  --mb-text-disabled: #c8d4d8;
+
+  /* Accent — orange */
+  --mb-accent:        #ff9b51;
+  --mb-accent-bright: #ffb47a;
+  --mb-accent-dark:   #e07830;
+  --mb-accent-dim:    #bc5e18;
+  --mb-accent-bg:     #ff9b511a;
+  --mb-accent-bg-sel: #ff9b5130;
+
+  /* Semantic */
+  --mb-green:         #3a8a6e;
+  --mb-green-bright:  #4eab88;
+  --mb-green-bg:      #3a8a6e15;
+  --mb-red:           #c8394a;
+  --mb-red-bright:    #e04d60;
+  --mb-red-bg:        #c8394a15;
+  --mb-blue:          #3a6a8e;
+  --mb-blue-bright:   #4e88b0;
+  --mb-blue-bg:       #3a6a8e15;
+  --mb-warning:       #d97a28;
+  --mb-warning-bg:    #d97a2815;
+  --mb-info:          #5a7a9e;
+  --mb-info-bg:       #5a7a9e20;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #bfc9d1;
+  --mb-scrollbar-hover: #ff9b51;
+
+  /* Pico overrides — light mode */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    #e07830;
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* Slate — code block overrides ──────────────────────────────── */
+html[data-accent="slate"] pre,
+html[data-accent="slate"] .chroma {
+  background: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="slate"] pre code { color: var(--mb-text) !important; }
+html[data-accent="slate"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #e07830;
+  border-color: var(--mb-border);
+}
+html[data-accent="slate"] .chroma .k,
+html[data-accent="slate"] .chroma .kc,
+html[data-accent="slate"] .chroma .kd,
+html[data-accent="slate"] .chroma .kn,
+html[data-accent="slate"] .chroma .kp,
+html[data-accent="slate"] .chroma .kr,
+html[data-accent="slate"] .chroma .kt { color: #3a6a8e; }
+html[data-accent="slate"] .chroma .s,
+html[data-accent="slate"] .chroma .sa,
+html[data-accent="slate"] .chroma .sb,
+html[data-accent="slate"] .chroma .sc,
+html[data-accent="slate"] .chroma .dl,
+html[data-accent="slate"] .chroma .s2,
+html[data-accent="slate"] .chroma .se,
+html[data-accent="slate"] .chroma .s1,
+html[data-accent="slate"] .chroma .ss { color: #3a8a6e; }
+html[data-accent="slate"] .chroma .m,
+html[data-accent="slate"] .chroma .mb,
+html[data-accent="slate"] .chroma .mf,
+html[data-accent="slate"] .chroma .mh,
+html[data-accent="slate"] .chroma .mi,
+html[data-accent="slate"] .chroma .il,
+html[data-accent="slate"] .chroma .mo { color: #c8394a; }
+html[data-accent="slate"] .chroma .nf,
+html[data-accent="slate"] .chroma .fm { color: #e07830; }
+html[data-accent="slate"] .chroma .nc,
+html[data-accent="slate"] .chroma .nn { color: #bc5e18; }
+html[data-accent="slate"] .chroma .n,
+html[data-accent="slate"] .chroma .nb,
+html[data-accent="slate"] .chroma .bp { color: #25343f; }
+html[data-accent="slate"] .chroma .o,
+html[data-accent="slate"] .chroma .ow { color: #5e7280; }
+html[data-accent="slate"] .chroma .c,
+html[data-accent="slate"] .chroma .ch,
+html[data-accent="slate"] .chroma .cm,
+html[data-accent="slate"] .chroma .c1,
+html[data-accent="slate"] .chroma .cs,
+html[data-accent="slate"] .chroma .cp,
+html[data-accent="slate"] .chroma .cpf { color: #8da0ad; font-style: italic; }
+html[data-accent="slate"] .chroma .nt { color: #3a6a8e; }
+html[data-accent="slate"] .chroma .na { color: #d97a28; font-style: italic; }
+html[data-accent="slate"] .chroma .p,
+html[data-accent="slate"] .chroma .pi { color: #5e7280; }
+html[data-accent="slate"] .chroma .err { color: #c8394a; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Naval ─────────────────────────────────────────────────── */
+/* Deep navy — #30364F · #ACBAC4 · #E1D9BC · #F0F0DB              */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="naval"] {
+  /* Backgrounds — deep navy */
+  --mb-bg:          #252840;
+  --mb-surface-1:   #30364f;   /* palette navy                 */
+  --mb-surface-2:   #3a4060;
+  --mb-surface-3:   #444b6e;
+
+  /* Borders */
+  --mb-border:        #4a5278;
+  --mb-border-focus:  #acbac4;
+  --mb-border-accent: #acbac444;
+
+  /* Text — warm sand/cream on deep navy */
+  --mb-text-bright:   #f0f0db;   /* palette cream               */
+  --mb-text:          #e1d9bc;   /* palette sand                */
+  --mb-text-muted:    #acbac4;   /* palette blue-gray           */
+  --mb-text-faint:    #7080a0;
+  --mb-text-disabled: #2e3558;
+
+  /* Accent — warm sand-gold derived from palette */
+  --mb-accent:        #e1d9bc;
+  --mb-accent-bright: #f0f0db;
+  --mb-accent-dark:   #c8be9a;
+  --mb-accent-dim:    #a89e78;
+  --mb-accent-bg:     #e1d9bc18;
+  --mb-accent-bg-sel: #e1d9bc28;
+
+  /* Semantic */
+  --mb-green:         #6ab8a0;
+  --mb-green-bright:  #82d4bc;
+  --mb-green-bg:      #6ab8a018;
+  --mb-red:           #d4607a;
+  --mb-red-bright:    #e87a94;
+  --mb-red-bg:        #d4607a18;
+  --mb-blue:          #7aa0cc;
+  --mb-blue-bright:   #98bce0;
+  --mb-blue-bg:       #7aa0cc18;
+  --mb-warning:       #d4a860;
+  --mb-warning-bg:    #d4a86018;
+  --mb-info:          #acbac4;
+  --mb-info-bg:       #acbac420;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #4a5278;
+  --mb-scrollbar-hover: #acbac4;
+}
+/* Naval — code block overrides ─────────────────────────────── */
+html[data-accent="naval"] pre,
+html[data-accent="naval"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="naval"] pre code { color: var(--mb-text) !important; }
+html[data-accent="naval"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #acbac4;
+  border-color: var(--mb-border);
+}
+html[data-accent="naval"] .chroma .k,
+html[data-accent="naval"] .chroma .kc,
+html[data-accent="naval"] .chroma .kd,
+html[data-accent="naval"] .chroma .kn,
+html[data-accent="naval"] .chroma .kp,
+html[data-accent="naval"] .chroma .kr,
+html[data-accent="naval"] .chroma .kt { color: #7aa0cc; }
+html[data-accent="naval"] .chroma .s,
+html[data-accent="naval"] .chroma .sa,
+html[data-accent="naval"] .chroma .sb,
+html[data-accent="naval"] .chroma .sc,
+html[data-accent="naval"] .chroma .dl,
+html[data-accent="naval"] .chroma .s2,
+html[data-accent="naval"] .chroma .se,
+html[data-accent="naval"] .chroma .s1,
+html[data-accent="naval"] .chroma .ss { color: #6ab8a0; }
+html[data-accent="naval"] .chroma .m,
+html[data-accent="naval"] .chroma .mb,
+html[data-accent="naval"] .chroma .mf,
+html[data-accent="naval"] .chroma .mh,
+html[data-accent="naval"] .chroma .mi,
+html[data-accent="naval"] .chroma .il,
+html[data-accent="naval"] .chroma .mo { color: #d4a860; }
+html[data-accent="naval"] .chroma .nf,
+html[data-accent="naval"] .chroma .fm { color: #e1d9bc; }
+html[data-accent="naval"] .chroma .nc,
+html[data-accent="naval"] .chroma .nn { color: #f0f0db; }
+html[data-accent="naval"] .chroma .n,
+html[data-accent="naval"] .chroma .nb,
+html[data-accent="naval"] .chroma .bp { color: #e1d9bc; }
+html[data-accent="naval"] .chroma .o,
+html[data-accent="naval"] .chroma .ow { color: #acbac4; }
+html[data-accent="naval"] .chroma .c,
+html[data-accent="naval"] .chroma .ch,
+html[data-accent="naval"] .chroma .cm,
+html[data-accent="naval"] .chroma .c1,
+html[data-accent="naval"] .chroma .cs,
+html[data-accent="naval"] .chroma .cp,
+html[data-accent="naval"] .chroma .cpf { color: #7080a0; font-style: italic; }
+html[data-accent="naval"] .chroma .nt { color: #7aa0cc; }
+html[data-accent="naval"] .chroma .na { color: #d4a860; font-style: italic; }
+html[data-accent="naval"] .chroma .p,
+html[data-accent="naval"] .chroma .pi { color: #acbac4; }
+html[data-accent="naval"] .chroma .err { color: #d4607a; }
+
+
+/* ── (archived) Catppuccin Latte — kept for reference, not in rotation ── */
+html[data-accent="latte"] {
+  color-scheme: light;
+
+  /* Backgrounds — warm off-white */
+  --mb-bg:          #eff1f5;
+  --mb-surface-1:   #e6e9ef;
+  --mb-surface-2:   #dce0e8;
+  --mb-surface-3:   #ccd0da;
+
+  /* Borders */
+  --mb-border:        #bcc0cc;
+  --mb-border-focus:  #fe640b;
+  --mb-border-accent: #fe640b44;
+
+  /* Text — near-black lavender */
+  --mb-text-bright:   #4c4f69;   /* text                       */
+  --mb-text:          #4c4f69;
+  --mb-text-muted:    #6c6f85;   /* subtext1                   */
+  --mb-text-faint:    #8c8fa1;   /* overlay2                   */
+  --mb-text-disabled: #ccd0da;
+
+  /* Accent — peach */
+  --mb-accent:        #fe640b;
+  --mb-accent-bright: #ff8040;
+  --mb-accent-dark:   #d45000;
+  --mb-accent-dim:    #b04000;
+  --mb-accent-bg:     #fe640b1a;
+  --mb-accent-bg-sel: #fe640b30;
+
+  /* Semantic — Catppuccin Latte palette */
+  --mb-green:         #40a02b;
+  --mb-green-bright:  #5ab840;
+  --mb-green-bg:      #40a02b15;
+  --mb-red:           #d20f39;
+  --mb-red-bright:    #e8305a;
+  --mb-red-bg:        #d20f3915;
+  --mb-blue:          #1e66f5;
+  --mb-blue-bright:   #4480ff;
+  --mb-blue-bg:       #1e66f515;
+  --mb-warning:       #df8e1d;
+  --mb-warning-bg:    #df8e1d15;
+  --mb-info:          #7287fd;   /* lavender */
+  --mb-info-bg:       #7287fd20;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #bcc0cc;
+  --mb-scrollbar-hover: #fe640b;
+
+  /* Pico overrides */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    #fe640b;
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* Catppuccin Latte — code block overrides ───────────────────── */
+html[data-accent="latte"] pre,
+html[data-accent="latte"] .chroma {
+  background: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="latte"] pre code { color: var(--mb-text) !important; }
+html[data-accent="latte"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #fe640b;
+  border-color: var(--mb-border);
+}
+/* Keywords — mauve */
+html[data-accent="latte"] .chroma .k,
+html[data-accent="latte"] .chroma .kc,
+html[data-accent="latte"] .chroma .kd,
+html[data-accent="latte"] .chroma .kn,
+html[data-accent="latte"] .chroma .kp,
+html[data-accent="latte"] .chroma .kr,
+html[data-accent="latte"] .chroma .kt { color: #8839ef; }
+/* Strings — green */
+html[data-accent="latte"] .chroma .s,
+html[data-accent="latte"] .chroma .sa,
+html[data-accent="latte"] .chroma .sb,
+html[data-accent="latte"] .chroma .sc,
+html[data-accent="latte"] .chroma .dl,
+html[data-accent="latte"] .chroma .s2,
+html[data-accent="latte"] .chroma .se,
+html[data-accent="latte"] .chroma .s1,
+html[data-accent="latte"] .chroma .ss { color: #40a02b; }
+/* Numbers — peach */
+html[data-accent="latte"] .chroma .m,
+html[data-accent="latte"] .chroma .mb,
+html[data-accent="latte"] .chroma .mf,
+html[data-accent="latte"] .chroma .mh,
+html[data-accent="latte"] .chroma .mi,
+html[data-accent="latte"] .chroma .il,
+html[data-accent="latte"] .chroma .mo { color: #fe640b; }
+/* Functions — blue */
+html[data-accent="latte"] .chroma .nf,
+html[data-accent="latte"] .chroma .fm { color: #1e66f5; }
+/* Types — yellow */
+html[data-accent="latte"] .chroma .nc,
+html[data-accent="latte"] .chroma .nn { color: #df8e1d; }
+/* Variables */
+html[data-accent="latte"] .chroma .n,
+html[data-accent="latte"] .chroma .nb,
+html[data-accent="latte"] .chroma .bp { color: #4c4f69; }
+/* Operators */
+html[data-accent="latte"] .chroma .o,
+html[data-accent="latte"] .chroma .ow { color: #6c6f85; }
+/* Comments */
+html[data-accent="latte"] .chroma .c,
+html[data-accent="latte"] .chroma .ch,
+html[data-accent="latte"] .chroma .cm,
+html[data-accent="latte"] .chroma .c1,
+html[data-accent="latte"] .chroma .cs,
+html[data-accent="latte"] .chroma .cp,
+html[data-accent="latte"] .chroma .cpf { color: #8c8fa1; font-style: italic; }
+/* Tags */
+html[data-accent="latte"] .chroma .nt { color: #1e66f5; }
+/* Attributes */
+html[data-accent="latte"] .chroma .na { color: #df8e1d; font-style: italic; }
+/* Punctuation */
+html[data-accent="latte"] .chroma .p,
+html[data-accent="latte"] .chroma .pi { color: #6c6f85; }
+/* Error */
+html[data-accent="latte"] .chroma .err { color: #d20f39; }
+
+
 /* ── Theme toggle button color indicator ───────────────────── */
 /* The button shows a small dot in the current accent color       */
 #theme-toggle .theme-dot {

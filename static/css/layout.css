@@ -105,22 +105,12 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
   text-decoration: none;
-  touch-action: manipulation;   /* removes 300ms tap delay on mobile */
-  -webkit-tap-highlight-color: transparent;
   transition: color 0.1s, border-color 0.1s, background 0.1s;
 }
 .header-icon-btn:hover {
   color: var(--mb-text);
   background: var(--mb-surface-2);
   border-color: var(--mb-border-focus);
-}
-
-/* Larger tap target on touch screens */
-@media (pointer: coarse) {
-  .header-icon-btn {
-    width: 44px;
-    height: 44px;
-  }
 }
 
 /* Hamburger (mobile) */

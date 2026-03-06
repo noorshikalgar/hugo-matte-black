@@ -45,14 +45,18 @@
   }
 
   /* ── Theme switcher ─────────────────────────────────────────── */
-  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter'];
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval'];
   var THEME_NAMES = {
-    amber:      'Amber',
-    tokyo:      'Tokyo Night',
-    ayu:        'Ayu Mirage',
-    forest:     'Forest',
-    gruvbox:    'Gruvbox Dark',
-    graymatter: 'Gray Matter'
+    amber:        'Amber',
+    tokyo:        'Tokyo Night',
+    ayu:          'Ayu Mirage',
+    forest:       'Forest',
+    gruvbox:      'Gruvbox Dark',
+    graymatter:   'Gray Matter',
+    rosepine:     'Rosé Pine Dawn',
+    rosepinedark: 'Rosé Pine',
+    slate:        'Slate',
+    naval:        'Naval'
   };
 
   function applyAccentTheme(name) {
@@ -206,6 +210,38 @@
   }
   setHeaderVar();
   window.addEventListener('resize', setHeaderVar);
+
+  /* ── TOC scroll-spy (highlight current section) ───────────────── */
+  (function () {
+    var allTocLinks = Array.from(document.querySelectorAll('.toc-content a[href^="#"]'));
+    if (!allTocLinks.length) return;
+    var headingIds = allTocLinks.map(function (a) { return a.getAttribute('href').slice(1); });
+    var headings   = headingIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    if (!headings.length) return;
+
+    function setActive(id) {
+      allTocLinks.forEach(function (a) {
+        if (a.getAttribute('href') === '#' + id) {
+          a.classList.add('toc-active');
+        } else {
+          a.classList.remove('toc-active');
+        }
+      });
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, {
+      rootMargin: '-' + (Math.round((siteHeader ? siteHeader.getBoundingClientRect().height : 60) + 8)) + 'px 0px -70% 0px',
+      threshold: 0
+    });
+
+    headings.forEach(function (h) { observer.observe(h); });
+    // Set first as active by default
+    setActive(headings[0].id);
+  }());
 
   /* ── TOC smooth scroll (with header offset) ─────────────────── */
   const tocAnchors = document.querySelectorAll(
