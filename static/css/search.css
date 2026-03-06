@@ -98,6 +98,41 @@
 .ssh-user  { color: var(--mb-text-faint); }
 .ssh-cmd   { color: var(--mb-text-muted); }
 
+/* ── 2b. Search help hints ───────────────────────────────────── */
+.search-help {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4em 0.6em;
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+}
+.search-help-flag {
+  color: var(--mb-accent);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.search-help-tip kbd {
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border);
+  border-radius: 3px;
+  padding: 0 0.35em;
+  line-height: 1.5;
+  color: var(--mb-text);
+}
+.search-help-sep {
+  opacity: 0.4;
+}
+@media (max-width: 480px) {
+  .search-help-sep { display: none; }
+  .search-help { gap: 0.3em 0; flex-direction: column; align-items: flex-start; }
+}
+
 /* ── 2. Search Input ─────────────────────────────────────────── */
 .search-form {
   display: flex;
@@ -391,12 +426,22 @@
 }
 
 .quick-nav-title {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-family: "JetBrains Mono", monospace;
   color: var(--mb-text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.02em;
+  text-transform: none;
   margin-bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.title-prompt {
+  color: var(--mb-accent);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .quick-nav-grid {
@@ -439,16 +484,51 @@
 }
 
 /* ── 9. Fresh this week section ───────────────────────────────── */
+.quick-nav-title-block {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.6em;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.sections-header-desc {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .quick-nav-title-block {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}
+
 .week-section {
   margin-top: 2.5rem;
 }
 .week-section-header {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
   border-bottom: 1px solid var(--mb-border);
   padding-bottom: 0.5rem;
   margin-bottom: 1.25rem;
+}
+.week-header-main {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.6em;
+  flex-wrap: wrap;
+}
+.week-header-desc {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .week-header-main {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
 }
 .week-section-count {
   font-size: 0.7rem;

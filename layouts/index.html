@@ -24,6 +24,15 @@
       >
     </form>
 
+    <!-- Search help hints -->
+    <div class="search-help">
+      <span class="search-help-flag">--help</span>
+      <span class="search-help-tip"><kbd>react</kbd> searches react in titles.</span>
+      <span class="search-help-sep">·</span>
+      <span class="search-help-tip"><kbd>content:react</kbd> searches react in full text.</span>
+      <span class="search-help-tip"><kbd>content:react,angular</kbd> searches react & angular in full text.</span>
+    </div>
+
     <!-- Filter chips (hidden until a search query is active) -->
     <div class="search-filters" id="search-filters" style="display:none">
       <span class="filter-label">type:</span>
@@ -60,7 +69,10 @@
   <div id="browse-section">
     <!-- Quick nav sections -->
     <div class="quick-nav" style="margin-top:1.25rem;">
-      <p class="quick-nav-title">Browse sections</p>
+      <div class="quick-nav-title-block">
+        <span class="title-prompt">~/sections$</span>
+        <p class="quick-nav-title sections-header-desc">pick a topic, start digging</p>
+      </div>
       <div class="quick-nav-grid">
         {{- range $sec := $statSections }}
           {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
@@ -85,7 +97,10 @@
     {{- if $recent }}
     <div class="week-section">
       <div class="week-section-header">
-        <p class="quick-nav-title" style="margin:0;">Fresh this week</p>
+        <div class="week-header-main">
+          <span class="title-prompt">~/feed$</span>
+          <p class="quick-nav-title week-header-desc">published in the last 7 days</p>
+        </div>
         <span class="week-section-count">{{ len $recent }} new</span>
       </div>
       <div class="posts-grid">
