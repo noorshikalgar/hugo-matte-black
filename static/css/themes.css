@@ -1028,6 +1028,118 @@ html[data-accent="naval"] .chroma .pi { color: #acbac4; }
 html[data-accent="naval"] .chroma .err { color: #d4607a; }
 
 
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Deep Blur Gold ─────────────────────────────────────────── */
+/* Dark glass + warm gold editorial palette                      */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="deep-blur-gold"] {
+  /* Backgrounds — near-black with blue steel depth */
+  --mb-bg:          #06070a;
+  --mb-surface-1:   #0e1117;
+  --mb-surface-2:   #131822;
+  --mb-surface-3:   #1a2230;
+
+  /* Borders */
+  --mb-border:        #223047;
+  --mb-border-focus:  #5a7393;
+  --mb-border-accent: #F2A94C44;
+
+  /* Text — warm gold hierarchy */
+  --mb-text-bright:   #f5d28b;   /* H1 / hero heading             */
+  --mb-text:          #e9e1d1;   /* body / main content           */
+  --mb-text-muted:    #c2b39a;   /* subheads / supporting text    */
+  --mb-text-faint:    #8f7e63;   /* meta / placeholders           */
+  --mb-text-disabled: #4a4236;
+
+  /* Accent — deep golden amber */
+  --mb-accent:        #f2a94c;   /* links, icons                  */
+  --mb-accent-bright: #ffd37a;   /* hover / emphasis              */
+  --mb-accent-dark:   #d88a29;   /* pressed / active              */
+  --mb-accent-dim:    #b97317;   /* visited / subdued accent      */
+  --mb-accent-bg:     #f2a94c1a;
+  --mb-accent-bg-sel: #f2a94c33;
+
+  /* Semantic */
+  --mb-green:         #2fa37c;
+  --mb-green-bright:  #58d4a4;
+  --mb-green-bg:      #2FA37C1F;
+
+  --mb-red:           #d95c5c;
+  --mb-red-bright:    #ff8a8a;
+  --mb-red-bg:        #D95C5C1F;
+
+  --mb-blue:          #5ba8f5;
+  --mb-blue-bright:   #8bc5ff;
+  --mb-blue-bg:       #5BA8F51F;
+
+  --mb-warning:       #e59a3a;
+  --mb-warning-bg:    #E59A3A1F;
+
+  --mb-info:          #e8c15a;
+  --mb-info-bg:       #E8C15A24;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #223047;
+  --mb-scrollbar-hover: #5a7393;
+}
+/* Deep Blur Gold — code block overrides ─────────────────────── */
+html[data-accent="deep-blur-gold"] pre,
+html[data-accent="deep-blur-gold"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="deep-blur-gold"] pre code { color: var(--mb-text) !important; }
+html[data-accent="deep-blur-gold"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #d88a29;
+  border-color: var(--mb-border);
+}
+html[data-accent="deep-blur-gold"] .chroma .k,
+html[data-accent="deep-blur-gold"] .chroma .kc,
+html[data-accent="deep-blur-gold"] .chroma .kd,
+html[data-accent="deep-blur-gold"] .chroma .kn,
+html[data-accent="deep-blur-gold"] .chroma .kp,
+html[data-accent="deep-blur-gold"] .chroma .kr,
+html[data-accent="deep-blur-gold"] .chroma .kt { color: #5ba8f5; }
+html[data-accent="deep-blur-gold"] .chroma .s,
+html[data-accent="deep-blur-gold"] .chroma .sa,
+html[data-accent="deep-blur-gold"] .chroma .sb,
+html[data-accent="deep-blur-gold"] .chroma .sc,
+html[data-accent="deep-blur-gold"] .chroma .dl,
+html[data-accent="deep-blur-gold"] .chroma .s2,
+html[data-accent="deep-blur-gold"] .chroma .se,
+html[data-accent="deep-blur-gold"] .chroma .s1,
+html[data-accent="deep-blur-gold"] .chroma .ss { color: #2fa37c; }
+html[data-accent="deep-blur-gold"] .chroma .m,
+html[data-accent="deep-blur-gold"] .chroma .mb,
+html[data-accent="deep-blur-gold"] .chroma .mf,
+html[data-accent="deep-blur-gold"] .chroma .mh,
+html[data-accent="deep-blur-gold"] .chroma .mi,
+html[data-accent="deep-blur-gold"] .chroma .il,
+html[data-accent="deep-blur-gold"] .chroma .mo { color: #f2a94c; }
+html[data-accent="deep-blur-gold"] .chroma .nf,
+html[data-accent="deep-blur-gold"] .chroma .fm { color: #ffd37a; }
+html[data-accent="deep-blur-gold"] .chroma .nc,
+html[data-accent="deep-blur-gold"] .chroma .nn { color: #f5d28b; }
+html[data-accent="deep-blur-gold"] .chroma .n,
+html[data-accent="deep-blur-gold"] .chroma .nb,
+html[data-accent="deep-blur-gold"] .chroma .bp { color: #e9e1d1; }
+html[data-accent="deep-blur-gold"] .chroma .o,
+html[data-accent="deep-blur-gold"] .chroma .ow { color: #c2b39a; }
+html[data-accent="deep-blur-gold"] .chroma .c,
+html[data-accent="deep-blur-gold"] .chroma .ch,
+html[data-accent="deep-blur-gold"] .chroma .cm,
+html[data-accent="deep-blur-gold"] .chroma .c1,
+html[data-accent="deep-blur-gold"] .chroma .cs,
+html[data-accent="deep-blur-gold"] .chroma .cp,
+html[data-accent="deep-blur-gold"] .chroma .cpf { color: #8f7e63; font-style: italic; }
+html[data-accent="deep-blur-gold"] .chroma .nt { color: #5ba8f5; }
+html[data-accent="deep-blur-gold"] .chroma .na { color: #e59a3a; font-style: italic; }
+html[data-accent="deep-blur-gold"] .chroma .p,
+html[data-accent="deep-blur-gold"] .chroma .pi { color: #c2b39a; }
+html[data-accent="deep-blur-gold"] .chroma .err { color: #d95c5c; }
+
+
 /* ── (archived) Catppuccin Latte — kept for reference, not in rotation ── */
 html[data-accent="latte"] {
   color-scheme: light;

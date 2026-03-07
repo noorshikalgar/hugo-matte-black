@@ -45,7 +45,7 @@
   }
 
   /* ── Theme switcher ─────────────────────────────────────────── */
-  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval'];
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold'];
   var THEME_NAMES = {
     amber:        'Amber',
     tokyo:        'Tokyo Night',
@@ -56,7 +56,8 @@
     rosepine:     'Rosé Pine Dawn',
     rosepinedark: 'Rosé Pine',
     slate:        'Slate',
-    naval:        'Naval'
+    naval:          'Naval',
+    'deep-blur-gold': 'Deep Blur Gold'
   };
 
   function applyAccentTheme(name) {
