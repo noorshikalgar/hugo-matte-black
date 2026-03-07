@@ -45,19 +45,24 @@
   }
 
   /* ── Theme switcher ─────────────────────────────────────────── */
-  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold'];
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold', 'mocha', 'dracula', 'nord', 'onedark', 'github-light'];
   var THEME_NAMES = {
-    amber:        'Amber',
-    tokyo:        'Tokyo Night',
-    ayu:          'Ayu Mirage',
-    forest:       'Forest',
-    gruvbox:      'Gruvbox Dark',
-    graymatter:   'Gray Matter',
-    rosepine:     'Rosé Pine Dawn',
-    rosepinedark: 'Rosé Pine',
-    slate:        'Slate',
+    amber:          'Amber',
+    tokyo:          'Tokyo Night',
+    ayu:            'Ayu Mirage',
+    forest:         'Forest',
+    gruvbox:        'Gruvbox Dark',
+    graymatter:     'Gray Matter',
+    rosepine:       'Rosé Pine Dawn',
+    rosepinedark:   'Rosé Pine',
+    slate:          'Slate',
     naval:          'Naval',
-    'deep-blur-gold': 'Deep Blur Gold'
+    'deep-blur-gold': 'Deep Blur Gold',
+    mocha:          'Catppuccin Mocha',
+    dracula:        'Dracula',
+    nord:           'Nord',
+    onedark:        'One Dark Pro',
+    'github-light': 'GitHub Light'
   };
 
   function applyAccentTheme(name) {

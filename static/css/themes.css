@@ -1318,3 +1318,560 @@ html[data-accent="latte"] .chroma .err { color: #d20f39; }
 #theme-toggle.show-label::after {
   opacity: 1;
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* ── NEW THEMES  (added 2026-03-07)                                        */
+/*                                                                           */
+/* To remove a theme, delete everything from its opening ══ banner          */
+/* down to (and including) its last `.chroma .err { … }` line plus the      */
+/* blank line that follows it.                                               */
+/*                                                                           */
+/*  1. mocha        — Catppuccin Mocha   (dark,  pastel)                    */
+/*  2. dracula      — Dracula            (dark,  vivid)                     */
+/*  3. nord         — Nord               (dark,  arctic minimal)            */
+/*  4. onedark      — One Dark Pro       (dark,  Atom classic)              */
+/*  5. github-light — GitHub Light       (light, clean professional)        */
+/* ══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 1. Catppuccin Mocha ────────────────────────────────────── */
+/* Pastel dark — most-starred Neovim/VS Code theme of 2024      */
+/* https://github.com/catppuccin/catppuccin                      */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="mocha"] {
+  /* Backgrounds — Mocha base */
+  --mb-bg:          #1e1e2e;   /* base                        */
+  --mb-surface-1:   #181825;   /* mantle                      */
+  --mb-surface-2:   #313244;   /* surface0                    */
+  --mb-surface-3:   #45475a;   /* surface1                    */
+
+  --mb-border:        #45475a;
+  --mb-border-focus:  #cba6f7;   /* mauve                     */
+  --mb-border-accent: #cba6f744;
+
+  --mb-text-bright:   #cdd6f4;   /* text                      */
+  --mb-text:          #bac2de;   /* subtext1                  */
+  --mb-text-muted:    #a6adc8;   /* subtext0                  */
+  --mb-text-faint:    #6c7086;   /* overlay0                  */
+  --mb-text-disabled: #313244;
+
+  --mb-accent:        #cba6f7;   /* mauve                     */
+  --mb-accent-bright: #d8b4fe;
+  --mb-accent-dark:   #b48ee0;
+  --mb-accent-dim:    #9672c4;
+  --mb-accent-bg:     #cba6f71a;
+  --mb-accent-bg-sel: #cba6f730;
+
+  --mb-green:         #a6e3a1;   /* green                     */
+  --mb-green-bright:  #b8f0b3;
+  --mb-green-bg:      #a6e3a118;
+  --mb-red:           #f38ba8;   /* red                       */
+  --mb-red-bright:    #ff9fb8;
+  --mb-red-bg:        #f38ba818;
+  --mb-blue:          #89b4fa;   /* blue                      */
+  --mb-blue-bright:   #a0c8ff;
+  --mb-blue-bg:       #89b4fa18;
+  --mb-warning:       #fab387;   /* peach                     */
+  --mb-warning-bg:    #fab38718;
+  --mb-info:          #89dceb;   /* sky                       */
+  --mb-info-bg:       #89dceb20;
+
+  --mb-scrollbar:       #45475a;
+  --mb-scrollbar-hover: #cba6f7;
+}
+html[data-accent="mocha"] pre,
+html[data-accent="mocha"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="mocha"] pre code             { color: var(--mb-text) !important; }
+html[data-accent="mocha"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #f38ba8;
+  border-color: var(--mb-border);
+}
+html[data-accent="mocha"] .chroma .k,
+html[data-accent="mocha"] .chroma .kc,
+html[data-accent="mocha"] .chroma .kd,
+html[data-accent="mocha"] .chroma .kn,
+html[data-accent="mocha"] .chroma .kp,
+html[data-accent="mocha"] .chroma .kr,
+html[data-accent="mocha"] .chroma .kt { color: #cba6f7; }    /* keywords — mauve   */
+html[data-accent="mocha"] .chroma .s,
+html[data-accent="mocha"] .chroma .sa,
+html[data-accent="mocha"] .chroma .sb,
+html[data-accent="mocha"] .chroma .sc,
+html[data-accent="mocha"] .chroma .dl,
+html[data-accent="mocha"] .chroma .s2,
+html[data-accent="mocha"] .chroma .se,
+html[data-accent="mocha"] .chroma .s1,
+html[data-accent="mocha"] .chroma .ss { color: #a6e3a1; }    /* strings — green    */
+html[data-accent="mocha"] .chroma .m,
+html[data-accent="mocha"] .chroma .mb,
+html[data-accent="mocha"] .chroma .mf,
+html[data-accent="mocha"] .chroma .mh,
+html[data-accent="mocha"] .chroma .mi,
+html[data-accent="mocha"] .chroma .il,
+html[data-accent="mocha"] .chroma .mo { color: #fab387; }    /* numbers — peach    */
+html[data-accent="mocha"] .chroma .nf,
+html[data-accent="mocha"] .chroma .fm { color: #89b4fa; }    /* functions — blue   */
+html[data-accent="mocha"] .chroma .nc,
+html[data-accent="mocha"] .chroma .nn { color: #f9e2af; }    /* types — yellow     */
+html[data-accent="mocha"] .chroma .n,
+html[data-accent="mocha"] .chroma .nb,
+html[data-accent="mocha"] .chroma .bp { color: #cdd6f4; }    /* variables          */
+html[data-accent="mocha"] .chroma .o,
+html[data-accent="mocha"] .chroma .ow { color: #89dceb; }    /* operators — sky    */
+html[data-accent="mocha"] .chroma .c,
+html[data-accent="mocha"] .chroma .ch,
+html[data-accent="mocha"] .chroma .cm,
+html[data-accent="mocha"] .chroma .c1,
+html[data-accent="mocha"] .chroma .cs,
+html[data-accent="mocha"] .chroma .cp,
+html[data-accent="mocha"] .chroma .cpf { color: #7f849c; font-style: italic; }
+html[data-accent="mocha"] .chroma .nt { color: #f38ba8; }    /* tags — red         */
+html[data-accent="mocha"] .chroma .na { color: #fab387; font-style: italic; }
+html[data-accent="mocha"] .chroma .p,
+html[data-accent="mocha"] .chroma .pi { color: #cdd6f4; }
+html[data-accent="mocha"] .chroma .err { color: #f38ba8; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 2. Dracula ─────────────────────────────────────────────── */
+/* The legendary dark theme — deep charcoal + vivid pastels     */
+/* https://draculatheme.com                                      */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="dracula"] {
+  --mb-bg:          #282a36;
+  --mb-surface-1:   #21222c;
+  --mb-surface-2:   #2d2f3f;
+  --mb-surface-3:   #343747;
+
+  --mb-border:        #44475a;
+  --mb-border-focus:  #bd93f9;   /* purple                    */
+  --mb-border-accent: #bd93f944;
+
+  --mb-text-bright:   #f8f8f2;
+  --mb-text:          #eeeeea;
+  --mb-text-muted:    #a0a8be;
+  --mb-text-faint:    #6272a4;
+  --mb-text-disabled: #383a4a;
+
+  --mb-accent:        #bd93f9;   /* purple                    */
+  --mb-accent-bright: #d0aeff;
+  --mb-accent-dark:   #9d70e0;
+  --mb-accent-dim:    #7d58c0;
+  --mb-accent-bg:     #bd93f91a;
+  --mb-accent-bg-sel: #bd93f930;
+
+  --mb-green:         #50fa7b;
+  --mb-green-bright:  #80ff9e;
+  --mb-green-bg:      #50fa7b18;
+  --mb-red:           #ff5555;
+  --mb-red-bright:    #ff7777;
+  --mb-red-bg:        #ff555518;
+  --mb-blue:          #8be9fd;   /* cyan                      */
+  --mb-blue-bright:   #a8f0ff;
+  --mb-blue-bg:       #8be9fd18;
+  --mb-warning:       #ffb86c;   /* orange                    */
+  --mb-warning-bg:    #ffb86c18;
+  --mb-info:          #ff79c6;   /* pink                      */
+  --mb-info-bg:       #ff79c620;
+
+  --mb-scrollbar:       #44475a;
+  --mb-scrollbar-hover: #bd93f9;
+}
+html[data-accent="dracula"] pre,
+html[data-accent="dracula"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="dracula"] pre code             { color: var(--mb-text) !important; }
+html[data-accent="dracula"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #ff79c6;
+  border-color: var(--mb-border);
+}
+html[data-accent="dracula"] .chroma .k,
+html[data-accent="dracula"] .chroma .kc,
+html[data-accent="dracula"] .chroma .kd,
+html[data-accent="dracula"] .chroma .kn,
+html[data-accent="dracula"] .chroma .kp,
+html[data-accent="dracula"] .chroma .kr,
+html[data-accent="dracula"] .chroma .kt { color: #ff79c6; }  /* keywords — pink    */
+html[data-accent="dracula"] .chroma .s,
+html[data-accent="dracula"] .chroma .sa,
+html[data-accent="dracula"] .chroma .sb,
+html[data-accent="dracula"] .chroma .sc,
+html[data-accent="dracula"] .chroma .dl,
+html[data-accent="dracula"] .chroma .s2,
+html[data-accent="dracula"] .chroma .se,
+html[data-accent="dracula"] .chroma .s1,
+html[data-accent="dracula"] .chroma .ss { color: #f1fa8c; }  /* strings — yellow   */
+html[data-accent="dracula"] .chroma .m,
+html[data-accent="dracula"] .chroma .mb,
+html[data-accent="dracula"] .chroma .mf,
+html[data-accent="dracula"] .chroma .mh,
+html[data-accent="dracula"] .chroma .mi,
+html[data-accent="dracula"] .chroma .il,
+html[data-accent="dracula"] .chroma .mo { color: #bd93f9; }  /* numbers — purple   */
+html[data-accent="dracula"] .chroma .nf,
+html[data-accent="dracula"] .chroma .fm { color: #50fa7b; }  /* functions — green  */
+html[data-accent="dracula"] .chroma .nc,
+html[data-accent="dracula"] .chroma .nn { color: #8be9fd; }  /* types — cyan       */
+html[data-accent="dracula"] .chroma .n,
+html[data-accent="dracula"] .chroma .nb,
+html[data-accent="dracula"] .chroma .bp { color: #f8f8f2; }
+html[data-accent="dracula"] .chroma .o,
+html[data-accent="dracula"] .chroma .ow { color: #ff79c6; }  /* operators — pink   */
+html[data-accent="dracula"] .chroma .c,
+html[data-accent="dracula"] .chroma .ch,
+html[data-accent="dracula"] .chroma .cm,
+html[data-accent="dracula"] .chroma .c1,
+html[data-accent="dracula"] .chroma .cs,
+html[data-accent="dracula"] .chroma .cp,
+html[data-accent="dracula"] .chroma .cpf { color: #6272a4; font-style: italic; }
+html[data-accent="dracula"] .chroma .nt { color: #ff5555; }  /* tags — red         */
+html[data-accent="dracula"] .chroma .na { color: #50fa7b; font-style: italic; }
+html[data-accent="dracula"] .chroma .p,
+html[data-accent="dracula"] .chroma .pi { color: #f8f8f2; }
+html[data-accent="dracula"] .chroma .err { color: #ff5555; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 3. Nord ─────────────────────────────────────────────────── */
+/* Arctic, north-bluish palette — clean, understated, beloved   */
+/* https://www.nordtheme.com                                     */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="nord"] {
+  /* Polar Night — backgrounds */
+  --mb-bg:          #2e3440;   /* nord0                       */
+  --mb-surface-1:   #3b4252;   /* nord1                       */
+  --mb-surface-2:   #434c5e;   /* nord2                       */
+  --mb-surface-3:   #4c566a;   /* nord3                       */
+
+  --mb-border:        #4c566a;
+  --mb-border-focus:  #88c0d0;   /* frost                     */
+  --mb-border-accent: #88c0d044;
+
+  /* Snow Storm — text */
+  --mb-text-bright:   #eceff4;   /* nord6                     */
+  --mb-text:          #e5e9f0;   /* nord5                     */
+  --mb-text-muted:    #d8dee9;   /* nord4                     */
+  --mb-text-faint:    #616e88;
+  --mb-text-disabled: #3b4252;
+
+  /* Frost — accent */
+  --mb-accent:        #88c0d0;   /* nord8                     */
+  --mb-accent-bright: #9fd4e2;
+  --mb-accent-dark:   #6aadbe;
+  --mb-accent-dim:    #4e8fa0;
+  --mb-accent-bg:     #88c0d01a;
+  --mb-accent-bg-sel: #88c0d030;
+
+  /* Aurora — semantic */
+  --mb-green:         #a3be8c;   /* nord14                    */
+  --mb-green-bright:  #b9d4a0;
+  --mb-green-bg:      #a3be8c18;
+  --mb-red:           #bf616a;   /* nord11                    */
+  --mb-red-bright:    #d47880;
+  --mb-red-bg:        #bf616a18;
+  --mb-blue:          #81a1c1;   /* nord9                     */
+  --mb-blue-bright:   #9bbad6;
+  --mb-blue-bg:       #81a1c118;
+  --mb-warning:       #d08770;   /* nord12                    */
+  --mb-warning-bg:    #d0877018;
+  --mb-info:          #b48ead;   /* nord15                    */
+  --mb-info-bg:       #b48ead20;
+
+  --mb-scrollbar:       #4c566a;
+  --mb-scrollbar-hover: #88c0d0;
+}
+html[data-accent="nord"] pre,
+html[data-accent="nord"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="nord"] pre code             { color: var(--mb-text) !important; }
+html[data-accent="nord"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #88c0d0;
+  border-color: var(--mb-border);
+}
+html[data-accent="nord"] .chroma .k,
+html[data-accent="nord"] .chroma .kc,
+html[data-accent="nord"] .chroma .kd,
+html[data-accent="nord"] .chroma .kn,
+html[data-accent="nord"] .chroma .kp,
+html[data-accent="nord"] .chroma .kr,
+html[data-accent="nord"] .chroma .kt { color: #81a1c1; }   /* keywords — frost   */
+html[data-accent="nord"] .chroma .s,
+html[data-accent="nord"] .chroma .sa,
+html[data-accent="nord"] .chroma .sb,
+html[data-accent="nord"] .chroma .sc,
+html[data-accent="nord"] .chroma .dl,
+html[data-accent="nord"] .chroma .s2,
+html[data-accent="nord"] .chroma .se,
+html[data-accent="nord"] .chroma .s1,
+html[data-accent="nord"] .chroma .ss { color: #a3be8c; }   /* strings — green    */
+html[data-accent="nord"] .chroma .m,
+html[data-accent="nord"] .chroma .mb,
+html[data-accent="nord"] .chroma .mf,
+html[data-accent="nord"] .chroma .mh,
+html[data-accent="nord"] .chroma .mi,
+html[data-accent="nord"] .chroma .il,
+html[data-accent="nord"] .chroma .mo { color: #b48ead; }   /* numbers — purple   */
+html[data-accent="nord"] .chroma .nf,
+html[data-accent="nord"] .chroma .fm { color: #88c0d0; }   /* functions — teal   */
+html[data-accent="nord"] .chroma .nc,
+html[data-accent="nord"] .chroma .nn { color: #ebcb8b; }   /* types — yellow     */
+html[data-accent="nord"] .chroma .n,
+html[data-accent="nord"] .chroma .nb,
+html[data-accent="nord"] .chroma .bp { color: #d8dee9; }
+html[data-accent="nord"] .chroma .o,
+html[data-accent="nord"] .chroma .ow { color: #81a1c1; }
+html[data-accent="nord"] .chroma .c,
+html[data-accent="nord"] .chroma .ch,
+html[data-accent="nord"] .chroma .cm,
+html[data-accent="nord"] .chroma .c1,
+html[data-accent="nord"] .chroma .cs,
+html[data-accent="nord"] .chroma .cp,
+html[data-accent="nord"] .chroma .cpf { color: #616e88; font-style: italic; }
+html[data-accent="nord"] .chroma .nt { color: #81a1c1; }
+html[data-accent="nord"] .chroma .na { color: #8fbcbb; font-style: italic; }
+html[data-accent="nord"] .chroma .p,
+html[data-accent="nord"] .chroma .pi { color: #d8dee9; }
+html[data-accent="nord"] .chroma .err { color: #bf616a; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 4. One Dark Pro ─────────────────────────────────────────── */
+/* Atom's iconic palette — VS Code's all-time most-installed    */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="onedark"] {
+  --mb-bg:          #282c34;
+  --mb-surface-1:   #21252b;
+  --mb-surface-2:   #2c313c;
+  --mb-surface-3:   #3a3f4b;
+
+  --mb-border:        #3e4452;
+  --mb-border-focus:  #61afef;
+  --mb-border-accent: #61afef44;
+
+  --mb-text-bright:   #abb2bf;
+  --mb-text:          #9da5b4;
+  --mb-text-muted:    #7f848e;
+  --mb-text-faint:    #5c6370;   /* comment color             */
+  --mb-text-disabled: #2c313c;
+
+  --mb-accent:        #61afef;   /* blue                      */
+  --mb-accent-bright: #82c3ff;
+  --mb-accent-dark:   #4a96d6;
+  --mb-accent-dim:    #3480c0;
+  --mb-accent-bg:     #61afef1a;
+  --mb-accent-bg-sel: #61afef30;
+
+  --mb-green:         #98c379;
+  --mb-green-bright:  #b0d990;
+  --mb-green-bg:      #98c37918;
+  --mb-red:           #e06c75;
+  --mb-red-bright:    #f08090;
+  --mb-red-bg:        #e06c7518;
+  --mb-blue:          #61afef;
+  --mb-blue-bright:   #82c3ff;
+  --mb-blue-bg:       #61afef18;
+  --mb-warning:       #e5c07b;
+  --mb-warning-bg:    #e5c07b18;
+  --mb-info:          #56b6c2;   /* cyan                      */
+  --mb-info-bg:       #56b6c220;
+
+  --mb-scrollbar:       #3e4452;
+  --mb-scrollbar-hover: #61afef;
+}
+html[data-accent="onedark"] pre,
+html[data-accent="onedark"] .chroma {
+  background: var(--mb-surface-2) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="onedark"] pre code             { color: var(--mb-text) !important; }
+html[data-accent="onedark"] code:not(pre > code) {
+  background: var(--mb-surface-3);
+  color: #e06c75;
+  border-color: var(--mb-border);
+}
+html[data-accent="onedark"] .chroma .k,
+html[data-accent="onedark"] .chroma .kc,
+html[data-accent="onedark"] .chroma .kd,
+html[data-accent="onedark"] .chroma .kn,
+html[data-accent="onedark"] .chroma .kp,
+html[data-accent="onedark"] .chroma .kr,
+html[data-accent="onedark"] .chroma .kt { color: #c678dd; }  /* keywords — mauve   */
+html[data-accent="onedark"] .chroma .s,
+html[data-accent="onedark"] .chroma .sa,
+html[data-accent="onedark"] .chroma .sb,
+html[data-accent="onedark"] .chroma .sc,
+html[data-accent="onedark"] .chroma .dl,
+html[data-accent="onedark"] .chroma .s2,
+html[data-accent="onedark"] .chroma .se,
+html[data-accent="onedark"] .chroma .s1,
+html[data-accent="onedark"] .chroma .ss { color: #98c379; }  /* strings — green    */
+html[data-accent="onedark"] .chroma .m,
+html[data-accent="onedark"] .chroma .mb,
+html[data-accent="onedark"] .chroma .mf,
+html[data-accent="onedark"] .chroma .mh,
+html[data-accent="onedark"] .chroma .mi,
+html[data-accent="onedark"] .chroma .il,
+html[data-accent="onedark"] .chroma .mo { color: #d19a66; }  /* numbers — orange   */
+html[data-accent="onedark"] .chroma .nf,
+html[data-accent="onedark"] .chroma .fm { color: #61afef; }  /* functions — blue   */
+html[data-accent="onedark"] .chroma .nc,
+html[data-accent="onedark"] .chroma .nn { color: #e5c07b; }  /* types — yellow     */
+html[data-accent="onedark"] .chroma .n,
+html[data-accent="onedark"] .chroma .nb,
+html[data-accent="onedark"] .chroma .bp { color: #abb2bf; }
+html[data-accent="onedark"] .chroma .o,
+html[data-accent="onedark"] .chroma .ow { color: #56b6c2; }  /* operators — cyan   */
+html[data-accent="onedark"] .chroma .c,
+html[data-accent="onedark"] .chroma .ch,
+html[data-accent="onedark"] .chroma .cm,
+html[data-accent="onedark"] .chroma .c1,
+html[data-accent="onedark"] .chroma .cs,
+html[data-accent="onedark"] .chroma .cp,
+html[data-accent="onedark"] .chroma .cpf { color: #5c6370; font-style: italic; }
+html[data-accent="onedark"] .chroma .nt { color: #e06c75; }  /* tags — red         */
+html[data-accent="onedark"] .chroma .na { color: #d19a66; font-style: italic; }
+html[data-accent="onedark"] .chroma .p,
+html[data-accent="onedark"] .chroma .pi { color: #abb2bf; }
+html[data-accent="onedark"] .chroma .err { color: #e06c75; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 5. GitHub Light ─────────────────────────────────────────── */
+/* Clean, white, professional — the UI every developer knows    */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="github-light"] {
+  color-scheme: light;
+
+  --mb-bg:          #ffffff;
+  --mb-surface-1:   #f6f8fa;
+  --mb-surface-2:   #eaf0f6;
+  --mb-surface-3:   #d0d7de;
+
+  --mb-border:        #d0d7de;
+  --mb-border-focus:  #0969da;
+  --mb-border-accent: #0969da33;
+
+  --mb-text-bright:   #1f2328;
+  --mb-text:          #24292f;
+  --mb-text-muted:    #57606a;
+  --mb-text-faint:    #8c959f;
+  --mb-text-disabled: #d0d7de;
+
+  --mb-accent:        #0969da;   /* GitHub blue               */
+  --mb-accent-bright: #218bff;
+  --mb-accent-dark:   #0550ae;
+  --mb-accent-dim:    #033d8b;
+  --mb-accent-bg:     #0969da14;
+  --mb-accent-bg-sel: #0969da28;
+
+  --mb-green:         #1a7f37;
+  --mb-green-bright:  #2da44e;
+  --mb-green-bg:      #1a7f3715;
+  --mb-red:           #cf222e;
+  --mb-red-bright:    #e34c73;
+  --mb-red-bg:        #cf222e15;
+  --mb-blue:          #0969da;
+  --mb-blue-bright:   #218bff;
+  --mb-blue-bg:       #0969da15;
+  --mb-warning:       #9a6700;
+  --mb-warning-bg:    #9a670015;
+  --mb-info:          #8250df;   /* purple                    */
+  --mb-info-bg:       #8250df20;
+
+  --mb-scrollbar:       #d0d7de;
+  --mb-scrollbar-hover: #0969da;
+
+  /* Pico overrides — force light mode */
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    #cf222e;
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(0,0,0,0.35);
+}
+/* SVG diagrams: add dark bg so white paths stay visible */
+html[data-accent="github-light"] .post-content img[src$=".svg"],
+html[data-accent="github-light"] .post-content object[type="image/svg+xml"] {
+  background: #24292f;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+html[data-accent="github-light"] pre,
+html[data-accent="github-light"] .chroma {
+  background: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="github-light"] pre code             { color: var(--mb-text) !important; }
+html[data-accent="github-light"] code:not(pre > code) {
+  background: var(--mb-surface-2);
+  color: #cf222e;
+  border-color: var(--mb-border);
+}
+html[data-accent="github-light"] .chroma .k,
+html[data-accent="github-light"] .chroma .kc,
+html[data-accent="github-light"] .chroma .kd,
+html[data-accent="github-light"] .chroma .kn,
+html[data-accent="github-light"] .chroma .kp,
+html[data-accent="github-light"] .chroma .kr,
+html[data-accent="github-light"] .chroma .kt { color: #cf222e; }   /* keywords — red    */
+html[data-accent="github-light"] .chroma .s,
+html[data-accent="github-light"] .chroma .sa,
+html[data-accent="github-light"] .chroma .sb,
+html[data-accent="github-light"] .chroma .sc,
+html[data-accent="github-light"] .chroma .dl,
+html[data-accent="github-light"] .chroma .s2,
+html[data-accent="github-light"] .chroma .se,
+html[data-accent="github-light"] .chroma .s1,
+html[data-accent="github-light"] .chroma .ss { color: #0a3069; }   /* strings — navy    */
+html[data-accent="github-light"] .chroma .m,
+html[data-accent="github-light"] .chroma .mb,
+html[data-accent="github-light"] .chroma .mf,
+html[data-accent="github-light"] .chroma .mh,
+html[data-accent="github-light"] .chroma .mi,
+html[data-accent="github-light"] .chroma .il,
+html[data-accent="github-light"] .chroma .mo { color: #953800; }   /* numbers — brown   */
+html[data-accent="github-light"] .chroma .nf,
+html[data-accent="github-light"] .chroma .fm { color: #8250df; }   /* functions — purple */
+html[data-accent="github-light"] .chroma .nc,
+html[data-accent="github-light"] .chroma .nn { color: #116329; }   /* types — green     */
+html[data-accent="github-light"] .chroma .n,
+html[data-accent="github-light"] .chroma .nb,
+html[data-accent="github-light"] .chroma .bp { color: #24292f; }
+html[data-accent="github-light"] .chroma .o,
+html[data-accent="github-light"] .chroma .ow { color: #24292f; }
+html[data-accent="github-light"] .chroma .c,
+html[data-accent="github-light"] .chroma .ch,
+html[data-accent="github-light"] .chroma .cm,
+html[data-accent="github-light"] .chroma .c1,
+html[data-accent="github-light"] .chroma .cs,
+html[data-accent="github-light"] .chroma .cp,
+html[data-accent="github-light"] .chroma .cpf { color: #6e7781; font-style: italic; }
+html[data-accent="github-light"] .chroma .nt { color: #116329; }   /* tags — green      */
+html[data-accent="github-light"] .chroma .na { color: #0550ae; font-style: italic; }
+html[data-accent="github-light"] .chroma .p,
+html[data-accent="github-light"] .chroma .pi { color: #57606a; }
+html[data-accent="github-light"] .chroma .err { color: #cf222e; }
+/* ── END NEW THEMES ─────────────────────────────────────────── */
