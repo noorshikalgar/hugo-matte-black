@@ -107,7 +107,7 @@ h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
   align-items: normal;
   gap: 10px;
 }
-.section-title .bc-icon { transition: transform 0.15s ease; }
+.section-title .bc-icon { transition: transform 0.15s ease; align-self: flex-start; }
 .section-title:hover .bc-icon { transform: translateY(-2px); }
 
 /* ── 4. Body Text ────────────────────────────────────────────── */
