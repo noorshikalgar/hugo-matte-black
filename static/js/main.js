@@ -45,7 +45,7 @@
   }
 
   /* ── Theme switcher ─────────────────────────────────────────── */
-  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold', 'mocha', 'dracula', 'nord', 'onedark', 'github-light', 'cyber-minimalist', 'ghost-archive'];
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold', 'mocha', 'dracula', 'nord', 'onedark', 'github-light'];
   var THEME_NAMES = {
     amber:          'Amber',
     tokyo:          'Tokyo Night',
@@ -62,9 +62,7 @@
     dracula:        'Dracula',
     nord:           'Nord',
     onedark:        'One Dark Pro',
-    'github-light': 'GitHub Light',
-    'cyber-minimalist': 'Cyber Minimalist',
-    'ghost-archive': 'Ghost Archive'
+    'github-light': 'GitHub Light'
   };
 
   function applyAccentTheme(name) {
