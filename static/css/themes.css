@@ -1875,3 +1875,152 @@ html[data-accent="github-light"] .chroma .p,
 html[data-accent="github-light"] .chroma .pi { color: #57606a; }
 html[data-accent="github-light"] .chroma .err { color: #cf222e; }
 /* ── END NEW THEMES ─────────────────────────────────────────── */
+
+
+
+/* -- Cyber Minimalist ----------------------------------------------- */
+/* This theme aims for a sleek, high-tech, and professional look. The dark backgrounds are designed to reduce eye strain, especially in low-light environments. Expect vibrant, yet desaturated, accents that guide the eye without being distracting. Code highlighting is designed for clarity and visual appeal within the overall cyberpunk aesthetic. */
+html[data-accent="cyber-minimalist"] {
+  /* Backgrounds */
+  --mb-bg:          #0A0C10;
+  --mb-surface-1:   #12141A;
+  --mb-surface-2:   #1A1D24;
+  --mb-surface-3:   #242830;
+
+  /* Borders */
+  --mb-border:        #303740;
+  --mb-border-focus:  #00BFBF;
+  --mb-border-accent: #00A6A633;
+
+  /* Text */
+  --mb-text-bright:   #E0E6F0;
+  --mb-text:          #C9D0DA;
+  --mb-text-muted:    #8B949E;
+  --mb-text-faint:    #5B636C;
+  --mb-text-disabled: #3B4047;
+
+  /* Accent */
+  --mb-accent:        #00BFBF;
+  --mb-accent-bright: #00E4E4;
+  --mb-accent-dark:   #008D8D;
+  --mb-accent-dim:    #005F5F;
+  --mb-accent-bg:     #00BFBF1A;
+  --mb-accent-bg-sel: #00BFBF33;
+
+  /* Semantic */
+  --mb-green:         #3EDC81;
+  --mb-green-bright:  #68E89D;
+  --mb-green-bg:      #3EDC811A;
+  --mb-red:           #D65A5A;
+  --mb-red-bright:    #E88282;
+  --mb-red-bg:        #D65A5A1A;
+  --mb-blue:          #8C57E8;
+  --mb-blue-bright:   #9F62ED;
+  --mb-blue-bg:       #8C57E81A;
+  --mb-warning:       #E8BB4F;
+  --mb-warning-bg:    #E8BB4F1A;
+  --mb-info:          #5BC5F5;
+  --mb-info-bg:       #5BC5F51A;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #303740;
+  --mb-scrollbar-hover: #5B636C;
+}
+
+/* Cyber Minimalist - code block overrides */
+html[data-accent="cyber-minimalist"] pre,
+html[data-accent="cyber-minimalist"] .chroma {
+  background: #1A1D24 !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="cyber-minimalist"] pre code { color: var(--mb-text) !important; }
+html[data-accent="cyber-minimalist"] code:not(pre > code) {
+  background: #242830;
+  color: var(--mb-accent-dark);
+  border-color: var(--mb-border);
+}
+html[data-accent="cyber-minimalist"] .chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr, .chroma .kt { color: #8C57E8; }
+html[data-accent="cyber-minimalist"] .chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .s2, .chroma .se, .chroma .s1, .chroma .ss { color: #3EDC81; }
+html[data-accent="cyber-minimalist"] .chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo { color: #E8BB4F; }
+html[data-accent="cyber-minimalist"] .chroma .nf, .chroma .fm { color: #00E4E4; }
+html[data-accent="cyber-minimalist"] .chroma .nc, .chroma .nn { color: #E0E6F0; }
+html[data-accent="cyber-minimalist"] .chroma .n, .chroma .nb, .chroma .bp { color: #C9D0DA; }
+html[data-accent="cyber-minimalist"] .chroma .o, .chroma .ow, .chroma .p, .chroma .pi { color: #8B949E; }
+html[data-accent="cyber-minimalist"] .chroma .nt { color: #00BFBF; }
+html[data-accent="cyber-minimalist"] .chroma .na { color: #5BC5F5; font-style: italic; }
+html[data-accent="cyber-minimalist"] .chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .cp, .chroma .cpf { color: #5B636C; font-style: italic; }
+html[data-accent="cyber-minimalist"] .chroma .err { color: #D65A5A; }
+
+
+/* -- Ghost Archive ----------------------------------------------- */
+/* The 'Ghost Archive' theme provides a light, airy feel with extremely muted tones. Text remains highly readable against the soft backgrounds, and accent colors are intentionally desaturated to maintain the minimalist, faded aesthetic. Ideal for long-form reading and content where a calm, focused environment is desired. */
+html[data-accent="ghost-archive"] {
+  /* Backgrounds */
+  --mb-bg:          #F9F9F7;
+  --mb-surface-1:   #F5F5F3;
+  --mb-surface-2:   #F0F0EE;
+  --mb-surface-3:   #EBEBE9;
+
+  /* Borders */
+  --mb-border:        #D1D1CF;
+  --mb-border-focus:  #AAB8C2;
+  --mb-border-accent: #B4CDBC;
+
+  /* Text */
+  --mb-text-bright:   #5C5C5C;
+  --mb-text:          #707070;
+  --mb-text-muted:    #909090;
+  --mb-text-faint:    #B0B0B0;
+  --mb-text-disabled: #C0C0C0;
+
+  /* Accent */
+  --mb-accent:        #8BA89D;
+  --mb-accent-bright: #A4C1B6;
+  --mb-accent-dark:   #739082;
+  --mb-accent-dim:    #5A7066;
+  --mb-accent-bg:     #8BA89D20;
+  --mb-accent-bg-sel: #8BA89D30;
+
+  /* Semantic */
+  --mb-green:         #9BBF9A;
+  --mb-green-bright:  #B0D7AF;
+  --mb-green-bg:      #9BBF9A20;
+  --mb-red:           #D88E8E;
+  --mb-red-bright:    #E8A8A8;
+  --mb-red-bg:        #D88E8E20;
+  --mb-blue:          #AAB8C2;
+  --mb-blue-bright:   #C0D0DA;
+  --mb-blue-bg:       #AAB8C220;
+  --mb-warning:       #E0C78C;
+  --mb-warning-bg:    #E0C78C20;
+  --mb-info:          #AAB8C2;
+  --mb-info-bg:       #AAB8C220;
+
+  /* Scrollbar */
+  --mb-scrollbar:       #CACACA;
+  --mb-scrollbar-hover: #B5B5B5;
+}
+
+/* Ghost Archive - code block overrides */
+html[data-accent="ghost-archive"] pre,
+html[data-accent="ghost-archive"] .chroma {
+  background: #EAECEB !important;
+  color: var(--mb-text) !important;
+}
+html[data-accent="ghost-archive"] pre code { color: var(--mb-text) !important; }
+html[data-accent="ghost-archive"] code:not(pre > code) {
+  background: #EAECEB;
+  color: var(--mb-accent-dark);
+  border-color: var(--mb-border);
+}
+html[data-accent="ghost-archive"] .chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr, .chroma .kt { color: #B8A8C9; }
+html[data-accent="ghost-archive"] .chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .s2, .chroma .se, .chroma .s1, .chroma .ss { color: #D3A79E; }
+html[data-accent="ghost-archive"] .chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo { color: #C7B080; }
+html[data-accent="ghost-archive"] .chroma .nf, .chroma .fm { color: #A8C2D3; }
+html[data-accent="ghost-archive"] .chroma .nc, .chroma .nn { color: #6D6D6D; }
+html[data-accent="ghost-archive"] .chroma .n, .chroma .nb, .chroma .bp { color: #707070; }
+html[data-accent="ghost-archive"] .chroma .o, .chroma .ow, .chroma .p, .chroma .pi { color: #B0B0B0; }
+html[data-accent="ghost-archive"] .chroma .nt { color: #D3A79E; }
+html[data-accent="ghost-archive"] .chroma .na { color: #B4CDBC; font-style: italic; }
+html[data-accent="ghost-archive"] .chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .cp, .chroma .cpf { color: #C0C0C0; font-style: italic; }
+html[data-accent="ghost-archive"] .chroma .err { color: #DD8888; }
