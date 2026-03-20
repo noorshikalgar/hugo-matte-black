@@ -186,7 +186,55 @@
 }
 .tag-chip:hover::before { opacity: 0.85; }
 
+/* ── 3.5. Featured Card (Slim, Pinned Content) ───────────────── */
+.featured-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  background: var(--mb-bg);
+  transition: background 0.1s;
+}
+.featured-card:hover { background: var(--mb-surface-1); }
+
+.featured-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.featured-card-title {
+  flex: 1;
+  min-width: 0;
+}
+.featured-card-title a {
+  color: var(--mb-text);
+  text-decoration: none;
+  font-weight: 500;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.featured-card-title a:hover { color: var(--mb-accent); }
+
+.featured-tags {
+  gap: 0.25rem;
+  max-width: 100%;
+}
+.featured-tags .tag-chip {
+  padding: 0.1rem 0.35rem;
+  font-size: 0.7rem;
+}
+
+.featured-card-meta {
+  font-size: 0.75rem;
+  color: var(--mb-text-muted);
+}
+
 /* Tag term page – group headings */
+
 .tag-group-heading {
   font-size: 0.7rem;
   font-family: "JetBrains Mono", monospace;

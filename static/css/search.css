@@ -483,7 +483,59 @@
   color: var(--mb-text-faint);
 }
 
-/* ── 9. Fresh this week section ───────────────────────────────── */
+/* ── 9. Highlights section (pinned/hot topics) ────────────────── */
+.highlights-section {
+  margin-top: 2.5rem;
+}
+.highlights-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  border-bottom: 1px solid var(--mb-border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.highlights-header-main {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.6em;
+  flex-wrap: wrap;
+}
+.highlights-header-desc {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .highlights-header-main {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}
+.highlights-count {
+  font-size: 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-accent);
+  background: var(--mb-accent-bg);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 30%, transparent);
+  border-radius: 999px;
+  padding: 0.1em 0.55em;
+  line-height: 1.6;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+@media (max-width: 900px) {
+  .highlights-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .highlights-grid { grid-template-columns: 1fr; }
+}
+
+/* ── 9a. Fresh this week section ────────────────────────────────── */
 .quick-nav-title-block {
   display: flex;
   flex-direction: row;

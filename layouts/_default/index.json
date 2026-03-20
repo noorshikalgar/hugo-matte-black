@@ -14,6 +14,7 @@
     "difficulty":  {{ $p.Params.difficulty | default "" | jsonify }},
     "contentType": {{ $p.Params.contentType | default $p.Section | jsonify }},
     "readingTime": {{ $p.ReadingTime | jsonify }},
+    "featured":    {{ $p.Params.featured | default false | jsonify }},
     "content":     {{ $p.Plain | truncate 1500 | jsonify }}
   }
   {{- end }}

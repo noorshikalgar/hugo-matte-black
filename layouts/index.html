@@ -88,6 +88,73 @@
       </div>
     </div>
 
+    <!-- Hot Topics / Highlights -->
+    {{- $hotTopicsConfig := .Site.Params.hotTopics | default slice -}}
+    {{- $hotTopicsCount := .Site.Params.hotTopicsCount | default 3 -}}
+    {{- $highlighted := slice -}}
+    {{- $highlightedPermalinks := slice -}}
+    
+    {{- /* Add config URLs first (highest priority) */}}
+    {{- if and $hotTopicsConfig (gt (len $hotTopicsConfig) 0) }}
+      {{- range first $hotTopicsCount $hotTopicsConfig }}
+        {{- $path := . }}
+        {{- $page := $.Site.GetPage $path }}
+        {{- if $page }}
+          {{- $highlighted = $highlighted | append $page }}
+          {{- $highlightedPermalinks = $highlightedPermalinks | append $page.Permalink }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    
+    {{- /* Fill remaining slots with featured posts (if not at limit) */}}
+    {{- if lt (len $highlighted) $hotTopicsCount }}
+      {{- $featured := where $.Site.RegularPages "Params.featured" true -}}
+      {{- $featured = $featured.ByDate.Reverse -}}
+      {{- range $featured }}
+        {{- if lt (len $highlighted) $hotTopicsCount }}
+          {{- /* Skip if already in highlighted */}}
+          {{- if not (in $highlightedPermalinks .Permalink) }}
+            {{- $highlighted = $highlighted | append . }}
+            {{- $highlightedPermalinks = $highlightedPermalinks | append .Permalink }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    
+    {{- if $highlighted }}
+    <div class="highlights-section">
+      <div class="highlights-header">
+        <div class="highlights-header-main">
+          <span class="title-prompt">~/highlights$</span>
+          <p class="quick-nav-title highlights-header-desc">trending now</p>
+        </div>
+        <span class="highlights-count">{{ len $highlighted }} pinned</span>
+      </div>
+      <div class="highlights-grid">
+        {{- range $highlighted }}
+          <article class="featured-card">
+            <div class="featured-card-header">
+              <div class="featured-card-title">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              </div>
+              <span class="badge badge-section">{{ .Section }}</span>
+            </div>
+            {{- with .Params.tags }}
+              <ul class="tag-list featured-tags">
+                {{- range first 2 . }}
+                  <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+                {{- end }}
+              </ul>
+            {{- end }}
+            <div class="featured-card-meta">
+              <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
+            </div>
+          </article>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
+
     <!-- Fresh this week -->
     {{- $cutoff := now.AddDate 0 0 -7 -}}
     {{- $mainSections := .Site.Params.searchSections | default (slice "guides") -}}
