@@ -20,6 +20,7 @@
   const browseSection = document.getElementById('browse-section');
   const sortSelect    = document.getElementById('sort-select');
   const filtersContainer = document.getElementById('search-filters');
+  const mascotEl      = document.getElementById('terminal-mascot');
 
   if (!searchInput) return;
 
@@ -544,6 +545,156 @@
   }
 
   /* ── Init ─────────────────────────────────────────────────────── */
+  (function initMascot() {
+    if (!mascotEl || window.matchMedia('(max-width: 980px)').matches) return;
+
+    var mascotSize = 128;
+    var hoverLock = false;
+    var actionLock = false;
+    var seekTimer = null;
+    var actionTimer = null;
+    var currentX = 0;
+    var ACTIONS = [
+      { name: 'action-bounce', thought: 'hi' },
+      { name: 'action-wink', thought: ':)' },
+      { name: 'action-tilt', thought: 'hmm' },
+      { name: 'action-glitch', thought: '...' }
+    ];
+
+    function clearMascotState() {
+      mascotEl.classList.remove(
+        'is-awake',
+        'is-hiding',
+        'is-seeking',
+        'action-bounce',
+        'action-wink',
+        'action-tilt',
+        'action-glitch'
+      );
+    }
+
+    function setThought(text) {
+      mascotEl.dataset.thought = text || '';
+      mascotEl.classList.toggle('has-thought', !!text);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function positionMascot(opts) {
+      var options = opts || {};
+      var viewportW = window.innerWidth;
+      var marginX = 24;
+      var maxX = Math.max(marginX, viewportW - mascotSize - marginX);
+      var x = maxX;
+
+      if (!options.bottomRight) {
+        var candidate = currentX || maxX;
+        var attempts = 0;
+        while (attempts < 8 && Math.abs(candidate - currentX) < 120) {
+          candidate = marginX + Math.random() * Math.max(1, maxX - marginX);
+          attempts += 1;
+        }
+        x = candidate;
+      }
+
+      currentX = clamp(x, marginX, maxX);
+      mascotEl.style.setProperty('--mascot-x', currentX + 'px');
+    }
+
+    function scheduleSeek() {
+      clearTimeout(seekTimer);
+      seekTimer = setTimeout(function () {
+        if (hoverLock || actionLock || document.hidden) {
+          scheduleSeek();
+          return;
+        }
+
+        actionLock = true;
+        clearMascotState();
+        mascotEl.classList.add('is-hiding');
+        setThought('shh');
+
+        setTimeout(function () {
+          positionMascot();
+        }, 700);
+
+        setTimeout(function () {
+          clearMascotState();
+          mascotEl.classList.add('is-seeking');
+          setThought('psst');
+
+          setTimeout(function () {
+            clearMascotState();
+            setThought('');
+            actionLock = false;
+            scheduleSeek();
+          }, 1000);
+        }, 1600);
+      }, 12000 + Math.random() * 9000);
+    }
+
+    positionMascot({ bottomRight: true });
+    setThought('');
+
+    mascotEl.addEventListener('mouseenter', function () {
+      hoverLock = true;
+      clearMascotState();
+      mascotEl.classList.add('is-awake');
+      setThought('oh?');
+      clearTimeout(seekTimer);
+    });
+
+    mascotEl.addEventListener('mouseleave', function () {
+      hoverLock = false;
+      clearTimeout(actionTimer);
+      if (!actionLock) {
+        clearMascotState();
+        setThought('');
+      }
+      scheduleSeek();
+    });
+
+    mascotEl.addEventListener('click', function () {
+      actionLock = true;
+      clearMascotState();
+      clearTimeout(seekTimer);
+      clearTimeout(actionTimer);
+
+      var choice = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+      mascotEl.classList.add(choice.name);
+      setThought(choice.thought);
+
+      actionTimer = setTimeout(function () {
+        actionLock = false;
+        if (hoverLock) {
+          clearMascotState();
+          mascotEl.classList.add('is-awake');
+          setThought('heh');
+        } else {
+          clearMascotState();
+          setThought('');
+          scheduleSeek();
+        }
+      }, 850);
+    });
+
+    window.addEventListener('resize', function () {
+      positionMascot({ bottomRight: currentX === 0 });
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        clearTimeout(seekTimer);
+      } else if (!hoverLock && !actionLock) {
+        scheduleSeek();
+      }
+    });
+
+    scheduleSeek();
+  }());
+
   // Pre-load index silently in background (consumes preload hint)
   loadIndex(true);
 

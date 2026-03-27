@@ -68,13 +68,31 @@
 
 .terminal-mascot {
   position: fixed;
-  right: clamp(1rem, 2vw, 2rem);
+  left: var(--mascot-x, calc(100vw - 170px));
   bottom: 1.5rem;
   width: 128px;
   height: 128px;
-  z-index: 30;
-  pointer-events: none;
+  z-index: 4;
+  pointer-events: auto;
   opacity: 0.9;
+  cursor: pointer;
+  transition:
+    left 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    bottom 0.35s ease,
+    opacity 0.25s ease,
+    filter 0.25s ease;
+}
+
+.terminal-mascot::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: -6px;
+  height: 42px;
+  background: var(--mb-bg);
+  border-top: 1px solid var(--mb-border);
+  pointer-events: none;
 }
 
 .terminal-mascot-svg {
@@ -101,8 +119,8 @@
 }
 
 .mascot-screen {
-  fill: color-mix(in srgb, var(--mb-surface-2) 82%, white 18%);
-  stroke: color-mix(in srgb, var(--mb-border) 86%, white 14%);
+  fill: color-mix(in srgb, white 90%, var(--mb-surface-1) 10%);
+  stroke: color-mix(in srgb, var(--mb-border) 70%, white 30%);
   stroke-width: 1.5;
 }
 
@@ -120,10 +138,15 @@
 .mascot-eye,
 .mascot-mouth,
 .mascot-cursor {
-  fill: var(--mb-text);
-  stroke: var(--mb-text);
+  fill: color-mix(in srgb, var(--mb-bg) 72%, black 28%);
+  stroke: color-mix(in srgb, var(--mb-bg) 72%, black 28%);
   stroke-width: 4;
   stroke-linecap: round;
+}
+
+.mascot-eye-line,
+.mascot-mouth-smile {
+  opacity: 0;
 }
 
 .mascot-eye {
@@ -135,14 +158,134 @@
   animation-delay: 0.08s;
 }
 
+.mascot-eye-line,
+.mascot-mouth-smile {
+  opacity: 0;
+}
+
 .mascot-mouth {
   fill: none;
   stroke-width: 4.5;
 }
 
+.mascot-mouth-smile {
+  fill: none;
+  stroke-width: 4.2;
+}
+
+.mascot-mouth-smile {
+  fill: none;
+  stroke-width: 4.2;
+}
+
 .mascot-cursor {
   stroke-width: 0;
   animation: mascot-cursor 1.15s steps(1, end) infinite;
+}
+
+.terminal-mascot::after {
+  content: attr(data-thought);
+  position: absolute;
+  right: 10px;
+  top: -2px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.64rem;
+  color: var(--mb-text-muted);
+  padding: 0.18rem 0.4rem;
+  border: 1px solid var(--mb-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mb-surface-1) 92%, white 8%);
+  letter-spacing: 0.01em;
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.terminal-mascot.has-thought::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.terminal-mascot:hover,
+.terminal-mascot.is-awake {
+  bottom: 28px;
+  filter: saturate(1.04);
+}
+
+.terminal-mascot:hover .mascot-mouth,
+.terminal-mascot.is-awake .mascot-mouth {
+  opacity: 0;
+}
+
+.terminal-mascot:hover .mascot-mouth-smile,
+.terminal-mascot.is-awake .mascot-mouth-smile {
+  opacity: 1;
+}
+
+.terminal-mascot.is-hiding {
+  opacity: 0;
+  bottom: -36px;
+}
+
+.terminal-mascot.is-seeking {
+  opacity: 0.9;
+}
+
+.terminal-mascot.action-bounce,
+.terminal-mascot.action-wink,
+.terminal-mascot.action-tilt,
+.terminal-mascot.action-glitch {
+  bottom: 30px;
+  filter: saturate(1.08);
+}
+
+.terminal-mascot.action-bounce .mascot-body {
+  animation: mascot-bounce 0.72s cubic-bezier(0.2, 1.2, 0.25, 1);
+}
+
+.terminal-mascot.action-wink .mascot-eye-left {
+  opacity: 0;
+}
+
+.terminal-mascot.action-wink .mascot-eye-line-left {
+  opacity: 1;
+  animation: mascot-line-wink 0.72s ease;
+}
+
+.terminal-mascot.action-wink .mascot-mouth {
+  opacity: 0;
+}
+
+.terminal-mascot.action-wink .mascot-mouth-smile {
+  opacity: 1;
+}
+
+.terminal-mascot.action-tilt .mascot-body {
+  animation: mascot-tilt 0.8s ease;
+}
+
+.terminal-mascot.action-glitch .mascot-screen {
+  animation: mascot-glitch-screen 0.52s steps(2, end) 2;
+}
+
+.terminal-mascot.action-glitch .mascot-face {
+  animation: mascot-glitch-face 0.52s steps(2, end) 2;
+}
+
+.terminal-mascot.action-bounce .mascot-mouth,
+.terminal-mascot.action-wink .mascot-mouth,
+.terminal-mascot.action-tilt .mascot-mouth,
+.terminal-mascot.action-glitch .mascot-mouth {
+  opacity: 0;
+}
+
+.terminal-mascot.action-bounce .mascot-mouth-smile,
+.terminal-mascot.action-wink .mascot-mouth-smile,
+.terminal-mascot.action-tilt .mascot-mouth-smile,
+.terminal-mascot.action-glitch .mascot-mouth-smile {
+  opacity: 1;
 }
 
 @keyframes mascot-float {
@@ -165,18 +308,35 @@
   92%, 96% { transform: scaleY(0.12); }
 }
 
-.terminal-mascot::after {
-  content: "idle";
-  position: absolute;
-  inset: auto 14px -0.35rem auto;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  color: var(--mb-text-faint);
-  padding: 0.12rem 0.38rem;
-  border: 1px solid var(--mb-border);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--mb-bg) 90%, white 10%);
-  letter-spacing: 0.01em;
+@keyframes mascot-bounce {
+  0% { transform: translateY(0) rotate(-1deg); }
+  35% { transform: translateY(-12px) rotate(4deg); }
+  65% { transform: translateY(-2px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes mascot-line-wink {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(1.25); opacity: 1; }
+}
+
+@keyframes mascot-tilt {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-4px) rotate(-7deg); }
+  66% { transform: translateY(-2px) rotate(5deg); }
+}
+
+@keyframes mascot-glitch-screen {
+  0%, 100% { opacity: 1; }
+  35% { opacity: 0.8; }
+  65% { opacity: 0.96; }
+}
+
+@keyframes mascot-glitch-face {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
 }
 
 .search-header {
