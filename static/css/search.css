@@ -66,6 +66,119 @@
   padding: 2rem 1rem;
 }
 
+.terminal-mascot {
+  position: fixed;
+  right: clamp(1rem, 2vw, 2rem);
+  bottom: 1.5rem;
+  width: 128px;
+  height: 128px;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.terminal-mascot-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mascot-shadow {
+  fill: rgba(61, 55, 51, 0.12);
+  transform-origin: center;
+  animation: mascot-shadow-breathe 4.2s ease-in-out infinite;
+}
+
+.mascot-body {
+  transform-origin: center 60%;
+  animation: mascot-float 4.2s ease-in-out infinite;
+}
+
+.mascot-shell {
+  fill: color-mix(in srgb, var(--mb-surface-1) 88%, white 12%);
+  stroke: color-mix(in srgb, var(--mb-border) 82%, white 18%);
+  stroke-width: 2;
+}
+
+.mascot-screen {
+  fill: color-mix(in srgb, var(--mb-surface-2) 82%, white 18%);
+  stroke: color-mix(in srgb, var(--mb-border) 86%, white 14%);
+  stroke-width: 1.5;
+}
+
+.mascot-header-bar,
+.mascot-base,
+.mascot-stand {
+  fill: color-mix(in srgb, var(--mb-surface-3) 80%, white 20%);
+}
+
+.mascot-dot {
+  fill: var(--mb-text-faint);
+  opacity: 0.85;
+}
+
+.mascot-eye,
+.mascot-mouth,
+.mascot-cursor {
+  fill: var(--mb-text);
+  stroke: var(--mb-text);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.mascot-eye {
+  transform-origin: center;
+  animation: mascot-blink 5.6s infinite;
+}
+
+.mascot-eye-right {
+  animation-delay: 0.08s;
+}
+
+.mascot-mouth {
+  fill: none;
+  stroke-width: 4.5;
+}
+
+.mascot-cursor {
+  stroke-width: 0;
+  animation: mascot-cursor 1.15s steps(1, end) infinite;
+}
+
+@keyframes mascot-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-5px) rotate(1deg); }
+}
+
+@keyframes mascot-shadow-breathe {
+  0%, 100% { transform: scaleX(1); opacity: 0.12; }
+  50% { transform: scaleX(0.9); opacity: 0.08; }
+}
+
+@keyframes mascot-cursor {
+  0%, 46% { opacity: 1; }
+  47%, 100% { opacity: 0.15; }
+}
+
+@keyframes mascot-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  92%, 96% { transform: scaleY(0.12); }
+}
+
+.terminal-mascot::after {
+  content: "idle";
+  position: absolute;
+  inset: auto 14px -0.35rem auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--mb-text-faint);
+  padding: 0.12rem 0.38rem;
+  border: 1px solid var(--mb-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mb-bg) 90%, white 10%);
+  letter-spacing: 0.01em;
+}
+
 .search-header {
   margin-bottom: 1.5rem;
 }
@@ -90,6 +203,12 @@
   .search-header h1 {
     font-size: 0.7rem;
     margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .terminal-mascot {
+    display: none;
   }
 }
 .search-header h1 .site-name { color: var(--mb-accent); font-weight: 600; }
