@@ -549,6 +549,7 @@
     if (!mascotEl || window.matchMedia('(max-width: 980px)').matches) return;
 
     var mascotSize = 128;
+    var footerEl = mascotEl.closest('.site-footer');
     var hoverLock = false;
     var actionLock = false;
     var seekTimer = null;
@@ -584,9 +585,9 @@
 
     function positionMascot(opts) {
       var options = opts || {};
-      var viewportW = window.innerWidth;
+      var footerWidth = footerEl ? footerEl.clientWidth : window.innerWidth;
       var marginX = 24;
-      var maxX = Math.max(marginX, viewportW - mascotSize - marginX);
+      var maxX = Math.max(marginX, footerWidth - mascotSize - marginX);
       var x = maxX;
 
       if (!options.bottomRight) {

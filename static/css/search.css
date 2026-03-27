@@ -67,32 +67,20 @@
 }
 
 .terminal-mascot {
-  position: fixed;
-  left: var(--mascot-x, calc(100vw - 170px));
-  bottom: 1.5rem;
+  position: absolute;
+  left: var(--mascot-x, calc(100% - 170px));
+  top: -92px;
   width: 128px;
   height: 128px;
-  z-index: 4;
+  z-index: 1;
   pointer-events: auto;
   opacity: 0.9;
   cursor: pointer;
   transition:
     left 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    bottom 0.35s ease,
+    top 0.35s ease,
     opacity 0.25s ease,
     filter 0.25s ease;
-}
-
-.terminal-mascot::before {
-  content: "";
-  position: absolute;
-  left: -8px;
-  right: -8px;
-  bottom: -6px;
-  height: 42px;
-  background: var(--mb-bg);
-  border-top: 1px solid var(--mb-border);
-  pointer-events: none;
 }
 
 .terminal-mascot-svg {
@@ -210,7 +198,7 @@
 
 .terminal-mascot:hover,
 .terminal-mascot.is-awake {
-  bottom: 28px;
+  top: -108px;
   filter: saturate(1.04);
 }
 
@@ -226,7 +214,7 @@
 
 .terminal-mascot.is-hiding {
   opacity: 0;
-  bottom: -36px;
+  top: -44px;
 }
 
 .terminal-mascot.is-seeking {

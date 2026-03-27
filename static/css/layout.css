@@ -297,6 +297,20 @@ body {
   margin-top: 0;
   position: relative;
   z-index: 1;
+  overflow: visible;
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  background: var(--mb-bg);
+  border-top: 1px solid var(--mb-border);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .footer-inner {
@@ -310,6 +324,8 @@ body {
   font-size: 0.8rem;
   color: var(--mb-text-faint);
   font-family: "JetBrains Mono", monospace;
+  position: relative;
+  z-index: 3;
 }
 
 .footer-inner a {
