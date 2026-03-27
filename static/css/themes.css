@@ -402,6 +402,191 @@ html[data-accent="graymatter"] .chroma .err { color: #c0392b; }
 
 
 /* ══════════════════════════════════════════════════════════════ */
+/* ── Paper Diary ────────────────────────────────────────────── */
+/* Soft grey paper, charcoal ink, subtle print-like contrast    */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="paper-diary"] {
+  color-scheme: light;
+
+  --mb-bg:          #d4d0c9;
+  --mb-surface-1:   #dbd7cf;
+  --mb-surface-2:   #c9c4bc;
+  --mb-surface-3:   #bcb6ad;
+
+  --mb-border:        #b3ada4;
+  --mb-border-focus:  #8c867e;
+  --mb-border-accent: #6b655e33;
+
+  --mb-text-bright:   #2f2c28;
+  --mb-text:          #3b3733;
+  --mb-text-muted:    #5b5650;
+  --mb-text-faint:    #767069;
+  --mb-text-disabled: #a8a197;
+
+  --mb-accent:        #6b655e;
+  --mb-accent-bright: #4f4a45;
+  --mb-accent-dark:   #5f5953;
+  --mb-accent-dim:    #7a736c;
+  --mb-accent-bg:     #6b655e14;
+  --mb-accent-bg-sel: #6b655e24;
+
+  --mb-green:         #5b715d;
+  --mb-green-bright:  #48624d;
+  --mb-green-bg:      #5b715d14;
+  --mb-red:           #9a5b57;
+  --mb-red-bright:    #874744;
+  --mb-red-bg:        #9a5b5714;
+  --mb-blue:          #66758a;
+  --mb-blue-bright:   #546377;
+  --mb-blue-bg:       #66758a14;
+  --mb-warning:       #8d6f45;
+  --mb-warning-bg:    #8d6f4514;
+  --mb-info:          #6b655e;
+  --mb-info-bg:       #6b655e18;
+
+  --mb-scrollbar:       #b3ada4;
+  --mb-scrollbar-hover: #8c867e;
+
+  --mb-shadow-sm:    0 1px 0 rgba(255, 255, 255, 0.18);
+  --mb-shadow:       0 4px 16px rgba(72, 64, 56, 0.04);
+  --mb-shadow-lg:    0 10px 30px rgba(72, 64, 56, 0.06);
+  --mb-glow-hover:   none;
+
+  --pico-background-color:    var(--mb-bg);
+  --pico-card-background-color: var(--mb-surface-1);
+  --pico-color:               var(--mb-text);
+  --pico-muted-color:         var(--mb-text-muted);
+  --pico-border-color:        var(--mb-border);
+  --pico-form-element-background-color: var(--mb-surface-2);
+  --pico-form-element-border-color:     var(--mb-border);
+  --pico-form-element-color:            var(--mb-text);
+  --pico-form-element-placeholder-color: var(--mb-text-faint);
+  --pico-dropdown-background-color:     var(--mb-surface-2);
+  --pico-dropdown-color:                var(--mb-text);
+  --pico-dropdown-hover-background-color: var(--mb-surface-3);
+  --pico-code-background-color:         var(--mb-surface-1);
+  --pico-code-color:                    var(--mb-accent-dark);
+  --pico-table-border-color:            var(--mb-border);
+  --pico-table-row-stripped-background-color: var(--mb-surface-1);
+  --pico-modal-overlay-background-color: rgba(32, 28, 24, 0.28);
+}
+
+html[data-accent="paper-diary"] body {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.02)),
+    var(--mb-bg);
+}
+
+html[data-accent="paper-diary"] .site-header {
+  background: color-mix(in srgb, var(--mb-bg) 88%, transparent);
+  border-bottom-color: #b8b1a7;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+html[data-accent="paper-diary"] .site-footer {
+  background: color-mix(in srgb, var(--mb-bg) 92%, white 8%);
+}
+
+html[data-accent="paper-diary"] .post-card,
+html[data-accent="paper-diary"] .featured-card,
+html[data-accent="paper-diary"] .browse-card,
+html[data-accent="paper-diary"] .quick-nav-item,
+html[data-accent="paper-diary"] .toc-sidebar-inner,
+html[data-accent="paper-diary"] blockquote,
+html[data-accent="paper-diary"] pre,
+html[data-accent="paper-diary"] .chroma {
+  background: color-mix(in srgb, var(--mb-surface-1) 92%, white 8%) !important;
+  box-shadow: var(--mb-shadow-sm);
+}
+
+html[data-accent="paper-diary"] .post-content img[src$=".svg"],
+html[data-accent="paper-diary"] .post-content object[type="image/svg+xml"] {
+  background: #4b4741;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+html[data-accent="paper-diary"] code:not(pre > code) {
+  background: color-mix(in srgb, var(--mb-surface-2) 90%, white 10%);
+  color: var(--mb-accent-dark);
+  border-color: var(--mb-border);
+}
+
+html[data-accent="paper-diary"] .ambient-shadow::before {
+  background:
+    radial-gradient(circle at 24% 16%, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(212, 208, 201, 0.22), rgba(212, 208, 201, 0.14)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.04));
+  mix-blend-mode: normal;
+}
+
+html[data-accent="paper-diary"] .ambient-shadow-video {
+  opacity: 0.08;
+  filter: grayscale(1) contrast(0.58) brightness(1) blur(2.8px);
+  mix-blend-mode: multiply;
+}
+
+html[data-accent="paper-diary"] .chroma .k,
+html[data-accent="paper-diary"] .chroma .kc,
+html[data-accent="paper-diary"] .chroma .kd,
+html[data-accent="paper-diary"] .chroma .kn,
+html[data-accent="paper-diary"] .chroma .kp,
+html[data-accent="paper-diary"] .chroma .kr,
+html[data-accent="paper-diary"] .chroma .kt { color: #665468; }
+
+html[data-accent="paper-diary"] .chroma .s,
+html[data-accent="paper-diary"] .chroma .sa,
+html[data-accent="paper-diary"] .chroma .sb,
+html[data-accent="paper-diary"] .chroma .sc,
+html[data-accent="paper-diary"] .chroma .dl,
+html[data-accent="paper-diary"] .chroma .sd,
+html[data-accent="paper-diary"] .chroma .s2,
+html[data-accent="paper-diary"] .chroma .se,
+html[data-accent="paper-diary"] .chroma .sh,
+html[data-accent="paper-diary"] .chroma .si,
+html[data-accent="paper-diary"] .chroma .sx,
+html[data-accent="paper-diary"] .chroma .sr,
+html[data-accent="paper-diary"] .chroma .s1,
+html[data-accent="paper-diary"] .chroma .ss { color: #5b715d; }
+
+html[data-accent="paper-diary"] .chroma .m,
+html[data-accent="paper-diary"] .chroma .mb,
+html[data-accent="paper-diary"] .chroma .mf,
+html[data-accent="paper-diary"] .chroma .mh,
+html[data-accent="paper-diary"] .chroma .mi,
+html[data-accent="paper-diary"] .chroma .il,
+html[data-accent="paper-diary"] .chroma .mo { color: #8d6f45; }
+
+html[data-accent="paper-diary"] .chroma .nf,
+html[data-accent="paper-diary"] .chroma .fm { color: #56647a; }
+
+html[data-accent="paper-diary"] .chroma .nc,
+html[data-accent="paper-diary"] .chroma .nn { color: #4f4a45; }
+
+html[data-accent="paper-diary"] .chroma .n,
+html[data-accent="paper-diary"] .chroma .nb,
+html[data-accent="paper-diary"] .chroma .bp { color: #3b3733; }
+
+html[data-accent="paper-diary"] .chroma .o,
+html[data-accent="paper-diary"] .chroma .ow,
+html[data-accent="paper-diary"] .chroma .p,
+html[data-accent="paper-diary"] .chroma .pi { color: #5b5650; }
+
+html[data-accent="paper-diary"] .chroma .c,
+html[data-accent="paper-diary"] .chroma .ch,
+html[data-accent="paper-diary"] .chroma .cm,
+html[data-accent="paper-diary"] .chroma .c1,
+html[data-accent="paper-diary"] .chroma .cs,
+html[data-accent="paper-diary"] .chroma .cp,
+html[data-accent="paper-diary"] .chroma .cpf { color: #767069; font-style: italic; }
+
+html[data-accent="paper-diary"] .chroma .nt { color: #5b715d; }
+html[data-accent="paper-diary"] .chroma .na { color: #8d6f45; font-style: italic; }
+html[data-accent="paper-diary"] .chroma .err { color: #9a5b57; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
 /* ── Solarized Light ─────────────────────────────────────────── */
 /* Classic warm cream theme by Ethan Schoonover                  */
 /* ══════════════════════════════════════════════════════════════ */

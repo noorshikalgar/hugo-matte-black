@@ -7,6 +7,9 @@
 (function () {
   'use strict';
 
+  var DEFAULT_THEME = 'paper-diary';
+  var AMBIENT_VIDEO_KEY = 'ambientShadowEnabled';
+
   /* ── Hamburger menu ────────────────────────────────────────── */
   const hamburger = document.getElementById('hamburger');
   const mobileNav = document.getElementById('mobile-nav');
@@ -45,7 +48,7 @@
   }
 
   /* ── Theme switcher ─────────────────────────────────────────── */
-  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold', 'mocha', 'dracula', 'nord', 'onedark', 'github-light'];
+  var THEMES = ['amber', 'tokyo', 'ayu', 'forest', 'gruvbox', 'graymatter', 'paper-diary', 'rosepine', 'rosepinedark', 'slate', 'naval', 'deep-blur-gold', 'mocha', 'dracula', 'nord', 'onedark', 'github-light'];
   var THEME_NAMES = {
     amber:          'Amber',
     tokyo:          'Tokyo Night',
@@ -53,6 +56,7 @@
     forest:         'Forest',
     gruvbox:        'Gruvbox Dark',
     graymatter:     'Gray Matter',
+    'paper-diary':  'Paper Diary',
     rosepine:       'Rosé Pine Dawn',
     rosepinedark:   'Rosé Pine',
     slate:          'Slate',
@@ -75,16 +79,16 @@
   var themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     // Ensure a theme is always set
-    var initial = document.documentElement.getAttribute('data-accent') || 'amber';
+    var initial = document.documentElement.getAttribute('data-accent') || DEFAULT_THEME;
     if (!document.documentElement.getAttribute('data-accent')) {
-      applyAccentTheme('amber');
+      applyAccentTheme(DEFAULT_THEME);
     } else {
       // Set tooltip name for whatever was restored from localStorage
       themeToggle.setAttribute('data-theme-name', THEME_NAMES[initial] || initial);
     }
 
     themeToggle.addEventListener('click', function () {
-      var current = document.documentElement.getAttribute('data-accent') || 'amber';
+      var current = document.documentElement.getAttribute('data-accent') || DEFAULT_THEME;
       var idx     = THEMES.indexOf(current);
       var next    = THEMES[(idx + 1) % THEMES.length];
       applyAccentTheme(next);
@@ -108,6 +112,90 @@
     scrollBtn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+  }
+
+  /* ── Ambient shadow video ───────────────────────────────────── */
+  var ambientLayer = document.querySelector('.ambient-shadow');
+  var ambientVideo = document.getElementById('ambient-shadow-video');
+
+  if (ambientLayer && ambientVideo) {
+    function readAmbientPreference() {
+      var stored = localStorage.getItem(AMBIENT_VIDEO_KEY);
+      return stored === 'on';
+    }
+
+    function writeAmbientPreference(enabled) {
+      localStorage.setItem(AMBIENT_VIDEO_KEY, enabled ? 'on' : 'off');
+    }
+
+    function syncAmbientState() {
+      var enabled = readAmbientPreference();
+      ambientLayer.classList.toggle('is-disabled', !enabled);
+      if (!enabled) {
+        ambientVideo.pause();
+        return false;
+      }
+      return true;
+    }
+
+    function setAmbientPlayback() {
+      var prefersReducedMotion = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!syncAmbientState()) {
+        return;
+      }
+
+      if (prefersReducedMotion) {
+        ambientLayer.classList.add('reduced-motion');
+        ambientVideo.pause();
+        return;
+      }
+
+      ambientLayer.classList.remove('reduced-motion');
+      var playPromise = ambientVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(function () {});
+      }
+    }
+
+    ambientVideo.addEventListener('loadeddata', function () {
+      ambientLayer.classList.add('is-ready');
+      setAmbientPlayback();
+    }, { once: true });
+
+    ambientVideo.addEventListener('error', function () {
+      ambientLayer.classList.add('is-unavailable');
+    }, { once: true });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        ambientVideo.pause();
+      } else if (ambientLayer.classList.contains('is-ready')) {
+        setAmbientPlayback();
+      }
+    });
+
+    if (window.matchMedia) {
+      var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (typeof motionQuery.addEventListener === 'function') {
+        motionQuery.addEventListener('change', setAmbientPlayback);
+      } else if (typeof motionQuery.addListener === 'function') {
+        motionQuery.addListener(setAmbientPlayback);
+      }
+    }
+
+    window.addEventListener('ambient-video-toggle', function (e) {
+      var enabled = !e.detail || e.detail.enabled !== false;
+      writeAmbientPreference(enabled);
+      syncAmbientState();
+
+      if (enabled && ambientLayer.classList.contains('is-ready')) {
+        setAmbientPlayback();
+      }
+    });
+
+    syncAmbientState();
   }
 
   /* ── Copy code buttons ──────────────────────────────────────────── */

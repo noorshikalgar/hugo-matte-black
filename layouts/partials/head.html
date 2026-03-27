@@ -115,7 +115,7 @@
 <!-- Apply saved accent theme before CSS renders (prevents flash) -->
 <script>
   (function(){
-    var t = localStorage.getItem('accentTheme');
+    var t = localStorage.getItem('accentTheme') || {{ .Site.Params.defaultAccentTheme | default "paper-diary" | jsonify }};
     if (t) document.documentElement.setAttribute('data-accent', t);
   })();
 </script>

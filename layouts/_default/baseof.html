@@ -4,6 +4,20 @@
     {{- partial "head.html" . -}}
   </head>
   <body>
+    <div class="ambient-shadow" aria-hidden="true">
+      <video
+        id="ambient-shadow-video"
+        class="ambient-shadow-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata">
+        <source src="{{ .Site.Params.ambientShadowVideoWebm | default "videos/tree-shadow.webm" | relURL }}" type="video/webm">
+        <source src="{{ .Site.Params.ambientShadowVideoMp4 | default "videos/tree-shadow.mp4" | relURL }}" type="video/mp4">
+      </video>
+    </div>
+
     {{- partial "header.html" . -}}
 
     <main class="site-main">

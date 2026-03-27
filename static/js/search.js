@@ -62,6 +62,23 @@
   let   currentInclude  = false;
   let   scrollObserver  = null;
 
+  const COMMANDS = {
+    on: [
+      'bg-video:on',
+      'bgvideo:on',
+      'video --on',
+      'video on',
+      'ambient --on'
+    ],
+    off: [
+      'bg-video:off',
+      'bgvideo:off',
+      'video --off',
+      'video off',
+      'ambient --off'
+    ]
+  };
+
   /* ── Load index ──────────────────────────────────────────────── */
   /* silent=true: fetch in background without showing the spinner  */
   function loadIndex(silent) {
@@ -421,6 +438,48 @@
       '<div class="search-empty"><span class="empty-icon">!</span>' + msg + '</div>';
   }
 
+  function restoreBrowseState() {
+    query = '';
+    activeSection = '';
+    clearResults();
+    resetChipCounts();
+    showBrowse(true);
+    showFilters(false);
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (searchInput) searchInput.value = '';
+    document.querySelectorAll('.filter-chip[data-filter="section"]').forEach(function (chip) {
+      chip.classList.remove('active');
+    });
+  }
+
+  function parseCommand(raw) {
+    var normalized = (raw || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    if (!normalized) return null;
+    if (COMMANDS.on.indexOf(normalized) !== -1) return { type: 'ambient-video', enabled: true };
+    if (COMMANDS.off.indexOf(normalized) !== -1) return { type: 'ambient-video', enabled: false };
+    return null;
+  }
+
+  function dispatchAmbientVideoCommand(enabled) {
+    window.dispatchEvent(new CustomEvent('ambient-video-toggle', {
+      detail: { enabled: enabled }
+    }));
+  }
+
+  function handleSearchCommand(raw) {
+    var command = parseCommand(raw);
+    if (!command) return false;
+
+    if (command.type === 'ambient-video') {
+      dispatchAmbientVideoCommand(command.enabled);
+      syncUrl('');
+      restoreBrowseState();
+      return true;
+    }
+
+    return false;
+  }
+
   /* ── Debounce ────────────────────────────────────────────────── */
   function debounce(fn, ms) {
     let t;
@@ -442,6 +501,7 @@
 
   searchInput.addEventListener('input', function () {
     query = this.value;
+    if (handleSearchCommand(query)) return;
     syncUrl(query);
     debouncedSearch();
   });
@@ -450,6 +510,7 @@
     searchForm.addEventListener('submit', function (e) {
       e.preventDefault();
       query = searchInput.value;
+      if (handleSearchCommand(query)) return;
       syncUrl(query);
       runSearch();
     });
