@@ -404,4 +404,86 @@
     }
   });
 
+  /* ── Podcast player ─────────────────────────────────────────── */
+  document.querySelectorAll('[data-podcast-player]').forEach(function (player) {
+    var audio = player.querySelector('.podcast-player-media');
+    var controls = player.querySelector('.podcast-player-controls');
+    var toggle = player.querySelector('[data-podcast-toggle]');
+    var toggleLabel = player.querySelector('[data-podcast-toggle-label]');
+    var reset = player.querySelector('[data-podcast-reset]');
+    var seek = player.querySelector('[data-podcast-seek]');
+    var current = player.querySelector('[data-podcast-current]');
+    var duration = player.querySelector('[data-podcast-duration]');
+
+    if (!audio || !controls || !toggle || !toggleLabel || !reset || !seek || !current || !duration) return;
+
+    function formatTime(seconds) {
+      if (!isFinite(seconds) || seconds < 0) return '0:00';
+      var totalSeconds = Math.floor(seconds);
+      var minutes = Math.floor(totalSeconds / 60);
+      var secs = totalSeconds % 60;
+      return minutes + ':' + String(secs).padStart(2, '0');
+    }
+
+    function syncTime() {
+      var audioDuration = isFinite(audio.duration) ? audio.duration : 0;
+      var audioCurrent = isFinite(audio.currentTime) ? audio.currentTime : 0;
+      current.textContent = formatTime(audioCurrent);
+      duration.textContent = formatTime(audioDuration);
+      seek.value = audioDuration > 0 ? (audioCurrent / audioDuration) * 100 : 0;
+    }
+
+    function syncButton() {
+      var isPlaying = !audio.paused && !audio.ended;
+      toggleLabel.textContent = isPlaying ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-label', isPlaying ? 'Pause podcast audio' : 'Play podcast audio');
+      toggle.classList.toggle('is-playing', isPlaying);
+    }
+
+    player.classList.add('is-enhanced');
+    controls.hidden = false;
+    seek.disabled = true;
+
+    toggle.addEventListener('click', function () {
+      if (audio.paused || audio.ended) {
+        var playPromise = audio.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(function () {});
+        }
+      } else {
+        audio.pause();
+      }
+    });
+
+    seek.addEventListener('input', function () {
+      if (!isFinite(audio.duration) || audio.duration <= 0) return;
+      audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+      syncTime();
+    });
+
+    reset.addEventListener('click', function () {
+      audio.pause();
+      audio.currentTime = 0;
+      syncButton();
+      syncTime();
+    });
+
+    audio.addEventListener('loadedmetadata', function () {
+      seek.disabled = false;
+      syncTime();
+    });
+
+    audio.addEventListener('timeupdate', syncTime);
+    audio.addEventListener('durationchange', syncTime);
+    audio.addEventListener('play', syncButton);
+    audio.addEventListener('pause', syncButton);
+    audio.addEventListener('ended', function () {
+      syncButton();
+      syncTime();
+    });
+
+    syncButton();
+    syncTime();
+  });
+
 })();

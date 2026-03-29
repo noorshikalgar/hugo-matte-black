@@ -38,6 +38,9 @@
       </ul>
     {{- end }}
 
+    <!-- Podcast player -->
+    {{- partial "podcast-player.html" . -}}
+
     <!-- Featured image -->
     {{- with .Params.image }}
       <div class="post-featured-image" style="margin-bottom:1.5rem;">

@@ -705,7 +705,262 @@ h6:hover .heading-anchor { opacity: 1; }
   color: var(--mb-text);
 }
 
-/* ── 8. Copy Code Button ─────────────────────────────────────── */
+/* ── 8. Podcast Player ───────────────────────────────────────── */
+.podcast-player {
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+  background: linear-gradient(180deg, var(--mb-surface-1) 0%, var(--mb-bg) 100%);
+}
+
+.podcast-player-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.podcast-player-kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mb-text-faint);
+}
+
+.podcast-player-title {
+  margin: 0;
+  font-size: 1rem;
+  font-family: "IBM Plex Sans", "Inter", sans-serif;
+  color: var(--mb-text);
+  border: none;
+  padding: 0;
+}
+
+.podcast-player-badge {
+  align-self: flex-start;
+}
+
+.podcast-player-media {
+  width: 100%;
+  margin: 0;
+}
+
+.podcast-player-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.5rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.podcast-player.is-enhanced .podcast-player-media {
+  display: none;
+}
+
+.podcast-player.is-enhanced .podcast-player-controls[hidden] {
+  display: flex;
+}
+
+.podcast-player-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.podcast-player-toggle:hover {
+  color: var(--mb-accent);
+  transform: translateY(-1px);
+}
+
+.podcast-player-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mb-text-muted);
+  cursor: pointer;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.podcast-player-reset:hover {
+  color: var(--mb-accent);
+  transform: translateY(-1px);
+}
+
+.podcast-player-toggle:focus,
+.podcast-player-toggle:focus-visible,
+.podcast-player-reset:focus,
+.podcast-player-reset:focus-visible,
+.podcast-player-seek:focus,
+.podcast-player-seek:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.podcast-control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.podcast-control-svg {
+  width: 1.45rem;
+  height: 1.45rem;
+  display: block;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  stroke: currentColor;
+}
+
+.podcast-player-toggle:hover .podcast-control-icon,
+.podcast-player-reset:hover .podcast-control-icon {
+  transform: translateY(-1.5px);
+}
+
+.podcast-control-svg-play .podcast-icon-pause {
+  display: none;
+}
+
+.podcast-player-toggle.is-playing .podcast-control-svg-play .podcast-icon-play {
+  display: none;
+}
+
+.podcast-player-toggle.is-playing .podcast-control-svg-play .podcast-icon-pause {
+  display: block;
+}
+
+.podcast-player-reset:hover .podcast-control-svg {
+  transform: rotate(-24deg);
+}
+
+.podcast-player-toggle:hover .podcast-control-svg,
+.podcast-player-toggle.is-playing:hover .podcast-control-svg {
+  transform: scale(1.04);
+}
+
+.podcast-player-toggle.is-playing {
+  color: var(--mb-accent);
+}
+
+.podcast-control-svg-play .podcast-icon-play path,
+.podcast-control-svg-play .podcast-icon-pause path {
+  stroke-width: 1.5;
+}
+
+.podcast-control-svg-reset {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.podcast-player-timeline {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.podcast-player-seek {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--mb-accent);
+}
+
+.podcast-player-time {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--mb-text-faint);
+  line-height: 1;
+  min-width: 2.6rem;
+}
+
+.podcast-player-time-current {
+  text-align: right;
+}
+
+.podcast-player-time-duration {
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .podcast-player {
+    padding: 0.9rem;
+  }
+
+  .podcast-player-controls {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "play reset . ."
+      "seek seek seek seek"
+      "current . . duration";
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .podcast-player-toggle {
+    grid-area: play;
+  }
+
+  .podcast-player-reset {
+    grid-area: reset;
+  }
+
+  .podcast-player-timeline {
+    grid-area: seek;
+    width: 100%;
+  }
+
+  .podcast-player-time {
+    min-width: 0;
+    font-size: 0.72rem;
+    line-height: 1.1;
+  }
+
+  .podcast-player-time-current {
+    grid-area: current;
+    text-align: left;
+  }
+
+  .podcast-player-time-duration {
+    grid-area: duration;
+    text-align: right;
+  }
+}
+
+/* ── 9. Copy Code Button ─────────────────────────────────────── */
 .copy-button {
   position: absolute;
   top: 0.4rem;
@@ -729,7 +984,7 @@ pre:hover .copy-button,
 .copy-button:hover { color: var(--mb-accent); border-color: var(--mb-border-focus); }
 .copy-button.copied { color: var(--mb-green); border-color: var(--mb-green); }
 
-/* ── 9. Image Lightbox ───────────────────────────────────────── */
+/* ── 10. Image Lightbox ──────────────────────────────────────── */
 .image-lightbox {
   display: none;
   position: fixed;
