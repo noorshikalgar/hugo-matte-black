@@ -428,9 +428,11 @@
     function syncTime() {
       var audioDuration = isFinite(audio.duration) ? audio.duration : 0;
       var audioCurrent = isFinite(audio.currentTime) ? audio.currentTime : 0;
+      var progress = audioDuration > 0 ? (audioCurrent / audioDuration) * 100 : 0;
       current.textContent = formatTime(audioCurrent);
       duration.textContent = formatTime(audioDuration);
-      seek.value = audioDuration > 0 ? (audioCurrent / audioDuration) * 100 : 0;
+      seek.value = progress;
+      seek.style.setProperty('--podcast-progress', progress + '%');
     }
 
     function syncButton() {
@@ -443,6 +445,7 @@
     player.classList.add('is-enhanced');
     controls.hidden = false;
     seek.disabled = true;
+    seek.style.setProperty('--podcast-progress', '0%');
 
     toggle.addEventListener('click', function () {
       if (audio.paused || audio.ended) {

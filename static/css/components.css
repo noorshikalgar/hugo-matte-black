@@ -892,9 +892,83 @@ h6:hover .heading-anchor { opacity: 1; }
 }
 
 .podcast-player-seek {
+  --podcast-progress: 0%;
+  --podcast-track: color-mix(in srgb, var(--mb-border) 72%, var(--mb-surface-2) 28%);
+  --podcast-fill: color-mix(in srgb, var(--mb-accent) 58%, var(--mb-text) 42%);
+  --podcast-thumb: var(--mb-bg);
+  --podcast-thumb-ring: color-mix(in srgb, var(--mb-accent) 65%, var(--mb-border-focus) 35%);
   width: 100%;
   margin: 0;
-  accent-color: var(--mb-accent);
+  height: 1rem;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.podcast-player-seek:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.podcast-player-seek::-webkit-slider-runnable-track {
+  height: 0.32rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      var(--podcast-fill) 0,
+      var(--podcast-fill) var(--podcast-progress),
+      var(--podcast-track) var(--podcast-progress),
+      var(--podcast-track) 100%
+    );
+}
+
+.podcast-player-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.34rem;
+  border-radius: 50%;
+  border: 2px solid var(--podcast-thumb-ring);
+  background: var(--podcast-thumb);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--mb-bg) 82%, transparent);
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.podcast-player-seek:hover::-webkit-slider-thumb {
+  transform: scale(1.06);
+  border-color: var(--mb-accent);
+}
+
+.podcast-player-seek::-moz-range-track {
+  height: 0.32rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--podcast-track);
+}
+
+.podcast-player-seek::-moz-range-progress {
+  height: 0.32rem;
+  border-radius: 999px;
+  background: var(--podcast-fill);
+}
+
+.podcast-player-seek::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid var(--podcast-thumb-ring);
+  background: var(--podcast-thumb);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--mb-bg) 82%, transparent);
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.podcast-player-seek:hover::-moz-range-thumb {
+  transform: scale(1.06);
+  border-color: var(--mb-accent);
 }
 
 .podcast-player-time {
