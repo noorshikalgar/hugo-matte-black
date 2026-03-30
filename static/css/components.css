@@ -496,6 +496,7 @@
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--mb-border-focus) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 .toc-content.collapsed { display: none; }
 
@@ -603,6 +604,17 @@
 .post-content h5,
 .post-content h6 {
   scroll-margin-top: calc(var(--site-header-h, 60px) + 16px);
+}
+
+.post-content a {
+  color: var(--mb-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.1s ease;
+}
+.post-content a:hover,
+.post-content a:focus-visible {
+  color: var(--mb-accent-bright);
 }
 
 /* Heading anchor links (render-heading.html hook) */
