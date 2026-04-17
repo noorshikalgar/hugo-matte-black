@@ -5,7 +5,8 @@
 <div class="search-page">
 
   <!-- Terminal typewriter (always running) -->
-  <div class="terminal-typewriter"><span id="tw-text"></span><span class="tw-cursor"></span></div>
+  <div class="terminal-tagline" style="font-family: inherit; font-size: 0.85em; opacity: 0.6; margin-bottom: 0.4rem;">// AI VOID: Learning Guides generated using AI models</div>
+  <div class="terminal-typewriter"><span class="tw-prompt" style="color: #8A8A8D; margin-right: 6px;">$</span><span id="tw-text"></span><span class="tw-cursor"></span></div>
 
   <!-- Header -->
   <div class="search-header">
@@ -218,25 +219,21 @@
 <script>
 (function() {
   var PHRASES = [
-    'grep -r "anything" ./knowledge-base/',
-    'ssh root@knowledge — connected',
-    'git clone https://brain.local && cd /answers',
-    'ping 0.0.0.0 — latency: 0ms',
-    'docker run --rm -it knowledge:latest',
-    'find / -name "*.answer" | head -n 10',
-    'curl -s api.brain.local/v1/search | jq .',
-    'nmap -p 443 knowledge.base — open',
-    'traceroute to answer... 1 hop',
-    'cat /etc/motd && echo "ready"',
-    'ls -la ./guides ./cheatsheets ./howto',
-    'export PATH="$PATH:/usr/local/knowledge"',
-    'sudo chmod 777 /your/curiosity',
-    'nc -zv brain.local 1270 — open',
-    'tail -f /var/log/learning.log'
+    'loading LLM weights [==============>] 100%',
+    'prompt: "generate a learning guide for AIVOID"',
+    'inference speed: 120 tokens/sec',
+    'compiling AI output into human-readable markdown...',
+    'curl -X POST api.aivoid.dev/v1/generate',
+    'synthesizing new tutorial... success',
+    'optimizing latent space for maximum knowledge retention',
+    'model temperature set to 0.7 — generating creativity',
+    'tail -f /var/log/ai-generation.log',
+    'connecting to neural network... established',
+    'extracting insights from context window...',
+    'awaiting user input... system ready'
   ];
 
-  var PREFIX = '$ ';
-  var txtEl  = document.getElementById('tw-text');
+  var txtEl = document.getElementById('tw-text');
   if (!txtEl) return;
 
   function shuffle(arr) {
@@ -246,29 +243,45 @@
   var queue = shuffle(PHRASES);
   var qi = 0;
 
+  var kw = "loading|prompt|inference|speed|compiling|curl|synthesizing|optimizing|model|temperature|tail|connecting|extracting|awaiting".split('|');
+  var st = "success|established|ready".split('|');
+  var cm = "post|llm|aivoid".split('|');
+
+  function hl(text) {
+    return text.split(/("[^"]*"?|\b(?:[0-9]+(?:\.[0-9]+)?|loading|prompt|inference|speed|compiling|curl|synthesizing|optimizing|model|temperature|tail|connecting|extracting|awaiting|success|established|ready|POST|LLM|AIVOID|aivoid)\b)/g).map(function(t) {
+        if (!t) return '';
+        if (t.startsWith('"')) return '<span style="color: #EAEAEA;">' + t + '</span>';
+        if (/^[0-9]+(\.[0-9]+)?$/.test(t)) return '<span style="color: #EFBF04;">' + t + '</span>';
+        
+        var lower = t.toLowerCase();
+        if (kw.indexOf(lower) !== -1) return '<span style="color: #059669;">' + t + '</span>';
+        if (st.indexOf(lower) !== -1) return '<span style="color: #FBBF24;">' + t + '</span>';
+        if (cm.indexOf(lower) !== -1) return '<span style="color: #F59E0B;">' + t + '</span>';
+        
+        return t.replace(/(\[|\]|=+|>|\/|-X|-f)/g, '<span style="color: #8A8A8D;">$1</span>');
+    }).join('');
+  }
+
   function next() {
     var phrase = queue[qi++ % queue.length];
-    var full = PREFIX + phrase;
     var i = 0;
 
-    // ── type forward ──
     (function typeStep() {
-      if (i <= full.length) {
-        txtEl.textContent = full.slice(0, i++);
+      txtEl.innerHTML = hl(phrase.slice(0, i));
+      if (i < phrase.length) {
+        i++;
         setTimeout(typeStep, 42);
       } else {
-        // hold 1.6s then erase
         setTimeout(eraseStep, 1600);
       }
     })();
 
-    // ── erase backward ──
     function eraseStep() {
-      if (txtEl.textContent.length > 0) {
-        txtEl.textContent = txtEl.textContent.slice(0, -1);
+      if (i > 0) {
+        i--;
+        txtEl.innerHTML = hl(phrase.slice(0, i));
         setTimeout(eraseStep, 22);
       } else {
-        // short gap, then next phrase
         setTimeout(next, 400);
       }
     }
