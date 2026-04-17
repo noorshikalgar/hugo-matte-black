@@ -143,22 +143,22 @@
       <div class="highlights-grid">
         {{- range $highlighted }}
           <article class="featured-card">
-            <div class="featured-card-header">
-              <div class="featured-card-title">
-                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <div class="featured-card-header" style="align-items: center; margin-bottom: 0.3rem;">
+              <div class="featured-card-meta" style="margin: 0; color: var(--mb-text-faint); font-family: 'JetBrains Mono', monospace;">
+                <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
               </div>
               <span class="badge badge-section">{{ .Section }}</span>
             </div>
+            <div class="featured-card-title">
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </div>
             {{- with .Params.tags }}
-              <ul class="tag-list featured-tags">
+              <ul class="tag-list featured-tags" style="margin-top: 0.4rem;">
                 {{- range first 2 . }}
                   <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
                 {{- end }}
               </ul>
             {{- end }}
-            <div class="featured-card-meta">
-              <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
-            </div>
           </article>
         {{- end }}
       </div>
