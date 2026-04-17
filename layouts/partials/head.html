@@ -21,6 +21,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="{{ .Site.Params.themeColor | default "#121212" }}">
 <title>{{ $title }}{{ if not .IsHome }} · {{ $siteName }}{{ end }}</title>
 
 {{- with $description }}<meta name="description" content="{{ . }}">{{ end }}
@@ -100,7 +101,7 @@
 </script>
 {{- end }}
 
-<!-- Favicons — reads your params.faviconSvg / faviconPng / appleTouchIcon / webmanifest -->
+<!-- Favicons and app manifest -->
 <link rel="icon" type="image/svg+xml"
       href="{{ .Site.Params.faviconSvg | default "favicon.svg" | relURL }}">
 <link rel="icon" type="image/png" sizes="96x96"
@@ -108,14 +109,12 @@
 {{- with .Site.Params.appleTouchIcon }}
 <link rel="apple-touch-icon" href="{{ . | relURL }}">
 {{- end }}
-{{- with .Site.Params.webmanifest }}
-<link rel="manifest" href="{{ . | relURL }}">
-{{- end }}
+<link rel="manifest" href="{{ .Site.Params.webmanifest | default "site.webmanifest" | relURL }}">
 
 <!-- Apply saved accent theme before CSS renders (prevents flash) -->
 <script>
   (function(){
-    var t = localStorage.getItem('accentTheme') || {{ .Site.Params.defaultAccentTheme | default "paper-diary" | jsonify }};
+    var t = localStorage.getItem('accentTheme') || {{ .Site.Params.defaultAccentTheme | default "paper-diary" | jsonify | safeJS }};
     if (t) document.documentElement.setAttribute('data-accent', t);
   })();
 </script>
@@ -133,6 +132,7 @@
 <link rel="stylesheet" href="{{ "css/search.css"     | relURL }}">
 <link rel="stylesheet" href="{{ "css/animations.css" | relURL }}">
 <link rel="stylesheet" href="{{ "css/themes.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/cookie-consent.css" | relURL }}">
 
 {{- block "head" . }}{{- end }}
 
@@ -141,10 +141,23 @@
 <link rel="preload" href="{{ "/index.json" | relURL }}" as="fetch">
 {{- end }}
 
-<!-- Google Analytics (reads [services.googleAnalytics] from hugo.toml) -->
-{{- template "_internal/google_analytics.html" . -}}
-
-<!-- Google AdSense -->
-{{- with .Site.Params.googleAdsClient -}}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>
+{{- $gaID := "" -}}
+{{- with .Site.Config.Services.GoogleAnalytics.ID -}}
+  {{- $gaID = . -}}
+{{- else -}}
+  {{- with .Site.Params.googleAnalytics -}}{{- $gaID = . -}}{{- end -}}
 {{- end -}}
+{{- $adsClient := .Site.Params.googleAdsClient | default "" -}}
+{{- $consentConfig := dict
+  "storageKey" "hugo-pico-cookie-consent"
+  "version" 1
+  "siteName" $siteName
+  "privacyUrl" ("/privacy-policy/" | relURL)
+  "disclaimerUrl" ("/disclaimer/" | relURL)
+  "googleAnalyticsId" $gaID
+  "googleAdsClient" $adsClient
+  "adsEnabled" (ne $adsClient "")
+-}}
+<script>
+  window.HugoPicoConsent = {{ $consentConfig | jsonify | safeJS }};
+</script>

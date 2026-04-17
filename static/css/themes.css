@@ -2059,4 +2059,224 @@ html[data-accent="github-light"] .chroma .na { color: #0550ae; font-style: itali
 html[data-accent="github-light"] .chroma .p,
 html[data-accent="github-light"] .chroma .pi { color: #57606a; }
 html[data-accent="github-light"] .chroma .err { color: #cf222e; }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── 6. Terminal Vibes ──────────────────────────────────────── */
+/* Hacker-terminal inspired: phosphor green on near-black glass */
+/* ══════════════════════════════════════════════════════════════ */
+html[data-accent="terminal"] {
+  color-scheme: dark;
+
+  --mb-bg:          #040505;
+  --mb-surface-1:   #090b0a;
+  --mb-surface-2:   #101513;
+  --mb-surface-3:   #171d1a;
+
+  --mb-border:        #1a231f;
+  --mb-border-focus:  #16f2a5;
+  --mb-border-accent: #16f2a555;
+
+  --mb-text-bright:   #d8e5dc;
+  --mb-text:          #96b2a1;
+  --mb-text-muted:    #5d7668;
+  --mb-text-faint:    #314239;
+  --mb-text-disabled: #18221d;
+
+  --mb-accent:        #16f2a5;
+  --mb-accent-bright: #67ffbf;
+  --mb-accent-dark:   #0cba7c;
+  --mb-accent-dim:    #0a8e61;
+  --mb-accent-bg:     #16f2a514;
+  --mb-accent-bg-sel: #16f2a529;
+
+  --mb-green:         #16f2a5;
+  --mb-green-bright:  #67ffbf;
+  --mb-green-bg:      #16f2a518;
+  --mb-red:           #ff5577;
+  --mb-red-bright:    #ff879d;
+  --mb-red-bg:        #ff557718;
+  --mb-blue:          #43d7ff;
+  --mb-blue-bright:   #87ebff;
+  --mb-blue-bg:       #43d7ff18;
+  --mb-warning:       #e7ef57;
+  --mb-warning-bg:    #e7ef5718;
+  --mb-info:          #43d7ff;
+  --mb-info-bg:       #43d7ff18;
+
+  --mb-scrollbar:       #1a231f;
+  --mb-scrollbar-hover: #16f2a5;
+
+  --mb-shadow-sm:     0 1px 10px rgba(22, 242, 165, 0.05);
+  --mb-shadow:        0 8px 30px rgba(22, 242, 165, 0.07);
+  --mb-shadow-lg:     0 16px 44px rgba(22, 242, 165, 0.1);
+  --mb-glow-hover:    0 0 0 1px rgba(67, 215, 255, 0.12), 0 0 20px rgba(22, 242, 165, 0.1);
+}
+html[data-accent="terminal"] body {
+  background:
+    radial-gradient(circle at top right, rgba(67, 215, 255, 0.06), transparent 28%),
+    radial-gradient(circle at top left, rgba(255, 85, 119, 0.035), transparent 24%),
+    linear-gradient(180deg, rgba(22, 242, 165, 0.018), transparent 22%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(215, 229, 220, 0.018) 0,
+      rgba(215, 229, 220, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    var(--mb-bg);
+}
+html[data-accent="terminal"] .site-header,
+html[data-accent="terminal"] .post-card,
+html[data-accent="terminal"] .browse-card,
+html[data-accent="terminal"] .quick-nav-item,
+html[data-accent="terminal"] .search-form,
+html[data-accent="terminal"] .toc,
+html[data-accent="terminal"] blockquote,
+html[data-accent="terminal"] table,
+html[data-accent="terminal"] pre,
+html[data-accent="terminal"] .chroma {
+  box-shadow: var(--mb-shadow-sm);
+}
+html[data-accent="terminal"] .post-card:hover,
+html[data-accent="terminal"] .browse-card:hover,
+html[data-accent="terminal"] .quick-nav-item:hover {
+  box-shadow: var(--mb-glow-hover);
+}
+html[data-accent="terminal"] .search-form:focus-within {
+  box-shadow: 0 0 0 3px rgba(67, 215, 255, 0.11), var(--mb-shadow);
+}
+html[data-accent="terminal"] .site-logo,
+html[data-accent="terminal"] .nav-desktop a.active,
+html[data-accent="terminal"] .post-meta,
+html[data-accent="terminal"] .toc-header {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+html[data-accent="terminal"] .site-logo::before {
+  content: "> ";
+  color: var(--mb-green);
+}
+html[data-accent="terminal"] .site-header,
+html[data-accent="terminal"] .post-card,
+html[data-accent="terminal"] .browse-card,
+html[data-accent="terminal"] .quick-nav-item,
+html[data-accent="terminal"] .search-form,
+html[data-accent="terminal"] blockquote,
+html[data-accent="terminal"] pre,
+html[data-accent="terminal"] .chroma {
+  background-image: linear-gradient(180deg, rgba(67, 215, 255, 0.02), rgba(22, 242, 165, 0.01) 22%, transparent 42%);
+}
+html[data-accent="terminal"] pre,
+html[data-accent="terminal"] .chroma {
+  background-color: var(--mb-surface-1) !important;
+  color: var(--mb-text) !important;
+  border-color: var(--mb-border);
+}
+html[data-accent="terminal"] pre code { color: var(--mb-text) !important; }
+html[data-accent="terminal"] code:not(pre > code) {
+  background: rgba(67, 215, 255, 0.08);
+  color: var(--mb-blue-bright);
+  border-color: var(--mb-border-accent);
+}
+html[data-accent="terminal"] .nav-desktop a.active,
+html[data-accent="terminal"] .nav-more-btn[aria-expanded="true"],
+html[data-accent="terminal"] .read-more,
+html[data-accent="terminal"] h1,
+html[data-accent="terminal"] h2 {
+  color: var(--mb-green);
+}
+html[data-accent="terminal"] h3,
+html[data-accent="terminal"] .tag-group-heading,
+html[data-accent="terminal"] .toc-header,
+html[data-accent="terminal"] .post-card-meta {
+  color: var(--mb-warning);
+}
+html[data-accent="terminal"] a,
+html[data-accent="terminal"] .breadcrumbs .sep,
+html[data-accent="terminal"] .tag-chip:hover,
+html[data-accent="terminal"] .theme-dot {
+  color: var(--mb-blue);
+}
+html[data-accent="terminal"] #theme-toggle .theme-dot {
+  background: linear-gradient(135deg, var(--mb-green) 0 45%, var(--mb-warning) 45% 72%, var(--mb-red) 72% 100%);
+  box-shadow: 0 0 10px rgba(22, 242, 165, 0.28);
+}
+html[data-accent="terminal"] .badge-new {
+  color: var(--mb-green);
+  border-color: var(--mb-green);
+  background: var(--mb-green-bg);
+}
+html[data-accent="terminal"] .badge-recent {
+  color: var(--mb-warning);
+  border-color: rgba(231, 239, 87, 0.45);
+  background: rgba(231, 239, 87, 0.08);
+}
+html[data-accent="terminal"] .badge-section {
+  color: var(--mb-blue);
+  border-color: var(--mb-blue);
+  background: var(--mb-blue-bg);
+}
+html[data-accent="terminal"] .tag-chip:nth-child(3n + 1):hover {
+  color: var(--mb-green);
+  border-color: var(--mb-green);
+  background: var(--mb-green-bg);
+}
+html[data-accent="terminal"] .tag-chip:nth-child(3n + 2):hover {
+  color: var(--mb-blue);
+  border-color: var(--mb-blue);
+  background: var(--mb-blue-bg);
+}
+html[data-accent="terminal"] .tag-chip:nth-child(3n):hover {
+  color: var(--mb-warning);
+  border-color: var(--mb-warning);
+  background: var(--mb-warning-bg);
+}
+html[data-accent="terminal"] blockquote {
+  border-left-color: var(--mb-red);
+}
+html[data-accent="terminal"] .chroma .k,
+html[data-accent="terminal"] .chroma .kc,
+html[data-accent="terminal"] .chroma .kd,
+html[data-accent="terminal"] .chroma .kn,
+html[data-accent="terminal"] .chroma .kp,
+html[data-accent="terminal"] .chroma .kr,
+html[data-accent="terminal"] .chroma .kt { color: #43d7ff; }
+html[data-accent="terminal"] .chroma .s,
+html[data-accent="terminal"] .chroma .sa,
+html[data-accent="terminal"] .chroma .sb,
+html[data-accent="terminal"] .chroma .sc,
+html[data-accent="terminal"] .chroma .dl,
+html[data-accent="terminal"] .chroma .s2,
+html[data-accent="terminal"] .chroma .se,
+html[data-accent="terminal"] .chroma .s1,
+html[data-accent="terminal"] .chroma .ss { color: #67ffbf; }
+html[data-accent="terminal"] .chroma .m,
+html[data-accent="terminal"] .chroma .mb,
+html[data-accent="terminal"] .chroma .mf,
+html[data-accent="terminal"] .chroma .mh,
+html[data-accent="terminal"] .chroma .mi,
+html[data-accent="terminal"] .chroma .il,
+html[data-accent="terminal"] .chroma .mo { color: #e7ef57; }
+html[data-accent="terminal"] .chroma .nf,
+html[data-accent="terminal"] .chroma .fm { color: #16f2a5; }
+html[data-accent="terminal"] .chroma .nc,
+html[data-accent="terminal"] .chroma .nn { color: #d8e5dc; }
+html[data-accent="terminal"] .chroma .n,
+html[data-accent="terminal"] .chroma .nb,
+html[data-accent="terminal"] .chroma .bp { color: #96b2a1; }
+html[data-accent="terminal"] .chroma .o,
+html[data-accent="terminal"] .chroma .ow { color: #ff5577; }
+html[data-accent="terminal"] .chroma .c,
+html[data-accent="terminal"] .chroma .ch,
+html[data-accent="terminal"] .chroma .cm,
+html[data-accent="terminal"] .chroma .c1,
+html[data-accent="terminal"] .chroma .cs,
+html[data-accent="terminal"] .chroma .cp,
+html[data-accent="terminal"] .chroma .cpf { color: #314239; font-style: italic; }
+html[data-accent="terminal"] .chroma .nt { color: #43d7ff; }
+html[data-accent="terminal"] .chroma .na { color: #e7ef57; font-style: italic; }
+html[data-accent="terminal"] .chroma .p,
+html[data-accent="terminal"] .chroma .pi { color: #96b2a1; }
+html[data-accent="terminal"] .chroma .err { color: #ff5577; }
 /* ── END NEW THEMES ─────────────────────────────────────────── */
