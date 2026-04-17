@@ -1296,6 +1296,14 @@ pre:hover .copy-button,
   display: inline-block;
   width: 1ch;
   text-align: center;
+  animation: ai-spinner-colors 4s ease-in-out infinite;
+}
+
+@keyframes ai-spinner-colors {
+  0%   { color: var(--mb-green); }
+  33%  { color: var(--mb-accent); }
+  66%  { color: var(--mb-blue); }
+  100% { color: var(--mb-green); }
 }
 .hero-tagline-brand {
   color: var(--mb-text-bright);

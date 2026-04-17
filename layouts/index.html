@@ -244,13 +244,13 @@
   if (!txtEl) return;
 
   var spinnerEl = document.getElementById('ascii-spinner');
-  var chars = ['-', '\\', '|', '/'];
+  var chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   var sIdx = 0;
   if (spinnerEl) {
     setInterval(function() {
       sIdx = (sIdx + 1) % chars.length;
       spinnerEl.textContent = chars[sIdx];
-    }, 120);
+    }, 80);
   }
 
   function shuffle(arr) {
