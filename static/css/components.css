@@ -1273,3 +1273,50 @@ pre:hover .copy-button,
   font-family: "JetBrains Mono", monospace;
   color: var(--mb-accent);
 }
+
+/* ── Hero Tagline ────────────────────────────────────────────── */
+.hero-tagline {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.1rem;
+  color: var(--mb-text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+.hero-tagline-prefix {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.4rem;
+}
+.hero-tagline-bracket {
+  color: var(--mb-green);
+  font-weight: bold;
+}
+.hero-tagline-spinner {
+  color: var(--mb-text-bright);
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
+.hero-tagline-brand {
+  color: var(--mb-text-bright);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  margin: 0 0.5rem;
+}
+.hero-tagline-sep {
+  color: var(--mb-text-faint);
+  margin-right: 0.5rem;
+}
+.hero-tagline-text {
+  color: var(--mb-text);
+}
+.hero-tagline-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  background-color: var(--mb-accent);
+  vertical-align: text-bottom;
+  animation: tw-blink 1s step-start infinite;
+  margin-left: 5px;
+}
+@keyframes tw-blink { 50% { opacity: 0; } }

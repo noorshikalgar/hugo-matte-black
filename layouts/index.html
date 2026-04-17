@@ -5,8 +5,17 @@
 <div class="search-page">
 
   <!-- Terminal typewriter (always running) -->
-  <div class="terminal-tagline" style="font-family: inherit; font-size: 0.85em; opacity: 0.6; margin-bottom: 0.4rem;">// AI VOID: Learning Guides generated using AI models</div>
-  <div class="terminal-typewriter"><span class="tw-prompt" style="color: #8A8A8D; margin-right: 6px;">$</span><span id="tw-text"></span><span class="tw-cursor"></span></div>
+  <div class="hero-tagline">
+    <span class="hero-tagline-prefix">
+      <span class="hero-tagline-bracket">[</span><span id="ascii-spinner" class="hero-tagline-spinner">-</span><span class="hero-tagline-bracket">]</span>
+      <span class="hero-tagline-brand">AI_VOID_CORE</span> 
+      <span class="hero-tagline-sep">::</span>
+    </span>
+    <span id="tw-text" class="hero-tagline-text"></span><span class="hero-tagline-cursor"></span>
+  </div>
+  
+  <!-- OLD TERMINAL TYPEWRITER (Hidden for now) -->
+  <!-- <div class="terminal-typewriter"><span class="tw-prompt" style="color: #8A8A8D; margin-right: 6px;">$</span><span id="tw-text-old"></span><span class="tw-cursor"></span></div> -->
 
   <!-- Header -->
   <div class="search-header">
@@ -219,22 +228,30 @@
 <script>
 (function() {
   var PHRASES = [
-    'loading LLM weights [==============>] 100%',
-    'prompt: "generate a learning guide for AIVOID"',
-    'inference speed: 120 tokens/sec',
-    'compiling AI output into human-readable markdown...',
-    'curl -X POST api.aivoid.dev/v1/generate',
-    'synthesizing new tutorial... success',
-    'optimizing latent space for maximum knowledge retention',
-    'model temperature set to 0.7 — generating creativity',
-    'tail -f /var/log/ai-generation.log',
-    'connecting to neural network... established',
-    'extracting insights from context window...',
-    'awaiting user input... system ready'
+    'Want to learn new things for free? Just search.',
+    'AI generated zero-fluff learning guides. Start learning.',
+    'Don\'t just watch videos, learn by reading.',
+    'Read, learn, and improve your skills over time.',
+    'Master complex frameworks in minutes, not hours.',
+    'Stop browsing endless docs. Get instant, exact answers.',
+    '100% free developer knowledge base, curated by AI models.',
+    'Say goodbye to outdated tutorials. Always fresh, always accurate.',
+    'Level up your career with free AI-powered cheatsheets.',
+    'Deep-dive tech guides synthesized for maximum clarity.'
   ];
 
   var txtEl = document.getElementById('tw-text');
   if (!txtEl) return;
+
+  var spinnerEl = document.getElementById('ascii-spinner');
+  var chars = ['-', '\\', '|', '/'];
+  var sIdx = 0;
+  if (spinnerEl) {
+    setInterval(function() {
+      sIdx = (sIdx + 1) % chars.length;
+      spinnerEl.textContent = chars[sIdx];
+    }, 120);
+  }
 
   function shuffle(arr) {
     return arr.slice().sort(function() { return Math.random() - 0.5; });
@@ -243,22 +260,22 @@
   var queue = shuffle(PHRASES);
   var qi = 0;
 
-  var kw = "loading|prompt|inference|speed|compiling|curl|synthesizing|optimizing|model|temperature|tail|connecting|extracting|awaiting".split('|');
-  var st = "success|established|ready".split('|');
-  var cm = "post|llm|aivoid".split('|');
+  var kw = "free|search|learn|learning|reading|skills|videos|read|master|expert|minutes|hours|answers|tutorials|career|unlock|developer|guides|cheatsheets|frameworks".split('|');
+  var st = "start|improve|level|outdated|fresh|accurate|maximum|clarity|instant|exact".split('|');
+  var cm = "ai|generated|models|synthesized|powered".split('|');
 
   function hl(text) {
-    return text.split(/("[^"]*"?|\b(?:[0-9]+(?:\.[0-9]+)?|loading|prompt|inference|speed|compiling|curl|synthesizing|optimizing|model|temperature|tail|connecting|extracting|awaiting|success|established|ready|POST|LLM|AIVOID|aivoid)\b)/g).map(function(t) {
+    return text.split(/("[^"]*"?|\b(?:[0-9]+(?:\.[0-9]+)?|free|search|learn|learning|reading|skills|videos|read|master|expert|minutes|hours|answers|tutorials|career|unlock|developer|guides|cheatsheets|frameworks|start|improve|level|outdated|fresh|accurate|maximum|clarity|instant|exact|ai|generated|models|synthesized|powered)\b)/gi).map(function(t) {
         if (!t) return '';
-        if (t.startsWith('"')) return '<span style="color: #EAEAEA;">' + t + '</span>';
-        if (/^[0-9]+(\.[0-9]+)?$/.test(t)) return '<span style="color: #EFBF04;">' + t + '</span>';
+        if (t.startsWith('"')) return '<span style="color: var(--mb-text-faint);">' + t + '</span>';
+        if (/^[0-9]+(\.[0-9]+)?$/.test(t)) return '<span style="color: var(--mb-info, #EFBF04);">' + t + '</span>';
         
         var lower = t.toLowerCase();
-        if (kw.indexOf(lower) !== -1) return '<span style="color: #059669;">' + t + '</span>';
-        if (st.indexOf(lower) !== -1) return '<span style="color: #FBBF24;">' + t + '</span>';
-        if (cm.indexOf(lower) !== -1) return '<span style="color: #F59E0B;">' + t + '</span>';
+        if (kw.indexOf(lower) !== -1) return '<span style="color: var(--mb-green, #059669); font-weight: 500;">' + t + '</span>';
+        if (st.indexOf(lower) !== -1) return '<span style="color: var(--mb-accent-bright, #FBBF24);">' + t + '</span>';
+        if (cm.indexOf(lower) !== -1) return '<span style="color: var(--mb-accent, #F59E0B);">' + t + '</span>';
         
-        return t.replace(/(\[|\]|=+|>|\/|-X|-f)/g, '<span style="color: #8A8A8D;">$1</span>');
+        return t.replace(/(\[|\]|=+|>|\/|-X|-f|\?|\.|,|')/g, '<span style="color: var(--mb-text-muted);">$1</span>');
     }).join('');
   }
 
