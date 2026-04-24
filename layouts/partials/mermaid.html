@@ -1,5 +1,5 @@
 {{- if .Page.Store.Get "hasMermaid" -}}
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -134,6 +134,17 @@ document.addEventListener('DOMContentLoaded', function() {
     el.dataset.mermaidIdx = String(i);
   });
 
+  function supportsHandDrawn(source) {
+    var body = source.replace(/^\s*%%\{init:[\s\S]*?\}%%\s*/i, '').trim();
+    return /^(graph|flowchart|stateDiagram|stateDiagram-v2|classDiagram|erDiagram|journey|mindmap|quadrantChart)\b/i.test(body);
+  }
+
+  function withSupportedHandDrawnInit(source) {
+    if (!supportsHandDrawn(source)) return source;
+    if (/^\s*%%\{init:/i.test(source)) return source;
+    return '%%{init: {"look": "handDrawn"}}%%\n' + source;
+  }
+
   /* ── Post-process a single rendered mermaid container ────────── */
   function postProcess(container) {
     var svg = container.querySelector('svg');
@@ -230,11 +241,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       var svg = el.querySelector('svg');
       if (svg) svg.remove();
-      el.textContent = mermaidSources[el.dataset.mermaidIdx] || '';
+      el.textContent = withSupportedHandDrawnInit(mermaidSources[el.dataset.mermaidIdx] || '');
       el.removeAttribute('data-processed');
     });
 
-    mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables: vars });
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: vars
+    });
     mermaid.run({ querySelector: '.mermaid' }).then(function() {
       document.querySelectorAll('.mermaid').forEach(postProcess);
     });
