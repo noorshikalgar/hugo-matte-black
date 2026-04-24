@@ -1,6 +1,7 @@
-const CACHE_VERSION = 'hugo-pico-v1';
+const CACHE_VERSION = 'hugo-pico-v2';
 const APP_SHELL = [
   './',
+  './site.webmanifest',
   './favicon.svg',
   './css/pico/pico.min.css',
   './css/colors.css',
@@ -24,7 +25,7 @@ const APP_SHELL = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_VERSION)
-      .then(cache => cache.addAll(APP_SHELL))
+      .then(cache => Promise.allSettled(APP_SHELL.map(url => cache.add(url))))
       .then(() => self.skipWaiting())
   );
 });
@@ -47,12 +48,19 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
+  if (request.headers.has('range')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then(response => {
-          const copy = response.clone();
-          caches.open(CACHE_VERSION).then(cache => cache.put(request, copy));
+          if (response.ok && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_VERSION).then(cache => cache.put(request, copy));
+          }
           return response;
         })
         .catch(() => caches.match(request).then(cached => cached || caches.match('./offline/')))
@@ -64,10 +72,12 @@ self.addEventListener('fetch', event => {
     caches.match(request).then(cached => {
       if (cached) return cached;
       return fetch(request).then(response => {
-        const copy = response.clone();
-        caches.open(CACHE_VERSION).then(cache => cache.put(request, copy));
+        if (response.ok && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_VERSION).then(cache => cache.put(request, copy));
+        }
         return response;
-      });
+      }).catch(() => caches.match('./offline/'));
     })
   );
 });

@@ -104,12 +104,18 @@
 <!-- Favicons and app manifest -->
 <link rel="icon" type="image/svg+xml"
       href="{{ .Site.Params.faviconSvg | default "favicon.svg" | relURL }}">
+{{- with .Site.Params.faviconPng }}
 <link rel="icon" type="image/png" sizes="96x96"
-      href="{{ .Site.Params.faviconPng | default "favicon-96x96.png" | relURL }}">
+      href="{{ . | relURL }}">
+{{- end }}
 {{- with .Site.Params.appleTouchIcon }}
 <link rel="apple-touch-icon" href="{{ . | relURL }}">
 {{- end }}
+{{- with .Site.Home.OutputFormats.Get "WEBMANIFEST" }}
+<link rel="manifest" href="{{ .RelPermalink }}">
+{{- else }}
 <link rel="manifest" href="{{ .Site.Params.webmanifest | default "site.webmanifest" | relURL }}">
+{{- end }}
 
 <!-- Apply saved accent theme before CSS renders (prevents flash) -->
 <script>
