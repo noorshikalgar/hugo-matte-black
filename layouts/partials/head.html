@@ -144,7 +144,7 @@
 
 <!-- Search index preload on search/home page -->
 {{- if or .IsHome (eq .Type "search") }}
-<link rel="preload" href="{{ "/index.json" | relURL }}" as="fetch">
+<link rel="preload" href="{{ "/index.json" | relURL }}" as="fetch" crossorigin>
 {{- end }}
 
 {{- $gaID := "" -}}

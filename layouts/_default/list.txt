@@ -1,0 +1,10 @@
+{{- .Title -}}
+{{- with .Description }}
+
+{{ . }}
+{{- end }}
+
+{{- range .Pages }}
+
+- {{ .Title }}: {{ .Permalink }}
+{{- end }}
