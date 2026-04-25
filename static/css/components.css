@@ -610,11 +610,11 @@
   color: var(--mb-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
-  transition: color 0.1s ease;
 }
 .post-content a:hover,
-.post-content a:focus-visible {
-  color: var(--mb-accent-bright);
+.post-content a:active,
+.post-content a:focus {
+  color: var(--mb-accent);
 }
 
 /* Heading anchor links (render-heading.html hook) */
@@ -629,13 +629,24 @@
   transition: opacity 0.15s ease, color 0.15s ease;
   flex-shrink: 0;
 }
-h1:hover .heading-anchor,
-h2:hover .heading-anchor,
-h3:hover .heading-anchor,
-h4:hover .heading-anchor,
-h5:hover .heading-anchor,
-h6:hover .heading-anchor { opacity: 1; }
-.heading-anchor:hover { color: var(--mb-accent); }
+
+@media (hover: hover) and (pointer: fine) {
+  h1:hover .heading-anchor,
+  h2:hover .heading-anchor,
+  h3:hover .heading-anchor,
+  h4:hover .heading-anchor,
+  h5:hover .heading-anchor,
+  h6:hover .heading-anchor { opacity: 1; }
+
+  .heading-anchor:hover { color: var(--mb-accent); }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .post-content .heading-anchor {
+    display: none;
+  }
+}
+
 .heading-icon {
   width: 0.9em;
   height: 0.9em;
