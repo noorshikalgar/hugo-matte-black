@@ -44,7 +44,7 @@ h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
 /* ── Post content heading overrides ─────────────────────────── */
 .post-content h2 {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.45em;
   border-bottom: 1px solid var(--mb-accent-dim);
   color: var(--mb-text);
@@ -63,6 +63,7 @@ h6 { font-size: 0.875rem; margin-bottom: 0.5rem; color: var(--mb-text-muted); }
   mask-repeat: no-repeat;
   mask-size: contain;
   opacity: 0.85;
+  margin-top: 0.18em;
 }
 .post-content h3 {
   padding-left: 0.65rem;
@@ -187,6 +188,33 @@ ol li::marker { color: var(--mb-accent); font-weight: 600; }
   font-weight: 700;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.9em;
+}
+
+@media (max-width: 560px) {
+  .post-content ul,
+  .post-content ol {
+    padding-left: 0.85rem;
+  }
+
+  .post-content ul {
+    padding-left: 0.45rem;
+  }
+
+  .post-content ul ul,
+  .post-content ol ol,
+  .post-content ul ol,
+  .post-content ol ul {
+    padding-left: 0.8rem;
+    margin-top: 0.35rem;
+  }
+
+  .post-content ul > li {
+    padding-left: 1rem;
+  }
+
+  .post-content ul > li::before {
+    left: 0;
+  }
 }
 
 /* ── 7. Blockquote ───────────────────────────────────────────── */
