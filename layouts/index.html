@@ -4,18 +4,34 @@
 
 <div class="search-page">
 
-  <!-- Terminal typewriter (always running) -->
-  <div class="hero-tagline">
+  <!-- Terminal typewriter (hidden for now) -->
+  <!-- <div class="hero-tagline">
     <span class="hero-tagline-prefix">
       <span class="hero-tagline-bracket">[</span><span id="ascii-spinner" class="hero-tagline-spinner">-</span><span class="hero-tagline-bracket">]</span>
       <span class="hero-tagline-brand">AI_VOID_CORE</span> 
       <span class="hero-tagline-sep">::</span>
     </span>
     <span id="tw-text" class="hero-tagline-text"></span><span class="hero-tagline-cursor"></span>
-  </div>
+  </div> -->
   
   <!-- OLD TERMINAL TYPEWRITER (Hidden for now) -->
   <!-- <div class="terminal-typewriter"><span class="tw-prompt" style="color: #8A8A8D; margin-right: 6px;">$</span><span id="tw-text-old"></span><span class="tw-cursor"></span></div> -->
+
+  {{- if (.Site.Params.showBrandLab | default true) }}
+  <section class="brand-lab brand-lab-featured" aria-label="AI VOID branding">
+    <div class="brand-concept brand-concept-graph brand-concept-graph-compact">
+      <div class="brand-graph-copy">
+        <span class="brand-kicker">compression log</span>
+        <strong>Long reads in. Clear systems out.</strong>
+      </div>
+      <div class="brand-dot-grid" aria-hidden="true">
+        {{- range seq 1 56 }}
+          <span style="--i:{{ . }}"></span>
+        {{- end }}
+      </div>
+    </div>
+  </section>
+  {{- end }}
 
   <!-- Header -->
   <div class="search-header">
@@ -227,6 +243,37 @@
 </script>
 <script>
 (function() {
+  function seedBrandGrid() {
+    var dots = document.querySelectorAll('.brand-dot-grid span');
+    if (!dots.length) return;
+
+    var classes = [
+      'is-fill-accent',
+      'is-fill-green',
+      'is-border-accent',
+      'is-border-green',
+      'is-faint',
+      ''
+    ];
+
+    dots.forEach(function(dot) {
+      var roll = Math.random();
+      var className =
+        roll < 0.16 ? classes[0] :
+        roll < 0.28 ? classes[1] :
+        roll < 0.44 ? classes[2] :
+        roll < 0.58 ? classes[3] :
+        roll < 0.74 ? classes[4] :
+        classes[5];
+
+      dot.className = className;
+      dot.style.setProperty('--dot-delay', (-Math.random() * 8).toFixed(2) + 's');
+      dot.style.setProperty('--dot-duration', (5.5 + Math.random() * 5.5).toFixed(2) + 's');
+    });
+  }
+
+  seedBrandGrid();
+
   var PHRASES = [
     'Want to learn new things for free? Just search.',
     'AI generated zero-fluff learning guides. Start learning.',

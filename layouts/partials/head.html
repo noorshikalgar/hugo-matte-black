@@ -135,7 +135,8 @@
 <link rel="stylesheet" href="{{ "css/components.css" | relURL }}">
 <link rel="stylesheet" href="{{ "css/tables.css"     | relURL }}">
 <link rel="stylesheet" href="{{ "css/code.css"       | relURL }}">
-<link rel="stylesheet" href="{{ "css/search.css"     | relURL }}">
+{{- $searchCssVersion := .Site.Params.assetVersion | default now.Unix -}}
+<link rel="stylesheet" href="{{ "css/search.css"     | relURL }}?v={{ $searchCssVersion }}">
 <link rel="stylesheet" href="{{ "css/animations.css" | relURL }}">
 <link rel="stylesheet" href="{{ "css/themes.css"     | relURL }}">
 <link rel="stylesheet" href="{{ "css/cookie-consent.css" | relURL }}">

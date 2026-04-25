@@ -1393,11 +1393,14 @@ pre:hover .copy-button,
 
 /* ── Hero Tagline ────────────────────────────────────────────── */
 .hero-tagline {
+  display: block;
   font-family: "JetBrains Mono", monospace;
   font-size: 1.1rem;
   color: var(--mb-text-muted);
   margin-bottom: 2.5rem;
   line-height: 1.6;
+  min-height: 1.8em;
+  overflow: hidden;
 }
 .hero-tagline-prefix {
   display: inline-block;
@@ -1445,3 +1448,35 @@ pre:hover .copy-button,
   margin-left: 5px;
 }
 @keyframes tw-blink { 50% { opacity: 0; } }
+
+@media (max-width: 700px) {
+  .hero-tagline {
+    font-size: clamp(0.92rem, 3.7vw, 1.05rem);
+    line-height: 1.45;
+    height: 4.35em;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero-tagline-prefix {
+    display: block;
+    margin: 0 0 0.2rem;
+  }
+
+  .hero-tagline-text {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-tagline {
+    height: 4.65em;
+    margin-bottom: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-tagline-cursor,
+  .hero-tagline-spinner {
+    animation: none;
+  }
+}
