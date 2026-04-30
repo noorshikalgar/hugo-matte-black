@@ -39,6 +39,9 @@
         <div class="post-card-meta">
           <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
           {{- partial "status-badge.html" . -}}
+          {{- with .Params.difficulty }}
+            <span class="badge badge-section">{{ . }}</span>
+          {{- end }}
         </div>
 
         <div class="post-card-title">
@@ -49,6 +52,10 @@
           <ul class="tag-list" style="margin-bottom:0.4rem;">
             {{- range first 3 . }}
               <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+            {{- end }}
+            {{- $extra := sub (len .) 3 }}
+            {{- if gt $extra 0 }}
+              <li><span class="tag-chip tag-chip-more">+{{ $extra }}</span></li>
             {{- end }}
           </ul>
         {{- end }}

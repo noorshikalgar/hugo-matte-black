@@ -26,6 +26,9 @@
 
     {{- partial "footer.html" . -}}
 
+    <!-- Screen-reader announcements -->
+    <div id="sr-announce" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
+
     <!-- Scroll to top -->
     <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top" title="Back to top">↑</button>
 

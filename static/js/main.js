@@ -75,6 +75,8 @@
     localStorage.setItem('accentTheme', name);
     var btn = document.getElementById('theme-toggle');
     if (btn) btn.setAttribute('data-theme-name', THEME_NAMES[name] || name);
+    var announcer = document.getElementById('sr-announce');
+    if (announcer) announcer.textContent = 'Theme: ' + (THEME_NAMES[name] || name);
   }
 
   var themeToggle = document.getElementById('theme-toggle');
@@ -396,6 +398,24 @@
       if (lightbox.classList.contains('open') && e.key === 'Escape') closeLightbox();
     });
   }
+
+  /* ── / shortcut → focus search ─────────────────────────────── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== '/') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (document.activeElement && document.activeElement.isContentEditable) return;
+    var searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    } else {
+      e.preventDefault();
+      window.location.href = '/';
+    }
+  });
 
   /* ── Smooth active nav link ─────────────────────────────────── */
   const currentPath = window.location.pathname;

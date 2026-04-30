@@ -186,6 +186,13 @@
 }
 .tag-chip:hover::before { opacity: 0.85; }
 
+.tag-chip-more {
+  color: var(--mb-text-faint);
+  border-style: dashed;
+  cursor: default;
+}
+.tag-chip-more::before { display: none; }
+
 /* ── 3.5. Featured Card (Slim, Pinned Content) ───────────────── */
 .featured-card {
   display: flex;

@@ -97,6 +97,7 @@
   {{- with $ogImage }}, "image": { "@type": "ImageObject", "url": {{ . | jsonify | safeJS }}, "width": 1200, "height": 630 }{{ end }}
   {{- with .Params.tags }}, "keywords": {{ . | jsonify | safeJS }}{{ end }}
   {{- with .ReadingTime }}, "timeRequired": {{ printf "PT%dM" . | jsonify | safeJS }}{{ end }}
+  {{- with .WordCount }}, "wordCount": {{ . }}{{ end }}
 }
 </script>
 {{- end }}
