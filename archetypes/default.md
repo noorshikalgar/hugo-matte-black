@@ -10,6 +10,9 @@ difficulty: ""      # beginner / intermediate / advanced
 contentType: ""     # tutorial / reference / guide / cheatsheet
 toc: true
 noindex: false
+downloadsAvailable: false
+markdownZipUrl: ""
+pdfDownloadUrl: ""
 ---
 
 <!-- Content here -->
