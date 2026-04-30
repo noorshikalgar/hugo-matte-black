@@ -1,9 +1,9 @@
-{{- $downloadsEnabled := false -}}
-{{- with .Params.downloadsAvailable -}}
-  {{- $downloadsEnabled = eq (lower (printf "%v" .)) "true" -}}
-{{- end -}}
 {{- $markdownZipUrl := .Params.markdownZipUrl -}}
 {{- $pdfDownloadUrl := .Params.pdfDownloadUrl -}}
+{{- $downloadsEnabled := or $markdownZipUrl $pdfDownloadUrl -}}
+{{- with .Params.downloadsAvailable -}}
+  {{- $downloadsEnabled = and $downloadsEnabled (ne (lower (printf "%v" .)) "false") -}}
+{{- end -}}
 
 {{- if and $downloadsEnabled (or $markdownZipUrl $pdfDownloadUrl) -}}
   <span class="download-actions" aria-label="Article downloads">

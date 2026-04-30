@@ -9,6 +9,7 @@
       <span class="post-meta-date">{{ .Date.Format "2006.01.02" }}</span>
       <span class="badge badge-section">quiz</span>
       <span class="meta-text">{{ len .Params.questions }} questions</span>
+      {{- partial "download-actions.html" . -}}
     </div>
 
     <h1 class="post-title-single">{{ .Title }}</h1>
