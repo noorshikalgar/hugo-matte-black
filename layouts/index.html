@@ -107,9 +107,9 @@
             <span class="quick-nav-count">{{ len $sectionPages }} articles</span>
           </a>
         {{- end }}
-        <a href="{{ "/tags/" | relURL }}" class="quick-nav-item">
-          <span class="quick-nav-name">Tags</span>
-          <span class="quick-nav-count">{{ len .Site.Taxonomies.tags }} tags</span>
+        <a href="{{ "/sections/" | relURL }}" class="quick-nav-item quick-nav-more">
+          <span class="quick-nav-name">More sections</span>
+          <span class="quick-nav-count">browse full list</span>
         </a>
       </div>
     </div>

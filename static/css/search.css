@@ -1060,6 +1060,9 @@
 /* first column: container left-border is the line */
 .quick-nav-item:nth-child(4n+1) { border-left: none; }
 .quick-nav-item:hover { background: var(--mb-surface-1); }
+.quick-nav-more .quick-nav-name {
+  color: var(--mb-accent);
+}
 
 .quick-nav-name {
   font-size: 0.875rem;
@@ -1071,6 +1074,23 @@
   font-size: 0.72rem;
   font-family: "JetBrains Mono", monospace;
   color: var(--mb-text-faint);
+}
+
+.sections-list .quick-nav-grid {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.sections-list .quick-nav-item {
+  border: none;
+  outline: 1px solid var(--mb-border);
+  outline-offset: -1px;
+}
+
+.sections-list .quick-nav-item:nth-child(-n+4),
+.sections-list .quick-nav-item:nth-child(4n+1) {
+  border: none;
 }
 
 /* ── 9. Highlights section (pinned/hot topics) ────────────────── */
