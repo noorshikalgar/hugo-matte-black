@@ -155,7 +155,7 @@
 {{- else -}}
   {{- with .Site.Params.googleAnalytics -}}{{- $gaID = . -}}{{- end -}}
 {{- end -}}
-{{- $adsClient := or .Site.Params.googleadsclient .Site.Params.googleAdsClient .Site.Params.adsense_client_id | default "" -}}
+{{- $adsClient := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsense_client_id") | default "" -}}
 {{- $consentConfig := dict
   "storageKey" "hugo-pico-cookie-consent"
   "version" 1
