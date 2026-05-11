@@ -1,5 +1,5 @@
-{{- $client := .Site.Params.googleAdsClient -}}
-{{- $slot   := .Site.Params.googleAdsSlot -}}
+{{- $client := or .Site.Params.googleadsclient .Site.Params.googleAdsClient .Site.Params.adsense_client_id -}}
+{{- $slot   := or .Site.Params.googleadsslot .Site.Params.googleAdsSlot -}}
 {{- if and $client $slot -}}
 <div class="post-ad-unit ads-blocked">
   <ins class="adsbygoogle"
