@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'hugo-pico-v5';
+const CACHE_VERSION = 'hugo-pico-v6';
 const APP_SHELL = [
   './',
   './site.webmanifest',

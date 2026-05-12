@@ -103,11 +103,15 @@
   display: none !important;
 }
 
-.post-ad-unit.ads-blocked::after {
-  content: "Ads are off because advertising cookies are disabled.";
+.post-ad-status {
+  margin: 0;
   display: block;
   color: var(--mb-text-faint);
   font-size: 0.8rem;
+}
+
+.post-ad-unit.ads-consented .post-ad-status {
+  margin-bottom: 0.75rem;
 }
 
 @media (max-width: 720px) {

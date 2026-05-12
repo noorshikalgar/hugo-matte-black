@@ -1,12 +1,18 @@
-{{- $client := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsense_client_id") -}}
-{{- $slot   := or (index .Site.Params "googleadsslot") (index .Site.Params "googleAdsSlot") -}}
+{{- $client := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsenseClient") (index .Site.Params "adsense_client_id") (index .Site.Params "googleAdsense") -}}
+{{- $slot   := or (index .Site.Params "googleadsslot") (index .Site.Params "googleAdsSlot") (index .Site.Params "adsenseSlot") (index .Site.Params "adsense_slot_id") -}}
+{{- $format := or (index .Site.Params "googleAdsFormat") (index .Site.Params "adsenseFormat") "auto" -}}
+{{- $layout := or (index .Site.Params "googleAdsLayout") (index .Site.Params "adsenseLayout") -}}
+{{- $layoutKey := or (index .Site.Params "googleAdsLayoutKey") (index .Site.Params "adsenseLayoutKey") -}}
 {{- if and $client $slot -}}
 <div class="post-ad-unit ads-blocked">
+  <p class="post-ad-status" data-ad-status>Advertisement hidden until advertising cookies are allowed.</p>
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="{{ $client }}"
        data-ad-slot="{{ $slot }}"
-       data-ad-format="auto"
+       {{ with $layout }}data-ad-layout="{{ . }}"{{ end }}
+       {{ with $layoutKey }}data-ad-layout-key="{{ . }}"{{ end }}
+       data-ad-format="{{ $format }}"
        data-full-width-responsive="true"></ins>
 </div>
 {{- end -}}

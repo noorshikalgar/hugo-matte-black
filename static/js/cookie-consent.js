@@ -15,6 +15,7 @@
   var listeners = [];
   var analyticsLoaded = false;
   var adsLoaded = false;
+  var adsScriptLoaded = false;
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -88,7 +89,8 @@
   }
 
   function loadScript(src, attrs) {
-    if (document.querySelector('script[src="' + src + '"]')) return;
+    var existing = document.querySelector('script[src="' + src + '"]');
+    if (existing) return existing;
     var script = document.createElement('script');
     script.src = src;
     script.async = true;
@@ -96,6 +98,7 @@
       script.setAttribute(key, attrs[key]);
     });
     document.head.appendChild(script);
+    return script;
   }
 
   function loadAnalytics(prefs) {
@@ -118,6 +121,10 @@
     document.querySelectorAll('.post-ad-unit').forEach(function (unit) {
       unit.classList.toggle('ads-consented', adsLoaded);
       unit.classList.toggle('ads-blocked', !adsLoaded);
+      var status = unit.querySelector('[data-ad-status]');
+      if (status) {
+        status.textContent = adsLoaded ? 'Advertisement loading...' : 'Advertisement hidden until advertising cookies are allowed.';
+      }
     });
     if (!adsLoaded) return;
     document.querySelectorAll('ins.adsbygoogle:not([data-ad-consent-loaded])').forEach(function (slot) {
@@ -130,7 +137,12 @@
 
   function loadAdvertising(prefs) {
     var client = config.googleAdsClient;
+    var hasManualSlots = !!document.querySelector('ins.adsbygoogle');
     if (!client) {
+      refreshAdSlots();
+      return;
+    }
+    if (!config.autoAdsEnabled && !hasManualSlots) {
       refreshAdSlots();
       return;
     }
@@ -139,8 +151,9 @@
       refreshAdSlots();
       return;
     }
-    if (!adsLoaded) {
-      adsLoaded = true;
+    adsLoaded = true;
+    if (!adsScriptLoaded) {
+      adsScriptLoaded = true;
       setGoogleConsent(prefs);
       loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(client), {
         crossorigin: 'anonymous'

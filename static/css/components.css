@@ -678,6 +678,16 @@
   min-height: 100px;
 }
 
+.build-info {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--mb-text-faint);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
 .pagination {
   display: flex;
   align-items: center;

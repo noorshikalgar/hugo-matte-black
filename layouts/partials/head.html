@@ -62,6 +62,11 @@
 {{- with $ogImage }}<meta name="twitter:image" content="{{ . }}">{{ end }}
 {{- with .Site.Params.twitterSite }}<meta name="twitter:site" content="{{ . }}">{{ end }}
 
+{{- $adsClient := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsenseClient") (index .Site.Params "adsense_client_id") (index .Site.Params "googleAdsense") | default "" -}}
+{{- with $adsClient }}
+<meta name="google-adsense-account" content="{{ . }}">
+{{- end }}
+
 <!-- JSON-LD Structured Data ─────────────────────────────── -->
 {{- if .IsHome }}
 <script type="application/ld+json">
@@ -155,17 +160,34 @@
 {{- else -}}
   {{- with .Site.Params.googleAnalytics -}}{{- $gaID = . -}}{{- end -}}
 {{- end -}}
-{{- $adsClient := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsense_client_id") | default "" -}}
+{{- $adsSlot := or (index .Site.Params "googleadsslot") (index .Site.Params "googleAdsSlot") (index .Site.Params "adsenseSlot") (index .Site.Params "adsense_slot_id") | default "" -}}
+{{- $adsAuto := true -}}
+{{- if isset .Site.Params "googleadsauto" -}}
+  {{- $adsAuto = index .Site.Params "googleadsauto" -}}
+{{- else if isset .Site.Params "adsenseautoads" -}}
+  {{- $adsAuto = index .Site.Params "adsenseautoads" -}}
+{{- end -}}
 {{- $consentConfig := dict
   "storageKey" "hugo-pico-cookie-consent"
-  "version" 1
+  "version" 2
   "siteName" $siteName
   "privacyUrl" ("/privacy-policy/" | relURL)
   "disclaimerUrl" ("/disclaimer/" | relURL)
   "googleAnalyticsId" $gaID
   "googleAdsClient" $adsClient
+  "googleAdsSlot" $adsSlot
+  "autoAdsEnabled" $adsAuto
   "adsEnabled" (ne $adsClient "")
 -}}
 <script>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  window.gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    wait_for_update: 500
+  });
   window.HugoPicoConsent = {{ $consentConfig | jsonify | safeJS }};
 </script>
