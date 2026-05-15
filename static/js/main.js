@@ -350,7 +350,8 @@
       a.addEventListener('click', function (e) {
         const id = this.getAttribute('href');
         if (!id || id === '#') return;
-        const target = document.querySelector(id);
+        const targetId = decodeURIComponent(id.slice(1));
+        const target = document.getElementById(targetId);
         if (!target) return;
         e.preventDefault();
         const h = siteHeader ? siteHeader.getBoundingClientRect().height : 60;
