@@ -183,11 +183,28 @@ ol li::marker { color: var(--mb-accent); font-weight: 600; }
   content: "–";
   opacity: 0.5;
 }
-.post-content ol li::marker {
+.post-content ol {
+  counter-reset: post-ordered-list;
+  list-style: none;
+  padding-left: 0;
+}
+.post-content ol > li {
+  counter-increment: post-ordered-list;
+  position: relative;
+  padding-left: 2.35rem;
+}
+.post-content ol > li::before {
+  content: counter(post-ordered-list) ".";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.65rem;
   color: var(--mb-accent);
-  font-weight: 700;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.9;
+  text-align: right;
 }
 
 @media (max-width: 560px) {
@@ -210,6 +227,14 @@ ol li::marker { color: var(--mb-accent); font-weight: 600; }
 
   .post-content ul > li {
     padding-left: 1rem;
+  }
+
+  .post-content ol > li {
+    padding-left: 2rem;
+  }
+
+  .post-content ol > li::before {
+    width: 1.45rem;
   }
 
   .post-content ul > li::before {
