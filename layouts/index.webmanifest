@@ -2,21 +2,37 @@
 {{- $shortName := .Site.Params.pwaShortName | default .Site.Params.shortName | default .Site.Title -}}
 {{- $description := .Site.Params.description | default $name -}}
 {{- $themeColor := .Site.Params.themeColor | default "#121212" -}}
+{{- $icon192 := .Site.Params.pwaIcon192 | default "icons/icon-192.png" -}}
+{{- $icon512 := .Site.Params.pwaIcon512 | default "icons/icon-512.png" -}}
 {
   "name": {{ $name | jsonify | safeJS }},
   "short_name": {{ $shortName | jsonify | safeJS }},
   "description": {{ $description | jsonify | safeJS }},
+  "id": {{ "/" | relURL | jsonify | safeJS }},
   "start_url": {{ "/" | relURL | jsonify | safeJS }},
   "scope": {{ "/" | relURL | jsonify | safeJS }},
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "background_color": {{ $themeColor | jsonify | safeJS }},
   "theme_color": {{ $themeColor | jsonify | safeJS }},
   "icons": [
     {
+      "src": {{ $icon192 | relURL | jsonify | safeJS }},
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": {{ $icon512 | relURL | jsonify | safeJS }},
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": {{ .Site.Params.faviconSvg | default "favicon.svg" | relURL | jsonify | safeJS }},
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

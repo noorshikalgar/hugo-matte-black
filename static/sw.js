@@ -1,8 +1,11 @@
-const CACHE_VERSION = 'hugo-pico-v6';
+const CACHE_VERSION = 'hugo-pico-v7';
 const APP_SHELL = [
   './',
   './site.webmanifest',
   './favicon.svg',
+  './apple-touch-icon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
   './css/pico/pico.min.css',
   './css/colors.css',
   './css/typography.css',
