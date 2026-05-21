@@ -1196,11 +1196,17 @@
   }
 }
 
-/* ── 9. Copy Code Button ─────────────────────────────────────── */
+/* ── 9. Code Block Action Buttons ────────────────────────────── */
+.code-action-button,
 .copy-button {
+  --code-action-edge: 0.4rem;
+  --code-action-size: 1.85rem;
+  --code-action-gap: 0.35rem;
   position: absolute;
   top: 0.4rem;
-  right: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.2rem 0.5rem;
   font-size: 0.7rem;
   font-family: "JetBrains Mono", monospace;
@@ -1214,10 +1220,41 @@
   /* Ensure button is always above scrolling content */
   z-index: 2;
 }
+.copy-button {
+  right: var(--code-action-edge);
+  width: var(--code-action-size);
+  height: var(--code-action-size);
+  padding: 0;
+}
+.expand-code-button {
+  right: calc(var(--code-action-edge) + var(--code-action-size) + var(--code-action-gap));
+  width: var(--code-action-size);
+  height: var(--code-action-size);
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.expand-code-button svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
+.copy-button svg {
+  display: block;
+  width: 1.12rem;
+  height: 1.12rem;
+}
 pre:hover .copy-button,
 .highlight:hover .copy-button,
-.pre-copy-wrapper:hover .copy-button { opacity: 1; }
+.pre-copy-wrapper:hover .copy-button,
+pre:hover .expand-code-button,
+.highlight:hover .expand-code-button,
+.pre-copy-wrapper:hover .expand-code-button { opacity: 1; }
+.code-action-button:hover,
 .copy-button:hover { color: var(--mb-accent); border-color: var(--mb-border-focus); }
+.code-action-button.copied,
 .copy-button.copied { color: var(--mb-green); border-color: var(--mb-green); }
 
 /* ── 10. Image Lightbox ──────────────────────────────────────── */

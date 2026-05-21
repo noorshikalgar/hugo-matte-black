@@ -193,6 +193,7 @@ kbd {
   align-items: center;
   justify-content: center;
   width: 1.75rem;
+  min-width: 1.75rem;
   height: 1.75rem;
   padding: 0;
   background: var(--mb-surface-2);
@@ -205,10 +206,126 @@ kbd {
   transition: color 0.15s, border-color 0.15s;
   outline: none;
   box-shadow: none;
+  white-space: nowrap;
+}
+.mermaid-toolbar button svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
 }
 .mermaid-toolbar button:hover {
   color: var(--mb-accent);
   border-color: var(--mb-accent);
+}
+
+body.mermaid-viewer-open {
+  overflow: hidden;
+}
+
+.mermaid-viewer-modal[hidden] {
+  display: none;
+}
+
+.mermaid-viewer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1650;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vw, 2rem);
+}
+
+.mermaid-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.74);
+  backdrop-filter: blur(8px);
+}
+
+.mermaid-viewer-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: min(1180px, 100%);
+  height: min(84vh, 920px);
+  overflow: hidden;
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+}
+
+.mermaid-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--mb-surface-2);
+  border-bottom: 1px solid var(--mb-border);
+}
+
+.mermaid-viewer-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mb-accent-bright);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mermaid-viewer-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mermaid-viewer-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0 0.7rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  background: var(--mb-surface-1);
+  color: var(--mb-text-faint);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mermaid-viewer-actions button:hover {
+  color: var(--mb-accent);
+  border-color: var(--mb-border-focus);
+}
+
+.mermaid-viewer-body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mermaid-viewer-inner {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  overflow: visible;
+  user-select: none;
+}
+
+.mermaid-viewer-inner svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none !important;
 }
 
 /* ── 6. Kroki Diagrams ───────────────────────────────────────── */
@@ -247,4 +364,282 @@ kbd {
   padding: 0.5rem 0.75rem;
   border-radius: var(--pico-border-radius-sm);
   background: var(--mb-red-bg);
+}
+
+/* ── 7. Code Viewer Modal ────────────────────────────────────── */
+body.code-viewer-open {
+  overflow: hidden;
+}
+
+.code-viewer-modal[hidden] {
+  display: none;
+}
+
+.code-viewer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vw, 2rem);
+}
+
+.code-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.code-viewer-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: min(88vw, 1500px);
+  min-width: min(620px, 100%);
+  max-width: 100%;
+  max-height: min(82vh, 900px);
+  overflow: hidden;
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius);
+}
+
+@media (max-width: 900px) {
+  .code-viewer-modal {
+    padding: 0.75rem;
+  }
+
+  .code-viewer-panel {
+    width: 100%;
+    max-height: min(88dvh, 900px);
+  }
+}
+
+.code-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--mb-surface-2);
+  border-bottom: 1px solid var(--mb-border);
+}
+
+.code-viewer-language {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mb-accent-bright);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.code-viewer-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.code-viewer-copy,
+.code-viewer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 1.85rem;
+  min-width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--pico-border-radius-sm);
+  background: var(--mb-surface-1);
+  color: var(--mb-text-faint);
+  line-height: 1;
+}
+
+.code-viewer-copy svg,
+.code-viewer-close svg {
+  display: block;
+  width: 1.12rem;
+  height: 1.12rem;
+}
+
+.code-viewer-copy:hover,
+.code-viewer-close:hover {
+  color: var(--mb-accent);
+  border-color: var(--mb-border-focus);
+}
+
+.code-viewer-copy.copied {
+  color: var(--mb-green);
+  border-color: var(--mb-green);
+}
+
+.code-viewer-body {
+  min-width: 0;
+  min-height: 0;
+  max-height: calc(min(82vh, 900px) - 3.1rem);
+  overflow: auto;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px) 0 0 / 4ch 100%,
+    var(--mb-surface-1);
+}
+
+@media (max-width: 900px) {
+  .code-viewer-body {
+    max-height: calc(min(88dvh, 900px) - 3.1rem);
+  }
+}
+
+.code-viewer-code {
+  display: table;
+  min-width: 100%;
+  width: max-content;
+  padding: 0.75rem 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  line-height: 1.62;
+  color: var(--mb-text);
+  counter-reset: code-viewer-line;
+}
+
+.code-viewer-line {
+  display: table-row;
+  min-height: 1.6em;
+}
+
+.code-viewer-line:hover {
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.code-viewer-gutter,
+.code-viewer-line-content {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.code-viewer-gutter {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 3.5rem;
+  padding: 0 0.85rem 0 0.75rem;
+  border-right: 1px solid var(--mb-border);
+  background: color-mix(in srgb, var(--mb-surface-2) 82%, transparent);
+  color: var(--mb-text-faint);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  user-select: none;
+}
+
+.code-viewer-line-content {
+  padding: 0 1.25rem;
+  white-space: pre;
+}
+
+.code-viewer-code .line,
+.code-viewer-code .cl {
+  display: inline;
+}
+
+.code-viewer-modal.is-compact .code-viewer-body {
+  max-height: min(44vh, calc((var(--code-viewer-lines) * 1.62em) + 1.5rem));
+}
+
+@media (max-width: 640px) {
+  .code-viewer-modal {
+    align-items: stretch;
+    min-height: 100dvh;
+    padding:
+      max(0.45rem, env(safe-area-inset-top))
+      max(0.45rem, env(safe-area-inset-right))
+      max(0.45rem, env(safe-area-inset-bottom))
+      max(0.45rem, env(safe-area-inset-left));
+  }
+
+  .code-viewer-panel {
+    width: 100%;
+    height: calc(100vh - 0.9rem);
+    height: calc(100dvh - max(0.9rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    max-height: none;
+    min-width: 0;
+    border-radius: var(--pico-border-radius);
+  }
+
+  .code-viewer-modal.is-compact .code-viewer-body,
+  .code-viewer-body {
+    max-height: none;
+  }
+
+  .code-viewer-header {
+    min-width: 0;
+    padding: 0.55rem;
+    gap: 0.5rem;
+  }
+
+  .code-viewer-actions {
+    gap: 0.3rem;
+  }
+
+  .code-viewer-copy,
+  .code-viewer-close {
+    width: 2.15rem;
+    min-width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .code-viewer-copy svg,
+  .code-viewer-close svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .code-viewer-code {
+    font-size: 0.78rem;
+    line-height: 1.58;
+  }
+
+  .code-viewer-gutter {
+    min-width: 2.7rem;
+    padding: 0 0.55rem 0 0.45rem;
+  }
+
+  .code-viewer-line-content {
+    padding: 0 0.85rem;
+  }
+
+  .mermaid-viewer-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .mermaid-viewer-panel {
+    width: 100%;
+    height: 100%;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .mermaid-viewer-header {
+    padding: 0.6rem;
+  }
+
+  .mermaid-viewer-actions {
+    gap: 0.35rem;
+  }
+
+  .mermaid-viewer-actions button {
+    min-width: 2.35rem;
+    height: 2.35rem;
+    padding: 0 0.55rem;
+    font-size: 1.22rem;
+  }
 }

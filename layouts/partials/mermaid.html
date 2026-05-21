@@ -74,26 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     return '%%{init: {"look": "handDrawn"}}%%\n' + source;
   }
 
-  /* ── Post-process a single rendered mermaid container ────────── */
-  function postProcess(container) {
-    var svg = container.querySelector('svg');
-    if (!svg) return;
-
-    svg.style.maxWidth = 'none';
-    svg.style.width    = '100%';
-    svg.style.height   = 'auto';
-    svg.removeAttribute('width');
-    svg.removeAttribute('height');
-
-    var scale = 0.75;
+  function addPanZoom(inner, svg, options) {
+    options = options || {};
+    var scale = options.initialScale || 0.75;
     var STEP  = 0.25;
     var MIN   = 0.25;
     var MAX   = 4;
-
-    var inner = document.createElement('div');
-    inner.className = 'mermaid-scroll-inner';
-    container.appendChild(inner);
-    inner.appendChild(svg);
 
     function applyScale() {
       svg.style.width       = (scale * 100) + '%';
@@ -104,23 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     applyScale();
-
-    var bar = document.createElement('div');
-    bar.className = 'mermaid-toolbar';
-    bar.innerHTML =
-      '<button title="Zoom in" aria-label="Zoom in diagram" data-action="zoomIn">+</button>'  +
-      '<button title="Zoom out" aria-label="Zoom out diagram" data-action="zoomOut">&minus;</button>' +
-      '<button title="Reset zoom" aria-label="Reset diagram zoom" data-action="reset">&#8635;</button>';
-    container.insertBefore(bar, inner);
-
-    bar.addEventListener('click', function(e) {
-      var btn = e.target.closest('button');
-      if (!btn) return;
-      var action = btn.dataset.action;
-      if (action === 'zoomIn')  { scale = Math.min(scale + STEP, MAX); applyScale(); }
-      if (action === 'zoomOut') { scale = Math.max(scale - STEP, MIN); applyScale(); }
-      if (action === 'reset')   { scale = 0.75; applyScale(); }
-    });
 
     var panning = false, panStartX, panStartY, scrollStartX, scrollStartY;
     inner.addEventListener('mousedown', function(e) {
@@ -152,6 +121,154 @@ document.addEventListener('DOMContentLoaded', function() {
       inner.scrollTop  = touchScrollY - (e.touches[0].clientY - touchStartY);
       e.preventDefault();
     }, { passive: false });
+
+    if (options.wheelZoom) {
+      inner.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        var rect = inner.getBoundingClientRect();
+        var beforeX = e.clientX - rect.left + inner.scrollLeft;
+        var beforeY = e.clientY - rect.top + inner.scrollTop;
+        var beforeScale = scale;
+        var direction = e.deltaY > 0 ? -1 : 1;
+
+        scale = Math.max(MIN, Math.min(MAX, scale + direction * STEP));
+        applyScale();
+
+        if (beforeScale !== scale) {
+          var ratio = scale / beforeScale;
+          inner.scrollLeft = beforeX * ratio - (e.clientX - rect.left);
+          inner.scrollTop = beforeY * ratio - (e.clientY - rect.top);
+        }
+      }, { passive: false });
+    }
+
+    return {
+      zoomIn: function() { scale = Math.min(scale + STEP, MAX); applyScale(); },
+      zoomOut: function() { scale = Math.max(scale - STEP, MIN); applyScale(); },
+      reset: function(nextScale) {
+        scale = typeof nextScale === 'number' ? nextScale : (options.initialScale || 0.75);
+        inner.scrollLeft = 0;
+        inner.scrollTop = 0;
+        applyScale();
+      }
+    };
+  }
+
+  function ensureMermaidModal() {
+    var existing = document.getElementById('mermaid-viewer-modal');
+    if (existing) return existing;
+
+    var modal = document.createElement('div');
+    modal.id = 'mermaid-viewer-modal';
+    modal.className = 'mermaid-viewer-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'mermaid-viewer-title');
+    modal.setAttribute('hidden', '');
+    modal.innerHTML =
+      '<div class="mermaid-viewer-backdrop" data-mermaid-viewer-close></div>' +
+      '<section class="mermaid-viewer-panel">' +
+        '<header class="mermaid-viewer-header">' +
+          '<span class="mermaid-viewer-title" id="mermaid-viewer-title">MERMAID</span>' +
+          '<div class="mermaid-viewer-actions">' +
+            '<button title="Zoom in" aria-label="Zoom in diagram" data-action="zoomIn">&#43;</button>' +
+            '<button title="Zoom out" aria-label="Zoom out diagram" data-action="zoomOut">&#8722;</button>' +
+            '<button title="Reset zoom" aria-label="Reset diagram zoom" data-action="reset">&#8634;</button>' +
+            '<button title="Close" aria-label="Close diagram viewer" data-mermaid-viewer-close>&times;</button>' +
+          '</div>' +
+        '</header>' +
+        '<div class="mermaid-viewer-body">' +
+          '<div class="mermaid-viewer-inner"></div>' +
+        '</div>' +
+      '</section>';
+
+    document.body.appendChild(modal);
+
+    modal.querySelectorAll('[data-mermaid-viewer-close]').forEach(function(btn) {
+      btn.addEventListener('click', closeMermaidModal);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) closeMermaidModal();
+    });
+
+    return modal;
+  }
+
+  function openMermaidModal(container) {
+    var sourceSvg = container.querySelector('.mermaid-scroll-inner svg') || container.querySelector('svg');
+    if (!sourceSvg) return;
+
+    var modal = ensureMermaidModal();
+    var inner = modal.querySelector('.mermaid-viewer-inner');
+    inner.innerHTML = '';
+
+    var svg = sourceSvg.cloneNode(true);
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.style.maxWidth = 'none';
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    inner.appendChild(svg);
+
+    var controls = addPanZoom(inner, svg, { initialScale: 1, wheelZoom: true });
+    modal.querySelectorAll('.mermaid-viewer-actions [data-action]').forEach(function(btn) {
+      btn.onclick = function() {
+        var action = btn.dataset.action;
+        if (action === 'zoomIn') controls.zoomIn();
+        if (action === 'zoomOut') controls.zoomOut();
+        if (action === 'reset') controls.reset(1);
+      };
+    });
+
+    modal.removeAttribute('hidden');
+    document.body.classList.add('mermaid-viewer-open');
+    modal.querySelector('[data-mermaid-viewer-close]').focus();
+  }
+
+  function closeMermaidModal() {
+    var modal = document.getElementById('mermaid-viewer-modal');
+    if (!modal) return;
+    modal.setAttribute('hidden', '');
+    document.body.classList.remove('mermaid-viewer-open');
+  }
+
+  /* ── Post-process a single rendered mermaid container ────────── */
+  function postProcess(container) {
+    var svg = container.querySelector('svg');
+    if (!svg) return;
+
+    svg.style.maxWidth = 'none';
+    svg.style.width    = '100%';
+    svg.style.height   = 'auto';
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+
+    var inner = document.createElement('div');
+    inner.className = 'mermaid-scroll-inner';
+    container.appendChild(inner);
+    inner.appendChild(svg);
+
+    var controls = addPanZoom(inner, svg, { initialScale: 0.75 });
+
+    var bar = document.createElement('div');
+    bar.className = 'mermaid-toolbar';
+    bar.innerHTML =
+      '<button title="Zoom in" aria-label="Zoom in diagram" data-action="zoomIn">+</button>'  +
+      '<button title="Zoom out" aria-label="Zoom out diagram" data-action="zoomOut">&minus;</button>' +
+      '<button title="Reset zoom" aria-label="Reset diagram zoom" data-action="reset">&#8635;</button>' +
+      '<button title="Open diagram viewer" aria-label="Open diagram viewer" data-action="open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    container.insertBefore(bar, inner);
+
+    bar.addEventListener('click', function(e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var action = btn.dataset.action;
+      if (action === 'zoomIn') controls.zoomIn();
+      if (action === 'zoomOut') controls.zoomOut();
+      if (action === 'reset') controls.reset(0.75);
+      if (action === 'open') openMermaidModal(container);
+    });
   }
 
   /* ── Render (or re-render) all diagrams with a given accent ─── */
