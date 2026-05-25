@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{- $mainSections := .Site.Params.mainSections | default .Site.Params.showCountSections | default (slice "guides" "posts") -}}
 {{- $isMain := in $mainSections .Section -}}
-{{- $pages := .Pages -}}
+{{- $pages := partial "public-pages.html" .Pages -}}
 {{- if $isMain -}}
   {{- $pages = .Pages.ByDate.Reverse -}}
 {{- else -}}

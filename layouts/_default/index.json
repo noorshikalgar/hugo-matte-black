@@ -1,4 +1,4 @@
-{{- $pages := where .Site.RegularPages "Params.noindex" "ne" true -}}
+{{- $pages := partial "public-pages.html" .Site.RegularPages -}}
 [
   {{- range $i, $p := $pages }}
   {{- if $i }},{{ end }}

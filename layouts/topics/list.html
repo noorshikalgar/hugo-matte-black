@@ -1,6 +1,7 @@
 {{ define "main" }}
 {{- $topicSlug := .Title | urlize -}}
 {{- $allPages := where .Site.RegularPages "Params.topic" $topicSlug -}}
+{{- $allPages = partial "public-pages.html" $allPages -}}
 
 <div>
   <div class="section-header">

@@ -1,9 +1,15 @@
 {{ define "main" }}
+{{- $visibleTagCount := 0 -}}
+{{- range $name, $taxonomy := .Site.Taxonomies.tags -}}
+  {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+  {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+  {{- if gt (len $publicTaxonomy) 0 -}}{{- $visibleTagCount = add $visibleTagCount 1 -}}{{- end -}}
+{{- end -}}
 <div>
   <!-- Header -->
   <div class="section-header">
     <h1>Tags</h1>
-    <span class="meta-text">{{ len .Site.Taxonomies.tags }} tags</span>
+    <span class="meta-text">{{ $visibleTagCount }} tags</span>
   </div>
 
   <!-- Controls -->
@@ -34,12 +40,16 @@
       </thead>
       <tbody id="tags-tbody">
         {{- range $name, $taxonomy := .Site.Taxonomies.tags }}
-          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $taxonomy }}">
+          {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+          {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+          {{- if gt (len $publicTaxonomy) 0 }}
+          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $publicTaxonomy }}">
             <td class="tag-name">
               <a href="{{ "/tags/" | relURL }}{{ $name | urlize }}/">{{ $name }}</a>
             </td>
-            <td class="tag-count">{{ len $taxonomy }}</td>
+            <td class="tag-count">{{ len $publicTaxonomy }}</td>
           </tr>
+          {{- end }}
         {{- end }}
       </tbody>
     </table>

@@ -4,7 +4,7 @@
 {{ . }}
 {{- end }}
 
-{{- range where .Site.RegularPages "Params.noindex" "ne" true }}
+{{- range partial "public-pages.html" .Site.RegularPages }}
 
 - {{ .Title }}: {{ .Permalink }}
 {{- end }}

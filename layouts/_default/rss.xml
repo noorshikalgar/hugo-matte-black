@@ -7,7 +7,7 @@
 {{- if .IsHome -}}
   {{- $pages = .Site.RegularPages -}}
 {{- end -}}
-{{- $pages = where $pages "Params.private" "ne" true -}}
+{{- $pages = partial "public-pages.html" $pages -}}
 {{- with .Site.Config.Services.RSS.Limit -}}
   {{- if ge . 1 -}}
     {{- $pages = first . $pages -}}

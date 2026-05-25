@@ -1,0 +1,4 @@
+{{- $pages := . -}}
+{{- $pages = where $pages "Params.noindex" "ne" true -}}
+{{- $pages = where $pages "Params.private" "ne" true -}}
+{{- return $pages -}}

@@ -1,6 +1,7 @@
 {{ define "main" }}
 {{- $statSections  := .Site.Params.showCountSections | default (slice "guides" "posts" "cheatsheets") -}}
 {{- $filterSections := .Site.Params.searchSections | default $statSections -}}
+{{- $publicPages := partial "public-pages.html" .Site.RegularPages -}}
 
 <div class="search-page">
 
@@ -43,7 +44,7 @@
         type="search"
         id="search-input"
         class="search-input"
-        placeholder="Search {{ len .Site.RegularPages }}+ articles, guides, cheatsheets..."
+        placeholder="Search {{ len $publicPages }}+ articles, guides, cheatsheets..."
         aria-label="Search content"
         autofocus
         spellcheck="false"
@@ -101,7 +102,7 @@
       </div>
       <div class="quick-nav-grid">
         {{- range $sec := $statSections }}
-          {{- $sectionPages := where $.Site.RegularPages "Section" $sec }}
+          {{- $sectionPages := where $publicPages "Section" $sec }}
           <a href="{{ printf "/%s/" $sec | relURL }}" class="quick-nav-item">
             <span class="quick-nav-name">{{ $sec | humanize }}</span>
             <span class="quick-nav-count">{{ len $sectionPages }} articles</span>
@@ -134,7 +135,7 @@
     
     {{- /* Fill remaining slots with featured posts (if not at limit) */}}
     {{- if lt (len $highlighted) $hotTopicsCount }}
-      {{- $featured := where $.Site.RegularPages "Params.featured" true -}}
+      {{- $featured := where $publicPages "Params.featured" true -}}
       {{- $featured = $featured.ByDate.Reverse -}}
       {{- range $featured }}
         {{- if lt (len $highlighted) $hotTopicsCount }}
@@ -184,7 +185,7 @@
     <!-- Fresh this week -->
     {{- $cutoff := now.AddDate 0 0 -7 -}}
     {{- $mainSections := .Site.Params.searchSections | default (slice "guides") -}}
-    {{- $recent := where .Site.RegularPages "Section" "in" $mainSections -}}
+    {{- $recent := where $publicPages "Section" "in" $mainSections -}}
     {{- $recent  = where $recent "Date" "ge" $cutoff -}}
     {{- $recent  = $recent.ByDate.Reverse -}}
     {{- if $recent }}

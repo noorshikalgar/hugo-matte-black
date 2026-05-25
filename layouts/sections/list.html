@@ -2,11 +2,12 @@
 {{- $configuredSections := .Site.Params.sections | default (slice "") -}}
 {{- $showAllSections := or (eq (len $configuredSections) 0) (in $configuredSections "") -}}
 {{- $sections := slice -}}
+{{- $publicPages := partial "public-pages.html" .Site.RegularPages -}}
 
 {{- if $showAllSections -}}
   {{- range .Site.Sections.ByTitle -}}
     {{- $sectionName := .Section -}}
-    {{- $sectionPages := where $.Site.RegularPages "Section" $sectionName -}}
+    {{- $sectionPages := where $publicPages "Section" $sectionName -}}
     {{- if and (ne $sectionName "sections") (gt (len $sectionPages) 0) -}}
       {{- $sections = $sections | append $sectionName -}}
     {{- end -}}
@@ -38,7 +39,7 @@
     <div class="quick-nav-grid">
       {{- range $sections }}
         {{- $sectionName := . -}}
-        {{- $sectionPages := where $.Site.RegularPages "Section" $sectionName -}}
+        {{- $sectionPages := where $publicPages "Section" $sectionName -}}
         <a href="{{ printf "/%s/" $sectionName | relURL }}" class="quick-nav-item">
           <span class="quick-nav-name">{{ $sectionName | humanize | title }}</span>
           <span class="quick-nav-count">{{ len $sectionPages }} articles</span>

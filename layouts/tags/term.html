@@ -2,6 +2,7 @@
 
 {{/* ── Split: guides (section landing pages) first, then everything else ── */}}
 {{ $allPages := where .Pages "IsPage" true }}
+{{ $allPages = partial "public-pages.html" $allPages }}
 {{ $guides   := where $allPages "Params.contentType" "guide" }}
 {{ $chapters := where $allPages "Params.contentType" "ne"    "guide" }}
 

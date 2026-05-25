@@ -1,0 +1,13 @@
+{{- if or .Params.ai_disclosure .Params.generation_type .Params.review_status -}}
+  {{- $generation := .Params.generation_type | default "ai-assisted" -}}
+  {{- $review := .Params.review_status | default "automated-reviewed" -}}
+  <aside class="content-disclosure" aria-label="Content disclosure">
+    <strong>About this guide:</strong>
+    This page is part of Aivoid's {{ $generation }} learning library.
+    {{- if eq $review "legacy-import" }}
+      It was imported from older content and may be hidden from search until refreshed.
+    {{- else }}
+      It has passed automated formatting and quality checks.
+    {{- end }}
+  </aside>
+{{- end -}}
