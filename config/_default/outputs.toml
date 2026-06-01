@@ -1,0 +1,5 @@
+home = ["HTML", "RSS", "JSON", "CONTENTINDEX", "TXT", "WEBMANIFEST"]
+section = ["HTML", "RSS", "TXT"]
+taxonomy = ["HTML", "RSS"]
+term = ["HTML", "RSS"]
+page = ["HTML"]

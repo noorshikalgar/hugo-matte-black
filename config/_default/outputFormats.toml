@@ -1,0 +1,5 @@
+[CONTENTINDEX]
+mediaType = "application/json"
+baseName = "content-index"
+isPlainText = true
+notAlternative = true
