@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en" }}" data-theme="dark">
+<html lang="{{ .Site.Language.Locale | default .Site.Language.Name | default "en" }}" data-theme="dark">
   <head>
     {{- partial "head.html" . -}}
   </head>
@@ -45,6 +45,9 @@
 
     <!-- Core scripts -->
     <script src="{{ "js/main.js" | relURL }}" defer></script>
+    {{- if .Page.Store.Get "hasCodeBlocks" }}
+    <script src="{{ "js/code-actions.js" | relURL }}" defer></script>
+    {{- end }}
     <script src="{{ "js/cookie-consent.js" | relURL }}" defer></script>
     <script src="{{ "js/pwa.js" | relURL }}" defer></script>
 

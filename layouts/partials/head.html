@@ -40,7 +40,7 @@
 
 <!-- Open Graph ─────────────────────────────────────────── -->
 <meta property="og:site_name"   content="{{ $siteName }}">
-<meta property="og:locale"      content="{{ .Site.LanguageCode | default .Site.Language.Lang | default "en_US" | replaceRE "-" "_" }}">
+<meta property="og:locale"      content="{{ .Site.Language.Locale | default .Site.Language.Name | default "en_US" | replaceRE "-" "_" }}">
 <meta property="og:type"        content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:title"       content="{{ $title }}">
 <meta property="og:url"         content="{{ .Permalink }}">
