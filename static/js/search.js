@@ -144,47 +144,165 @@
 
   /* ── Scoring ─────────────────────────────────────────────────── */
 
-  /**
-   * Check if a page matches a phrase (exact substring match).
-   * includeContent=false: title only. true: title+section+desc+content.
-   */
-  function matchPhrase(page, phrase, includeContent) {
-    const p = phrase.toLowerCase();
-    const title = (page.title || '').toLowerCase();
-    const desc  = (page.description || '').toLowerCase();
-    const content = includeContent ? (page.content || '').toLowerCase() : '';
+  const STOP_WORDS = new Set([
+    'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
+    'how', 'in', 'into', 'is', 'it', 'of', 'on', 'or', 'the', 'to',
+    'vs', 'with', 'your'
+  ]);
 
-    return (
-      title.indexOf(p) !== -1 ||
-      desc.indexOf(p)  !== -1 ||
-      content.indexOf(p) !== -1
-    );
+  function normalizeText(value) {
+    return String(value || '')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
   }
 
+  function tokenize(value) {
+    return normalizeText(value)
+      .split(/[^a-z0-9+#.]+/i)
+      .map(function (token) { return token.trim(); })
+      .filter(function (token) {
+        return token.length > 1 && !STOP_WORDS.has(token);
+      });
+  }
+
+  function hasWord(text, token) {
+    if (!text || !token) return false;
+    return text.indexOf(token) !== -1;
+  }
+
+  function getSearchFields(page, includeContent) {
+    var cached = page._searchFields;
+    if (cached && cached.includeContent === includeContent) return cached;
+
+    var tags = Array.isArray(page.tags) ? page.tags.join(' ') : '';
+    var categories = Array.isArray(page.categories) ? page.categories.join(' ') : '';
+    var title = normalizeText(page.title);
+    var description = normalizeText(page.description);
+    var tagText = normalizeText(tags);
+    var categoryText = normalizeText(categories);
+    var section = normalizeText(page.section);
+    var topic = normalizeText(page.topic);
+    var difficulty = normalizeText(page.difficulty);
+    var contentType = normalizeText(page.contentType);
+    var content = includeContent ? normalizeText(page.content) : '';
+
+    cached = {
+      includeContent: includeContent,
+      title: title,
+      description: description,
+      tags: tagText,
+      categories: categoryText,
+      section: section,
+      topic: topic,
+      difficulty: difficulty,
+      contentType: contentType,
+      content: content,
+      allMetadata: [
+        title,
+        description,
+        tagText,
+        categoryText,
+        section,
+        topic,
+        difficulty,
+        contentType
+      ].join(' '),
+      all: [
+        title,
+        description,
+        tagText,
+        categoryText,
+        section,
+        topic,
+        difficulty,
+        contentType,
+        content
+      ].join(' ')
+    };
+    page._searchFields = cached;
+    return cached;
+  }
+
+  function recentBoost(page) {
+    if (!page.date) return 0;
+    var timestamp = Date.parse(page.date + 'T00:00:00Z');
+    if (!isFinite(timestamp)) return 0;
+    var ageDays = (Date.now() - timestamp) / 86400000;
+    if (ageDays < 0) return 8;
+    if (ageDays > 180) return 0;
+    return Math.max(0, Math.round(14 - ageDays / 15));
+  }
+
+  function scoreFieldToken(text, token, exactWeight, containsWeight, prefixWeight) {
+    if (!text || !token || text.indexOf(token) === -1) return 0;
+    if (text === token) return exactWeight;
+    if (text.indexOf(token) === 0) return prefixWeight || containsWeight;
+    return containsWeight;
+  }
+
+  function scoreGroup(page, phrase, includeContent) {
+    var fields = getSearchFields(page, includeContent);
+    var normalizedPhrase = normalizeText(phrase).trim();
+    var tokens = tokenize(phrase);
+    var phraseScore = 0;
+    var tokenScore = 0;
+
+    if (!tokens.length && !normalizedPhrase) return 0;
+
+    if (normalizedPhrase.length > 1) {
+      if (fields.title.indexOf(normalizedPhrase) === 0) phraseScore += 220;
+      else if (fields.title.indexOf(normalizedPhrase) !== -1) phraseScore += 160;
+      if (fields.tags.indexOf(normalizedPhrase) !== -1) phraseScore += 130;
+      if (fields.topic.indexOf(normalizedPhrase) !== -1) phraseScore += 90;
+      if (fields.contentType.indexOf(normalizedPhrase) !== -1) phraseScore += 75;
+      if (fields.description.indexOf(normalizedPhrase) !== -1) phraseScore += 60;
+      if (fields.section.indexOf(normalizedPhrase) !== -1) phraseScore += 35;
+      if (includeContent && fields.content.indexOf(normalizedPhrase) !== -1) phraseScore += 24;
+    }
+
+    var matchedTokens = 0;
+    tokens.forEach(function (token) {
+      var tokenMatched = hasWord(fields.all, token);
+      if (!tokenMatched) return;
+      matchedTokens += 1;
+
+      tokenScore += scoreFieldToken(fields.title, token, 75, 42, 62);
+      tokenScore += scoreFieldToken(fields.tags, token, 70, 46, 56);
+      tokenScore += scoreFieldToken(fields.topic, token, 44, 30, 38);
+      tokenScore += scoreFieldToken(fields.contentType, token, 38, 24, 30);
+      tokenScore += scoreFieldToken(fields.categories, token, 34, 20, 26);
+      tokenScore += scoreFieldToken(fields.description, token, 26, 14, 20);
+      tokenScore += scoreFieldToken(fields.section, token, 20, 10, 14);
+      if (includeContent) tokenScore += scoreFieldToken(fields.content, token, 10, 4, 6);
+    });
+
+    var allTokensMatched = tokens.length > 0 && matchedTokens === tokens.length;
+    if (!phraseScore && !allTokensMatched) return 0;
+
+    var total = phraseScore + tokenScore;
+    if (allTokensMatched && tokens.length > 1) total += 35 + (tokens.length * 6);
+    if (page.featured) total += 35;
+    total += recentBoost(page);
+
+    if (isChapter(page)) {
+      total *= includeContent ? 0.88 : 0.78;
+    }
+
+    return Math.round(total);
+  }
 
   /**
    * Score a page against OR-groups.
-   * groups = ["react native", "angular"]  → page matches if ANY phrase matches.
-   * Returns score > 0 if matched.
+   * groups = ["react native", "angular"] -> page matches if ANY group matches.
+   * Multi-word groups require all meaningful words unless an exact phrase matches.
    */
   function score(page, groups, includeContent) {
-    let total = 0;
-    let anyGroupMatched = false;
-    for (const phrase of groups) {
-      if (!matchPhrase(page, phrase, includeContent)) continue;
-      anyGroupMatched = true;
-      // Score based on phrase location
-      const p = phrase.toLowerCase();
-      const title   = (page.title   || '').toLowerCase();
-      const section = includeContent ? (page.section || '').toLowerCase()          : '';
-      const desc    = includeContent ? (page.description || '').toLowerCase()      : '';
-      const content = includeContent ? (page.content     || '').toLowerCase()      : '';
-      if (title.indexOf(p)   !== -1) total += title.indexOf(p) === 0 ? 120 : 80;
-      if (section.indexOf(p) !== -1) total += 20;
-      if (desc.indexOf(p)    !== -1) total += 30;
-      if (content.indexOf(p) !== -1) total += 10;
-    }
-    return anyGroupMatched ? total || 1 : 0;
+    var best = 0;
+    groups.forEach(function (phrase) {
+      best = Math.max(best, scoreGroup(page, phrase, includeContent));
+    });
+    return best;
   }
 
   /* ── Run search ──────────────────────────────────────────────── */
@@ -272,15 +390,7 @@
       });
     }
 
-    // When showing all: main section pages first, chapters appended after
-    let results;
-    if (!activeSection) {
-      const mainR    = filtered.filter(function (p) { return !isChapter(p); });
-      const chapterR = filtered.filter(isChapter);
-      results = sortArr(mainR).concat(sortArr(chapterR));
-    } else {
-      results = sortArr(filtered);
-    }
+    let results = sortArr(filtered);
 
     renderResults(results, q, sectionCounts, includeContent);
   }
@@ -326,11 +436,7 @@
 
     const excerpt = document.createElement('div');
     excerpt.className = 'result-excerpt';
-    if (includeContent) {
-      excerpt.innerHTML = highlight(page.description || '', q);
-    } else {
-      excerpt.textContent = page.description || '';
-    }
+    excerpt.innerHTML = highlight(makeExcerpt(page, q, includeContent), q);
 
     const footer = document.createElement('div');
     footer.className = 'result-footer';
@@ -430,15 +536,53 @@
   /* ── Helpers ─────────────────────────────────────────────────── */
   function highlight(text, q) {
     if (!q || !text) return escHtml(text || '');
-    // Highlight each phrase (comma-separated)
-    const phrases = q.split(',').map(function (g) { return g.trim(); }).filter(Boolean);
+    const phrases = [];
+    q.split(',').forEach(function (group) {
+      var phrase = group.trim();
+      if (phrase) phrases.push(phrase);
+      tokenize(phrase).forEach(function (token) {
+        if (phrases.indexOf(token) === -1) phrases.push(token);
+      });
+    });
+
     let result  = escHtml(text);
-    phrases.forEach(function (phrase) {
+    phrases.sort(function (a, b) { return b.length - a.length; }).forEach(function (phrase) {
       if (!phrase) return;
       const re = new RegExp('(' + regEsc(escHtml(phrase)) + ')', 'gi');
       result = result.replace(re, '<mark>$1</mark>');
     });
     return result;
+  }
+
+  function makeExcerpt(page, q, includeContent) {
+    var fallback = page.description || '';
+    if (!includeContent || !page.content) return fallback;
+
+    var terms = [];
+    q.split(',').forEach(function (group) {
+      terms = terms.concat(tokenize(group));
+      var phrase = normalizeText(group).trim();
+      if (phrase.length > 2) terms.unshift(phrase);
+    });
+
+    var content = page.content || '';
+    var normalizedContent = normalizeText(content);
+    var bestIndex = -1;
+    terms.some(function (term) {
+      bestIndex = normalizedContent.indexOf(term);
+      return bestIndex !== -1;
+    });
+
+    if (bestIndex === -1) return fallback || content.slice(0, 220);
+
+    var radius = 120;
+    var start = Math.max(0, bestIndex - radius);
+    var end = Math.min(content.length, bestIndex + radius);
+    var excerpt = content.slice(start, end).replace(/\s+/g, ' ').trim();
+
+    if (start > 0) excerpt = '...' + excerpt;
+    if (end < content.length) excerpt += '...';
+    return excerpt;
   }
 
   function escHtml(str) {
