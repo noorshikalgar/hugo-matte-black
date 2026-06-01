@@ -241,6 +241,7 @@
   window.searchSections = {{ .Site.Params.searchSections | default (slice) | jsonify | safeJS }};
   window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
   window.searchIndexURL = '{{ "/index.json" | relURL }}';
+  window.searchContentIndexURL = '{{ "/content-index.json" | relURL }}';
 </script>
 <script>
 (function() {

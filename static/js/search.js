@@ -48,12 +48,14 @@
   }
 
   /* ── State ───────────────────────────────────────────────────── */
-  let index         = null;
-  let isLoading     = false;   // guard against duplicate fetches
-  let query         = '';
-  let activeSection = '';   // '' = all
-  let activeSort    = 'relevance';
-  let loadError     = false;
+  let index            = null;
+  let contentIndex     = null;
+  let isLoading        = false;   // guard against duplicate metadata fetches
+  let isContentLoading = false;   // guard against duplicate full-text fetches
+  let query            = '';
+  let activeSection    = '';   // '' = all
+  let activeSort       = 'relevance';
+  let loadError        = false;
 
   /* Infinite scroll state */
   const PAGE_SIZE       = 20;
@@ -111,6 +113,35 @@
       });
   }
 
+  function loadContentIndex(silent) {
+    if (contentIndex || isContentLoading) {
+      if (contentIndex && query) runSearch();
+      return;
+    }
+
+    isContentLoading = true;
+    const indexURL = (window.searchContentIndexURL) || '/content-index.json';
+    if (!silent) showLoading(true);
+
+    fetch(indexURL)
+      .then(function (r) {
+        if (!r.ok) throw new Error('fetch failed');
+        return r.json();
+      })
+      .then(function (data) {
+        contentIndex = data;
+        isContentLoading = false;
+        injectChaptersChip();
+        if (!silent) showLoading(false);
+        if (query || activeSection) runSearch();
+      })
+      .catch(function () {
+        isContentLoading = false;
+        if (!silent) showLoading(false);
+        if (!silent) showError('Could not load full-text search index.');
+      });
+  }
+
   /* ── Scoring ─────────────────────────────────────────────────── */
 
   /**
@@ -121,10 +152,12 @@
     const p = phrase.toLowerCase();
     const title = (page.title || '').toLowerCase();
     const desc  = (page.description || '').toLowerCase();
-    // content: now means title OR description only
+    const content = includeContent ? (page.content || '').toLowerCase() : '';
+
     return (
       title.indexOf(p) !== -1 ||
-      desc.indexOf(p)  !== -1
+      desc.indexOf(p)  !== -1 ||
+      content.indexOf(p) !== -1
     );
   }
 
@@ -185,11 +218,18 @@
       return;
     }
 
+    if (includeContent && groups.length && !contentIndex) {
+      loadContentIndex(false);
+      return;
+    }
+
     showBrowse(false);
     showFilters(true);
 
+    const searchIndex = includeContent && contentIndex ? contentIndex : index;
+
     // All term-matching results (no section filter yet)
-    const allMatches = index.filter(function (page) {
+    const allMatches = searchIndex.filter(function (page) {
       if (!groups.length) return true;
       return score(page, terms, includeContent) > 0;
     });
