@@ -10,6 +10,66 @@
   var DEFAULT_THEME = 'paper-diary';
   var AMBIENT_VIDEO_KEY = 'ambientShadowEnabled';
 
+  /* ── Navigation progress ────────────────────────────────────── */
+  var navigationProgress = document.getElementById('navigation-progress');
+  var navigationProgressTimer;
+
+  function startNavigationProgress() {
+    if (!navigationProgress) return;
+    window.clearTimeout(navigationProgressTimer);
+    navigationProgress.classList.remove('is-finishing');
+    navigationProgress.classList.add('is-active');
+    navigationProgressTimer = window.setTimeout(finishNavigationProgress, 6000);
+  }
+
+  function finishNavigationProgress() {
+    if (!navigationProgress) return;
+    window.clearTimeout(navigationProgressTimer);
+    if (!navigationProgress.classList.contains('is-active')) return;
+    navigationProgress.classList.add('is-finishing');
+    navigationProgress.classList.remove('is-active');
+    navigationProgressTimer = window.setTimeout(function () {
+      navigationProgress.classList.remove('is-finishing');
+    }, 260);
+  }
+
+  function shouldShowNavigationProgress(anchor, event) {
+    if (!anchor || !anchor.href) return false;
+    if (event && (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return false;
+    if (anchor.hasAttribute('download')) return false;
+    if (anchor.target && anchor.target.toLowerCase() !== '_self') return false;
+
+    var url;
+    try {
+      url = new URL(anchor.href, window.location.href);
+    } catch (e) {
+      return false;
+    }
+
+    if (url.origin !== window.location.origin) return false;
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+
+    var current = window.location;
+    var samePage = url.pathname === current.pathname && url.search === current.search;
+    if (samePage && url.hash) return false;
+    if (samePage && !url.hash) return false;
+
+    return true;
+  }
+
+  if (navigationProgress) {
+    document.addEventListener('click', function (e) {
+      var anchor = e.target.closest ? e.target.closest('a[href]') : null;
+      if (shouldShowNavigationProgress(anchor, e)) {
+        startNavigationProgress();
+      }
+    }, true);
+
+    window.addEventListener('beforeunload', startNavigationProgress);
+    window.addEventListener('pageshow', finishNavigationProgress);
+    window.addEventListener('load', finishNavigationProgress);
+  }
+
   /* ── Hamburger menu ────────────────────────────────────────── */
   const hamburger = document.getElementById('hamburger');
   const mobileNav = document.getElementById('mobile-nav');
