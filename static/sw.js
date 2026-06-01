@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'hugo-pico-v7';
+const CACHE_VERSION = 'hugo-pico-v8';
 const APP_SHELL = [
   './',
   './site.webmanifest',
@@ -13,14 +13,10 @@ const APP_SHELL = [
   './css/components.css',
   './css/tables.css',
   './css/code.css',
-  './css/search.css',
   './css/animations.css',
   './css/themes.css',
   './css/cookie-consent.css',
   './js/main.js',
-  './js/vendor/mermaid.min.js',
-  './js/search.js',
-  './js/kroki.js',
   './js/cookie-consent.js',
   './js/pwa.js',
   './offline/'

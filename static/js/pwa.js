@@ -9,7 +9,16 @@
     swUrl = script.src.replace(/\/js\/pwa\.js(?:\?.*)?$/, '/sw.js');
   }
 
-  window.addEventListener('load', function () {
+  function registerServiceWorker() {
     navigator.serviceWorker.register(swUrl).catch(function () {});
+  }
+
+  window.addEventListener('load', function () {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(registerServiceWorker, { timeout: 4000 });
+      return;
+    }
+
+    window.setTimeout(registerServiceWorker, 2000);
   });
 })();

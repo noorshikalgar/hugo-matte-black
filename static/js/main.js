@@ -122,6 +122,8 @@
   var ambientVideo = document.getElementById('ambient-shadow-video');
 
   if (ambientLayer && ambientVideo) {
+    var ambientSourcesLoaded = false;
+
     function readAmbientPreference() {
       var stored = localStorage.getItem(AMBIENT_VIDEO_KEY);
       return stored === 'on';
@@ -129,6 +131,30 @@
 
     function writeAmbientPreference(enabled) {
       localStorage.setItem(AMBIENT_VIDEO_KEY, enabled ? 'on' : 'off');
+    }
+
+    function loadAmbientSources() {
+      if (ambientSourcesLoaded) return;
+
+      var webmSrc = ambientVideo.getAttribute('data-webm-src');
+      var mp4Src = ambientVideo.getAttribute('data-mp4-src');
+
+      if (webmSrc) {
+        var webm = document.createElement('source');
+        webm.src = webmSrc;
+        webm.type = 'video/webm';
+        ambientVideo.appendChild(webm);
+      }
+
+      if (mp4Src) {
+        var mp4 = document.createElement('source');
+        mp4.src = mp4Src;
+        mp4.type = 'video/mp4';
+        ambientVideo.appendChild(mp4);
+      }
+
+      ambientSourcesLoaded = true;
+      ambientVideo.load();
     }
 
     function syncAmbientState() {
@@ -156,6 +182,7 @@
       }
 
       ambientLayer.classList.remove('reduced-motion');
+      loadAmbientSources();
       var playPromise = ambientVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(function () {});
@@ -193,7 +220,7 @@
       writeAmbientPreference(enabled);
       syncAmbientState();
 
-      if (enabled && ambientLayer.classList.contains('is-ready')) {
+      if (enabled) {
         setAmbientPlayback();
       }
     });
