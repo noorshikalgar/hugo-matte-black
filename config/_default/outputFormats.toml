@@ -10,6 +10,12 @@ baseName = "semantic-index"
 isPlainText = true
 notAlternative = true
 
+[TXT]
+mediaType = "text/plain"
+baseName = "index"
+isPlainText = true
+notAlternative = true
+
 [WEBMANIFEST]
 mediaType = "application/manifest+json"
 baseName = "site"
