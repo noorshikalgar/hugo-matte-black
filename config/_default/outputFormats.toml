@@ -3,3 +3,15 @@ mediaType = "application/json"
 baseName = "content-index"
 isPlainText = true
 notAlternative = true
+
+[SEMANTICINDEX]
+mediaType = "application/json"
+baseName = "semantic-index"
+isPlainText = true
+notAlternative = true
+
+[WEBMANIFEST]
+mediaType = "application/manifest+json"
+baseName = "site"
+isPlainText = true
+notAlternative = true
