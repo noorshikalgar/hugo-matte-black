@@ -20,7 +20,7 @@
     <link>{{ .Permalink }}</link>
     <description>{{ with .Description }}{{ . }}{{ else }}Recent content {{ if .IsHome }}on{{ else }}in {{ .Title }} on{{ end }} {{ $siteName }}{{ end }}</description>
     <generator>Hugo</generator>
-    <language>{{ .Site.Language.Locale | default .Site.Language.Name | default "en-us" }}</language>
+    <language>{{ .Site.Language.Lang | default "en" }}</language>
     {{- with $pages }}
     <lastBuildDate>{{ (index . 0).Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
     {{- end }}
