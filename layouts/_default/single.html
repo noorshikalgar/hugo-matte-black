@@ -1,17 +1,18 @@
 {{ define "main" }}
-<div class="content-layout">
+{{- $hasToc := isset .Params "toc" -}}
+{{- $tocValue := "" -}}
+{{- if $hasToc -}}
+  {{- $tocValue = lower (printf "%v" .Params.toc) -}}
+{{- end -}}
+{{- $showSidebarToc := and $hasToc (eq $tocValue "true") (gt (len .TableOfContents) 100) -}}
+
+<div class="content-layout{{ if not $showSidebarToc }} no-sidebar{{ end }}">
 
   <!-- Main article -->
   <article>
 
     <!-- Breadcrumbs -->
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="{{ "/" | relURL }}">home</a>
-      <span class="sep">/</span>
-      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
-      <span class="sep">/</span>
-      <span class="current">{{ .Title | truncate 40 }}</span>
-    </nav>
+    {{ partial "breadcrumbs.html" . }}
 
     <!-- Post meta -->
     <div class="post-meta-header">
@@ -23,6 +24,7 @@
       {{- with .ReadingTime }}
         <span class="meta-text">{{ . }} min read</span>
       {{- end }}
+      {{- partial "download-actions.html" . -}}
     </div>
 
     <!-- Title -->
@@ -37,6 +39,9 @@
       </ul>
     {{- end }}
 
+    <!-- Podcast player -->
+    {{- partial "podcast-player.html" . -}}
+
     <!-- Featured image -->
     {{- with .Params.image }}
       <div class="post-featured-image" style="margin-bottom:1.5rem;">
@@ -47,22 +52,30 @@
     <!-- TOC -->
     {{- partial "toc.html" . -}}
 
+    {{- partial "content-disclosure.html" . -}}
+
     <!-- Content -->
     <div class="post-content">
       {{ .Content }}
     </div>
+
+    <!-- Ad unit (after article, before nav) -->
+    {{- partial "google-ads.html" . -}}
 
     <!-- Post navigation -->
     {{- partial "post-nav.html" . -}}
 
   </article>
 
-  <!-- Sidebar (TOC on large screens, section links) -->
-  <aside>
-    <div style="position:sticky;top:70px;">
-      {{- partial "sidebar-toc.html" . -}}
-    </div>
-  </aside>
+  <!-- Sidebar TOC drawer (desktop only, slides in/out from right) -->
+  {{- if $showSidebarToc -}}
+    <aside id="toc-sidebar">
+      <button class="toc-drawer-tab" id="sidebar-toc-toggle" aria-label="Toggle table of contents" title="Toggle TOC">☰ TOC</button>
+      <div class="toc-sidebar-inner">
+        {{- partial "sidebar-toc.html" . -}}
+      </div>
+    </aside>
+  {{- end -}}
 
 </div>
 {{ end }}

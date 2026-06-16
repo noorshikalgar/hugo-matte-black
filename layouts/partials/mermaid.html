@@ -1,45 +1,317 @@
 {{- if .Page.Store.Get "hasMermaid" -}}
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="{{ .Site.Params.mermaidScript | default "js/vendor/mermaid.min.js" | relURL }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'base',
-    themeVariables: {
-      darkMode:         true,
-      background:       '#121212',
-      primaryColor:     '#212121',
-      primaryTextColor: '#EAEAEA',
-      primaryBorderColor: '#333333',
-      lineColor:        '#F59E0B',
-      secondaryColor:   '#1a1a1a',
-      tertiaryColor:    '#262626',
-      edgeLabelBackground: '#121212',
-      textColor:        '#bebebe',
-      clusterBkg:       '#1a1a1a',
-      clusterBorder:    '#333333',
-      titleColor:       '#F59E0B',
-      nodeBorder:       '#333333',
-      mainBkg:          '#212121',
-      nodeTextColor:    '#EAEAEA',
-      labelBackground:  '#212121'
-    }
+
+  function cssVar(name, fallback) {
+    var value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return value || fallback;
+  }
+
+  function isLightBackground(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex)) return false;
+    var r = parseInt(hex.slice(1, 3), 16);
+    var g = parseInt(hex.slice(3, 5), 16);
+    var b = parseInt(hex.slice(5, 7), 16);
+    return ((r * 299 + g * 587 + b * 114) / 1000) > 150;
+  }
+
+  function mermaidThemeVariables() {
+    var bg = cssVar('--mb-bg', '#121212');
+    var surface1 = cssVar('--mb-surface-1', '#1a1a1a');
+    var surface2 = cssVar('--mb-surface-2', '#212121');
+    var surface3 = cssVar('--mb-surface-3', '#262626');
+    var border = cssVar('--mb-border', '#333333');
+    var accent = cssVar('--mb-accent', '#F59E0B');
+    var text = cssVar('--mb-text', '#C0C0C0');
+    var bright = cssVar('--mb-text-bright', '#E0E0E0');
+    var warning = cssVar('--mb-warning', accent);
+
+    return {
+      darkMode: !isLightBackground(bg),
+      background: bg,
+      primaryColor: surface2,
+      primaryTextColor: bright,
+      primaryBorderColor: accent,
+      lineColor: accent,
+      secondaryColor: surface1,
+      tertiaryColor: surface3,
+      edgeLabelBackground: bg,
+      textColor: text,
+      clusterBkg: surface1,
+      clusterBorder: border,
+      titleColor: accent,
+      nodeBorder: accent,
+      mainBkg: surface2,
+      nodeTextColor: bright,
+      labelBackground: bg,
+      actorBkg: surface2,
+      actorBorder: border,
+      actorTextColor: bright,
+      noteBkgColor: surface1,
+      noteTextColor: bright,
+      noteBorderColor: warning,
+      activationBkgColor: surface3,
+      activationBorderColor: accent
+    };
+  }
+
+  /* ── Save original diagram sources before any rendering ─────── */
+  var mermaidSources = [];
+  document.querySelectorAll('.mermaid').forEach(function(el, i) {
+    mermaidSources[i] = el.textContent.trim();
+    el.dataset.mermaidIdx = String(i);
   });
 
-  // Make SVGs responsive
-  document.querySelectorAll('.mermaid').forEach(function(div) {
-    var observer = new MutationObserver(function() {
-      var svg = div.querySelector('svg');
-      if (svg) {
-        svg.removeAttribute('width');
-        svg.removeAttribute('height');
-        svg.style.width  = '100%';
-        svg.style.height = 'auto';
-        observer.disconnect();
-      }
+  function supportsHandDrawn(source) {
+    var body = source.replace(/^\s*%%\{init:[\s\S]*?\}%%\s*/i, '').trim();
+    return /^(graph|flowchart|stateDiagram|stateDiagram-v2|classDiagram|erDiagram|journey|mindmap|quadrantChart)\b/i.test(body);
+  }
+
+  function withSupportedHandDrawnInit(source) {
+    if (!supportsHandDrawn(source)) return source;
+    if (/^\s*%%\{init:/i.test(source)) return source;
+    return '%%{init: {"look": "handDrawn"}}%%\n' + source;
+  }
+
+  function addPanZoom(inner, svg, options) {
+    options = options || {};
+    var scale = options.initialScale || 0.75;
+    var STEP  = 0.25;
+    var MIN   = 0.25;
+    var MAX   = 4;
+
+    function applyScale() {
+      svg.style.width       = (scale * 100) + '%';
+      svg.style.height      = 'auto';
+      inner.style.overflowX = scale > 1 ? 'auto' : 'visible';
+      inner.style.overflowY = scale > 1 ? 'auto' : 'visible';
+      inner.style.cursor    = scale > 1 ? 'grab' : '';
+    }
+
+    applyScale();
+
+    var panning = false, panStartX, panStartY, scrollStartX, scrollStartY;
+    inner.addEventListener('mousedown', function(e) {
+      if (scale <= 1) return;
+      panning = true;
+      panStartX = e.clientX; panStartY = e.clientY;
+      scrollStartX = inner.scrollLeft; scrollStartY = inner.scrollTop;
+      inner.style.cursor = 'grabbing';
+      e.preventDefault();
     });
-    observer.observe(div, { childList: true, subtree: true });
-  });
+    document.addEventListener('mousemove', function(e) {
+      if (!panning) return;
+      inner.scrollLeft = scrollStartX - (e.clientX - panStartX);
+      inner.scrollTop  = scrollStartY - (e.clientY - panStartY);
+    });
+    document.addEventListener('mouseup', function() {
+      if (panning) { panning = false; inner.style.cursor = scale > 1 ? 'grab' : ''; }
+    });
+
+    var touchStartX, touchStartY, touchScrollX, touchScrollY;
+    inner.addEventListener('touchstart', function(e) {
+      if (scale <= 1 || e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+      touchScrollX = inner.scrollLeft;    touchScrollY = inner.scrollTop;
+    }, { passive: true });
+    inner.addEventListener('touchmove', function(e) {
+      if (scale <= 1 || e.touches.length !== 1) return;
+      inner.scrollLeft = touchScrollX - (e.touches[0].clientX - touchStartX);
+      inner.scrollTop  = touchScrollY - (e.touches[0].clientY - touchStartY);
+      e.preventDefault();
+    }, { passive: false });
+
+    if (options.wheelZoom) {
+      inner.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        var rect = inner.getBoundingClientRect();
+        var beforeX = e.clientX - rect.left + inner.scrollLeft;
+        var beforeY = e.clientY - rect.top + inner.scrollTop;
+        var beforeScale = scale;
+        var direction = e.deltaY > 0 ? -1 : 1;
+
+        scale = Math.max(MIN, Math.min(MAX, scale + direction * STEP));
+        applyScale();
+
+        if (beforeScale !== scale) {
+          var ratio = scale / beforeScale;
+          inner.scrollLeft = beforeX * ratio - (e.clientX - rect.left);
+          inner.scrollTop = beforeY * ratio - (e.clientY - rect.top);
+        }
+      }, { passive: false });
+    }
+
+    return {
+      zoomIn: function() { scale = Math.min(scale + STEP, MAX); applyScale(); },
+      zoomOut: function() { scale = Math.max(scale - STEP, MIN); applyScale(); },
+      reset: function(nextScale) {
+        scale = typeof nextScale === 'number' ? nextScale : (options.initialScale || 0.75);
+        inner.scrollLeft = 0;
+        inner.scrollTop = 0;
+        applyScale();
+      }
+    };
+  }
+
+  function ensureMermaidModal() {
+    var existing = document.getElementById('mermaid-viewer-modal');
+    if (existing) return existing;
+
+    var modal = document.createElement('div');
+    modal.id = 'mermaid-viewer-modal';
+    modal.className = 'mermaid-viewer-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'mermaid-viewer-title');
+    modal.setAttribute('hidden', '');
+    modal.innerHTML =
+      '<div class="mermaid-viewer-backdrop" data-mermaid-viewer-close></div>' +
+      '<section class="mermaid-viewer-panel">' +
+        '<header class="mermaid-viewer-header">' +
+          '<span class="mermaid-viewer-title" id="mermaid-viewer-title">MERMAID</span>' +
+          '<div class="mermaid-viewer-actions">' +
+            '<button title="Zoom in" aria-label="Zoom in diagram" data-action="zoomIn">&#43;</button>' +
+            '<button title="Zoom out" aria-label="Zoom out diagram" data-action="zoomOut">&#8722;</button>' +
+            '<button title="Reset zoom" aria-label="Reset diagram zoom" data-action="reset">&#8634;</button>' +
+            '<button title="Close" aria-label="Close diagram viewer" data-mermaid-viewer-close>&times;</button>' +
+          '</div>' +
+        '</header>' +
+        '<div class="mermaid-viewer-body">' +
+          '<div class="mermaid-viewer-inner"></div>' +
+        '</div>' +
+      '</section>';
+
+    document.body.appendChild(modal);
+
+    modal.querySelectorAll('[data-mermaid-viewer-close]').forEach(function(btn) {
+      btn.addEventListener('click', closeMermaidModal);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) closeMermaidModal();
+    });
+
+    return modal;
+  }
+
+  function openMermaidModal(container) {
+    var sourceSvg = container.querySelector('.mermaid-scroll-inner svg') || container.querySelector('svg');
+    if (!sourceSvg) return;
+
+    var modal = ensureMermaidModal();
+    var inner = modal.querySelector('.mermaid-viewer-inner');
+    inner.innerHTML = '';
+
+    var svg = sourceSvg.cloneNode(true);
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.style.maxWidth = 'none';
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    inner.appendChild(svg);
+
+    var controls = addPanZoom(inner, svg, { initialScale: 1, wheelZoom: true });
+    modal.querySelectorAll('.mermaid-viewer-actions [data-action]').forEach(function(btn) {
+      btn.onclick = function() {
+        var action = btn.dataset.action;
+        if (action === 'zoomIn') controls.zoomIn();
+        if (action === 'zoomOut') controls.zoomOut();
+        if (action === 'reset') controls.reset(1);
+      };
+    });
+
+    modal.removeAttribute('hidden');
+    document.body.classList.add('mermaid-viewer-open');
+    modal.querySelector('[data-mermaid-viewer-close]').focus();
+  }
+
+  function closeMermaidModal() {
+    var modal = document.getElementById('mermaid-viewer-modal');
+    if (!modal) return;
+    modal.setAttribute('hidden', '');
+    document.body.classList.remove('mermaid-viewer-open');
+  }
+
+  /* ── Post-process a single rendered mermaid container ────────── */
+  function postProcess(container) {
+    var svg = container.querySelector('svg');
+    if (!svg) return;
+
+    svg.style.maxWidth = 'none';
+    svg.style.width    = '100%';
+    svg.style.height   = 'auto';
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+
+    var inner = document.createElement('div');
+    inner.className = 'mermaid-scroll-inner';
+    container.appendChild(inner);
+    inner.appendChild(svg);
+
+    var controls = addPanZoom(inner, svg, { initialScale: 0.75 });
+
+    var bar = document.createElement('div');
+    bar.className = 'mermaid-toolbar';
+    bar.innerHTML =
+      '<button title="Zoom in" aria-label="Zoom in diagram" data-action="zoomIn">+</button>'  +
+      '<button title="Zoom out" aria-label="Zoom out diagram" data-action="zoomOut">&minus;</button>' +
+      '<button title="Reset zoom" aria-label="Reset diagram zoom" data-action="reset">&#8635;</button>' +
+      '<button title="Open diagram viewer" aria-label="Open diagram viewer" data-action="open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    container.insertBefore(bar, inner);
+
+    bar.addEventListener('click', function(e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      var action = btn.dataset.action;
+      if (action === 'zoomIn') controls.zoomIn();
+      if (action === 'zoomOut') controls.zoomOut();
+      if (action === 'reset') controls.reset(0.75);
+      if (action === 'open') openMermaidModal(container);
+    });
+  }
+
+  /* ── Render (or re-render) all diagrams with a given accent ─── */
+  function renderAll() {
+    /* Reset each container back to its original source text */
+    document.querySelectorAll('.mermaid').forEach(function(el) {
+      var toolbar = el.querySelector('.mermaid-toolbar');
+      if (toolbar) toolbar.remove();
+      var inner = el.querySelector('.mermaid-scroll-inner');
+      if (inner) {
+        /* Hoist any remaining children (svg) before removing wrapper */
+        while (inner.firstChild) el.appendChild(inner.firstChild);
+        inner.remove();
+      }
+      var svg = el.querySelector('svg');
+      if (svg) svg.remove();
+      el.textContent = withSupportedHandDrawnInit(mermaidSources[el.dataset.mermaidIdx] || '');
+      el.removeAttribute('data-processed');
+    });
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: mermaidThemeVariables()
+    });
+    mermaid.run({ querySelector: '.mermaid' }).then(function() {
+      document.querySelectorAll('.mermaid').forEach(postProcess);
+    });
+  }
+
+  /* ── Initial render ─────────────────────────────────────────── */
+  renderAll();
+
+  /* ── Re-render whenever the accent theme changes ────────────── */
+  new MutationObserver(function(mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].attributeName === 'data-accent') {
+        renderAll();
+        break;
+      }
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-accent'] });
+
 });
 </script>
 {{- end -}}

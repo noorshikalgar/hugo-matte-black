@@ -1,0 +1,10 @@
+{{- .Site.Title -}}
+{{- with .Site.Params.description }}
+
+{{ . }}
+{{- end }}
+
+{{- range partial "public-pages.html" .Site.RegularPages }}
+
+- {{ .Title }}: {{ .Permalink }}
+{{- end }}

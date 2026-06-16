@@ -1,4 +1,34 @@
 <footer class="site-footer">
+  {{- if .IsHome }}
+  <div id="terminal-mascot" class="terminal-mascot" aria-hidden="true">
+    <svg class="terminal-mascot-svg" viewBox="0 0 220 220" role="presentation">
+      <ellipse class="mascot-shadow" cx="110" cy="188" rx="44" ry="12" />
+
+      <g class="mascot-body">
+        <rect class="mascot-shell" x="50" y="42" width="120" height="100" rx="22" />
+        <rect class="mascot-screen" x="63" y="56" width="94" height="68" rx="14" />
+        <rect class="mascot-header-bar" x="63" y="56" width="94" height="12" rx="6" />
+        <circle class="mascot-dot mascot-dot-1" cx="76" cy="62" r="2.6" />
+        <circle class="mascot-dot mascot-dot-2" cx="85" cy="62" r="2.6" />
+        <circle class="mascot-dot mascot-dot-3" cx="94" cy="62" r="2.6" />
+
+        <g class="mascot-face">
+          <rect class="mascot-eye mascot-eye-left" x="84" y="83" width="10" height="10" rx="5" />
+          <rect class="mascot-eye mascot-eye-right" x="126" y="83" width="10" height="10" rx="5" />
+          <rect class="mascot-eye-line mascot-eye-line-left" x="84" y="87" width="10" height="2.8" rx="1.4" />
+          <rect class="mascot-eye-line mascot-eye-line-right" x="126" y="87" width="10" height="2.8" rx="1.4" />
+          <path class="mascot-mouth" d="M95 108h25" />
+          <path class="mascot-mouth mascot-mouth-smile" d="M96 107c5 6 18 6 23 0" />
+          <rect class="mascot-cursor" x="123" y="102" width="6" height="12" rx="1.5" />
+        </g>
+
+        <rect class="mascot-stand" x="102" y="142" width="16" height="18" rx="6" />
+        <rect class="mascot-base" x="80" y="156" width="60" height="10" rx="5" />
+      </g>
+    </svg>
+  </div>
+  {{- end }}
+
   <div class="footer-inner">
     <span>
       &copy; {{ now.Format "2006" }} {{ .Site.Title }}
@@ -14,8 +44,15 @@
       {{- if not .Site.Menus.footer -}}
         <a href="{{ "/privacy-policy/" | relURL }}">Privacy</a>
         <a href="{{ "/disclaimer/"     | relURL }}">Disclaimer</a>
+        <a href="{{ "/ai-transparency/" | relURL }}">AI Transparency</a>
+        <a href="{{ "/corrections/"     | relURL }}">Corrections</a>
         <a href="{{ "/tags/"           | relURL }}">Tags</a>
       {{- end -}}
     </nav>
+    <span class="footer-legal">
+      AI-generated content for educational use only &mdash;
+      <button class="footer-cookie-button" type="button" data-open-cookie-preferences>Cookie settings</button>
+    </span>
+    {{- partial "build-info.html" . -}}
   </div>
 </footer>

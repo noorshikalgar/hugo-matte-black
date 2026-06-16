@@ -1,4 +1,8 @@
-{{- $pages := where .Site.RegularPages "Params.noindex" "ne" true -}}
+{{- $pages := partial "public-pages.html" .Site.RegularPages -}}
+{{- $searchSections := .Site.Params.searchSections | default (.Site.Params.showCountSections | default slice) -}}
+{{- if gt (len $searchSections) 0 -}}
+  {{- $pages = where $pages "Section" "in" $searchSections -}}
+{{- end -}}
 [
   {{- range $i, $p := $pages }}
   {{- if $i }},{{ end }}
@@ -14,7 +18,7 @@
     "difficulty":  {{ $p.Params.difficulty | default "" | jsonify }},
     "contentType": {{ $p.Params.contentType | default $p.Section | jsonify }},
     "readingTime": {{ $p.ReadingTime | jsonify }},
-    "content":     {{ $p.Plain | truncate 1500 | jsonify }}
+    "featured":    {{ $p.Params.featured | default false | jsonify }}
   }
   {{- end }}
 ]

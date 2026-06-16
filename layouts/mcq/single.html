@@ -3,18 +3,13 @@
 
   <article>
     <!-- Breadcrumbs -->
-    <nav class="breadcrumbs">
-      <a href="{{ "/" | relURL }}">home</a>
-      <span class="sep">/</span>
-      <a href="{{ .Section | relURL }}">{{ .Section }}</a>
-      <span class="sep">/</span>
-      <span class="current">quiz</span>
-    </nav>
+    {{ partial "breadcrumbs.html" (dict "Page" . "CurrentLabel" "quiz") }}
 
     <div class="post-meta-header">
       <span class="post-meta-date">{{ .Date.Format "2006.01.02" }}</span>
       <span class="badge badge-section">quiz</span>
       <span class="meta-text">{{ len .Params.questions }} questions</span>
+      {{- partial "download-actions.html" . -}}
     </div>
 
     <h1 class="post-title-single">{{ .Title }}</h1>
@@ -76,46 +71,74 @@
   const submitBtn = document.getElementById('submit-btn');
   const resetBtn  = document.getElementById('reset-btn');
   const results   = document.getElementById('mcq-results');
-  let submitted   = false;
+  const STORAGE_KEY = 'mcq-state-' + location.pathname;
+  let submitted = false;
 
-  submitBtn.addEventListener('click', function() {
-    if (submitted) return;
+  function saveState(correct, total, checkedMap) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ correct, total, checkedMap }));
+    } catch (_) {}
+  }
+
+  function clearState() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+  }
+
+  function applySubmitted(correct, total, checkedMap) {
     submitted = true;
-
-    const questions = form.querySelectorAll('.mcq-question');
-    let correct = 0;
-
-    questions.forEach(qEl => {
-      const answer   = qEl.dataset.answer;
-      const selected = Array.from(qEl.querySelectorAll('input:checked'))
-                            .map(cb => cb.dataset.optionValue);
-      const isRight  = selected.length === 1 && selected[0] === answer;
-      if (isRight) correct++;
-
+    form.querySelectorAll('.mcq-question').forEach(qEl => {
+      const qId    = qEl.dataset.questionId;
+      const answer = qEl.dataset.answer;
+      const sel    = checkedMap[qId] || [];
+      sel.forEach(val => {
+        const cb = qEl.querySelector(`input[data-option-value="${val}"]`);
+        if (cb) cb.checked = true;
+      });
+      const isRight = sel.length === 1 && sel[0] === answer;
       const fb = qEl.querySelector('.question-feedback');
       fb.style.display = 'block';
       fb.classList.add(isRight ? 'correct' : 'incorrect');
-      fb.textContent = isRight
-        ? '✓ Correct!'
-        : `✗ Incorrect — answer: ${answer}`;
-
-      // Disable all checkboxes
+      fb.textContent = isRight ? '✓ Correct!' : `✗ Incorrect — answer: ${answer}`;
       qEl.querySelectorAll('input').forEach(i => i.disabled = true);
     });
-
-    const total = questions.length;
-    const pct   = Math.round((correct / total) * 100);
-
+    const pct = Math.round((correct / total) * 100);
     document.getElementById('mcq-score-pct').textContent = pct + '%';
     document.getElementById('mcq-correct').textContent   = correct;
     document.getElementById('mcq-total').textContent     = total;
-    results.style.display    = 'block';
-    submitBtn.style.display  = 'none';
-    resetBtn.style.display   = 'inline-block';
+    results.style.display   = 'block';
+    submitBtn.style.display = 'none';
+    resetBtn.style.display  = 'inline-block';
+  }
+
+  // Restore saved state on load
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && saved.checkedMap) applySubmitted(saved.correct, saved.total, saved.checkedMap);
+  } catch (_) {}
+
+  submitBtn.addEventListener('click', function() {
+    if (submitted) return;
+    const questions  = form.querySelectorAll('.mcq-question');
+    const checkedMap = {};
+    let correct = 0;
+
+    questions.forEach(qEl => {
+      const qId    = qEl.dataset.questionId;
+      const answer = qEl.dataset.answer;
+      const sel    = Array.from(qEl.querySelectorAll('input:checked')).map(cb => cb.dataset.optionValue);
+      checkedMap[qId] = sel;
+      const isRight = sel.length === 1 && sel[0] === answer;
+      if (isRight) correct++;
+    });
+
+    const total = questions.length;
+    saveState(correct, total, checkedMap);
+    applySubmitted(correct, total, checkedMap);
     results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
   resetBtn.addEventListener('click', function() {
+    clearState();
     form.reset();
     submitted = false;
     form.querySelectorAll('.question-feedback').forEach(fb => {

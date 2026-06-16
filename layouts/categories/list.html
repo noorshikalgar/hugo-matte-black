@@ -1,0 +1,160 @@
+{{ define "main" }}
+{{- $visibleCategoryCount := 0 -}}
+{{- range $name, $taxonomy := .Site.Taxonomies.categories -}}
+  {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+  {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+  {{- if gt (len $publicTaxonomy) 0 -}}{{- $visibleCategoryCount = add $visibleCategoryCount 1 -}}{{- end -}}
+{{- end -}}
+<div>
+  <!-- Header -->
+  <div class="section-header">
+    <h1>Categories</h1>
+    <span class="meta-text">{{ $visibleCategoryCount }} categories</span>
+  </div>
+
+  <!-- Controls -->
+  <div class="tags-controls">
+    <input
+      type="text"
+      id="category-search"
+      placeholder="filter categories…"
+      class="tag-filter-input"
+      aria-label="Filter categories"
+    />
+    <select id="category-sort" class="sort-select">
+      <option value="count-desc" selected>count ↓</option>
+      <option value="count-asc">count ↑</option>
+      <option value="name-asc">a → z</option>
+      <option value="name-desc">z → a</option>
+    </select>
+  </div>
+
+  <!-- Categories table -->
+  <div class="tags-table-container">
+    <table
+      class="tags-table"
+      id="categories-table"
+      aria-label="Categories list"
+    >
+      <thead>
+        <tr>
+          <th data-sort="name" class="tag-name-col">category</th>
+          <th
+            data-sort="count"
+            class="tag-count-col"
+            style="text-align: right; width: 100px;"
+          >
+            articles
+          </th>
+        </tr>
+      </thead>
+      <tbody id="categories-tbody">
+        {{- range $name, $taxonomy := .Site.Taxonomies.categories }}
+        {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+        {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+        {{- if gt (len $publicTaxonomy) 0 }}
+        <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $publicTaxonomy }}">
+          <td class="tag-name">
+            <a href="{{ "/categories/" | relURL }}{{ $name | urlize }}/">{{ $name }}</a>
+          </td>
+          <td class="tag-count">{{ len $publicTaxonomy }}</td>
+        </tr>
+        {{- end }}
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+  <nav class="pagination" id="categories-pagination" style="display:none;margin-top:1.25rem;"></nav>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+  (function () {
+    const searchInput = document.getElementById("category-search");
+    const sortSelect = document.getElementById("category-sort");
+    const tbody = document.getElementById("categories-tbody");
+    const pagination = document.getElementById("categories-pagination");
+    const PAGE_SIZE = 25;
+
+    // We store the original rows in memory because innerHTML = '' deletes them from the DOM
+    const allRows = Array.from(tbody.querySelectorAll(".tag-row"));
+
+    function filterRows(rows) {
+      const q = searchInput.value.toLowerCase().trim();
+      return rows.filter((r) => r.dataset.name.toLowerCase().includes(q));
+    }
+
+    function sortRows(rows) {
+      const val = sortSelect.value;
+      rows.sort((a, b) => {
+        const aName = a.dataset.name;
+        const bName = b.dataset.name;
+        const aCount = +a.dataset.count;
+        const bCount = +b.dataset.count;
+        if (val === "name-asc") return aName.localeCompare(bName);
+        if (val === "name-desc") return bName.localeCompare(aName);
+        if (val === "count-asc") return aCount - bCount;
+        return bCount - aCount;
+      });
+      return rows;
+    }
+
+    function renderPage(rows, page) {
+      tbody.innerHTML = "";
+      const start = (page - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      rows.slice(start, end).forEach((r) => tbody.appendChild(r));
+    }
+
+    function renderPagination(total, page) {
+      const totalPages = Math.ceil(total / PAGE_SIZE);
+      if (totalPages <= 1) {
+        pagination.innerHTML = "";
+        pagination.style.display = 'none';
+        return;
+      }
+      pagination.style.display = '';
+      let html = "";
+      if (page > 1)
+        html += `<a href="#" class="pagination-btn" data-page="${
+          page - 1
+        }">← Prev</a>`;
+      html += `<span class="pagination-info">Page ${page} of ${totalPages}</span>`;
+      if (page < totalPages)
+        html += `<a href="#" class="pagination-btn" data-page="${
+          page + 1
+        }">Next →</a>`;
+      pagination.innerHTML = html;
+      Array.from(pagination.querySelectorAll(".pagination-btn")).forEach(
+        (btn) => {
+          btn.onclick = (e) => {
+            e.preventDefault();
+            goToPage(+btn.dataset.page);
+          };
+        }
+      );
+    }
+
+    let currentPage = 1;
+    let filteredSortedRows = [];
+
+    function update() {
+      filteredSortedRows = sortRows(filterRows(allRows));
+      currentPage = 1;
+      renderPage(filteredSortedRows, currentPage);
+      renderPagination(filteredSortedRows.length, currentPage);
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderPage(filteredSortedRows, currentPage);
+      renderPagination(filteredSortedRows.length, currentPage);
+    }
+
+    searchInput.addEventListener("input", update);
+    sortSelect.addEventListener("change", update);
+    update();
+  })();
+</script>
+{{ end }}

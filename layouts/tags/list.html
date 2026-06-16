@@ -1,18 +1,24 @@
 {{ define "main" }}
+{{- $visibleTagCount := 0 -}}
+{{- range $name, $taxonomy := .Site.Taxonomies.tags -}}
+  {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+  {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+  {{- if gt (len $publicTaxonomy) 0 -}}{{- $visibleTagCount = add $visibleTagCount 1 -}}{{- end -}}
+{{- end -}}
 <div>
   <!-- Header -->
   <div class="section-header">
     <h1>Tags</h1>
-    <span class="meta-text">{{ len .Site.Taxonomies.tags }} tags</span>
+    <span class="meta-text">{{ $visibleTagCount }} tags</span>
   </div>
 
   <!-- Controls -->
-  <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+  <div class="tags-controls">
     <input
       type="search"
       id="tag-search"
       placeholder="filter tags…"
-      style="flex:1;min-width:160px;background:var(--mb-surface-1);border:1px solid var(--mb-border);border-radius:var(--pico-border-radius-sm);padding:0.35rem 0.6rem;color:var(--mb-text);font-family:'JetBrains Mono',monospace;font-size:0.82rem;"
+      class="tag-filter-input"
       aria-label="Filter tags"
     >
     <select id="tag-sort" class="sort-select">
@@ -34,16 +40,21 @@
       </thead>
       <tbody id="tags-tbody">
         {{- range $name, $taxonomy := .Site.Taxonomies.tags }}
-          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $taxonomy }}">
+          {{- $publicTaxonomy := where $taxonomy "Page.Params.noindex" "ne" true -}}
+          {{- $publicTaxonomy = where $publicTaxonomy "Page.Params.private" "ne" true -}}
+          {{- if gt (len $publicTaxonomy) 0 }}
+          <tr class="tag-row" data-name="{{ $name }}" data-count="{{ len $publicTaxonomy }}">
             <td class="tag-name">
               <a href="{{ "/tags/" | relURL }}{{ $name | urlize }}/">{{ $name }}</a>
             </td>
-            <td class="tag-count">{{ len $taxonomy }}</td>
+            <td class="tag-count">{{ len $publicTaxonomy }}</td>
           </tr>
+          {{- end }}
         {{- end }}
       </tbody>
     </table>
   </div>
+  <nav class="pagination" id="tags-pagination" style="display:none;margin-top:1.25rem;"></nav>
 </div>
 {{ end }}
 
@@ -53,16 +64,15 @@
   const searchInput = document.getElementById('tag-search');
   const sortSelect  = document.getElementById('tag-sort');
   const tbody       = document.getElementById('tags-tbody');
+  const pagination  = document.getElementById('tags-pagination');
+  const PAGE_SIZE   = 25;
 
-  function getRows() {
-    return Array.from(tbody.querySelectorAll('.tag-row'));
-  }
+  // Cache ALL rows once — never query live DOM after this
+  const allRows = Array.from(tbody.querySelectorAll('.tag-row'));
 
-  function filterRows(rows) {
+  function filterRows() {
     const q = searchInput.value.toLowerCase().trim();
-    rows.forEach(r => {
-      r.style.display = r.dataset.name.includes(q) ? '' : 'none';
-    });
+    return q ? allRows.filter(r => r.dataset.name.includes(q)) : allRows.slice();
   }
 
   function sortRows(rows) {
@@ -77,13 +87,44 @@
       if (val === 'count-asc')  return aCount - bCount;
       return bCount - aCount; // count-desc default
     });
-    rows.forEach(r => tbody.appendChild(r));
+    return rows;
   }
 
+  function renderPage(rows, page) {
+    tbody.innerHTML = '';
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    rows.slice(start, end).forEach(r => tbody.appendChild(r));
+  }
+
+  function renderPagination(total, page) {
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    if (totalPages <= 1) { pagination.innerHTML = ''; pagination.style.display = 'none'; return; }
+    pagination.style.display = '';
+    let html = '';
+    if (page > 1) html += `<a href="#" class="pagination-btn" data-page="${page-1}">← Prev</a>`;
+    html += `<span class="pagination-info">Page ${page} of ${totalPages}</span>`;
+    if (page < totalPages) html += `<a href="#" class="pagination-btn" data-page="${page+1}">Next →</a>`;
+    pagination.innerHTML = html;
+    Array.from(pagination.querySelectorAll('.pagination-btn')).forEach(btn => {
+      btn.onclick = e => { e.preventDefault(); goToPage(+btn.dataset.page); };
+    });
+  }
+
+  let currentPage = 1;
+  let filteredSortedRows = [];
+
   function update() {
-    const rows = getRows();
-    sortRows(rows);
-    filterRows(rows);
+    filteredSortedRows = sortRows(filterRows());
+    currentPage = 1;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
+  }
+
+  function goToPage(page) {
+    currentPage = page;
+    renderPage(filteredSortedRows, currentPage);
+    renderPagination(filteredSortedRows.length, currentPage);
   }
 
   searchInput.addEventListener('input', update);

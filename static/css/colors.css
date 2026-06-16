@@ -26,16 +26,17 @@
   --mb-border-accent: #F59E0B55; /* Accent-tinted border       */
 
   /* Text */
-  --mb-text:          #EAEAEA;   /* Primary text               */
-  --mb-text-muted:    #bebebe;   /* Secondary / subdued text   */
-  --mb-text-faint:    #8a8a8d;   /* Placeholders, disabled     */
+  --mb-text-bright:   #E0E0E0;   /* H1 / page titles           */
+  --mb-text:          #C0C0C0;   /* Body / H2 text             */
+  --mb-text-muted:    #888888;   /* H3 / secondary labels      */
+  --mb-text-faint:    #606066;   /* H4 / placeholders          */
   --mb-text-disabled: #333333;   /* Disabled labels            */
 
   /* Accent — Amber/Gold (primary interactive color) */
-  --mb-accent:        #F59E0B;   /* Primary accent             */
-  --mb-accent-dark:   #D97706;   /* Hover accent               */
-  --mb-accent-bright: #FBBF24;   /* Active / highlighted       */
-  --mb-accent-dim:    #BF9903;   /* Dimmer accent              */
+  --mb-accent:        #F59E0B;   /* Primary — links, icons     */
+  --mb-accent-bright: #FBBF24;   /* Highlight — bold, hover    */
+  --mb-accent-dark:   #D97706;   /* Tags, pressed states       */
+  --mb-accent-dim:    #B47409;   /* Visited links, subtle      */
   --mb-accent-bg:     #F59E0B1A; /* Accent tinted background   */
   --mb-accent-bg-sel: #F59E0B33; /* Selected item bg           */
 

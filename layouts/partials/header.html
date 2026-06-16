@@ -1,37 +1,63 @@
 {{- $currentPage := . -}}
 {{- $menuItems := .Site.Menus.main -}}
+{{- $visibleCount := .Site.Params.navVisibleItems | default 5 -}}
+{{- $visible := first $visibleCount $menuItems -}}
+{{- $overflow := after $visibleCount $menuItems -}}
 <header class="site-header">
+  <div class="navigation-progress" id="navigation-progress" aria-hidden="true"><span></span></div>
   <div class="header-container">
 
     <!-- Logo / Site title -->
     <a href="{{ "/" | relURL }}" class="site-logo">
-      {{- with .Site.Params.logo -}}
-        <img src="{{ . | relURL }}" alt="{{ $.Site.Title }}" height="22" style="vertical-align:middle;margin-right:0.4rem;">
-      {{- end -}}
+      <svg class="site-logo-svg" width="28" height="28" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+        <rect x="10" y="10" width="180" height="180" rx="20" stroke="currentColor" stroke-width="6"/>
+        <g stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 55C60 55 45 55 45 70C45 85 45 88 45 88C45 88 35 92 35 100C35 108 45 112 45 112C45 112 45 115 45 130C45 145 60 145 60 145"/>
+          <path d="M140 55C140 55 155 55 155 70C155 85 155 88 155 88C155 88 165 92 165 100C165 108 155 112 155 112C155 112 155 115 155 130C155 145 140 145 140 145"/>
+        </g>
+        <g stroke="currentColor" stroke-width="8" stroke-linecap="round">
+          <circle cx="100" cy="100" r="22"/>
+          <line x1="120" y1="80" x2="80" y2="120"/>
+        </g>
+      </svg>
       {{ .Site.Params.shortName | default .Site.Title }}<span class="logo-dot">.</span>
     </a>
-
-    <!-- Desktop navigation -->
+    <div class="header-spacer"></div>
+    <!-- Desktop navigation: first N items + overflow dropdown -->
     <nav class="nav-desktop" aria-label="Main navigation">
-      {{- range $menuItems -}}
+      {{- range $visible -}}
         <a href="{{ .URL | relURL }}"
            class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}"
            {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
           {{- .Name -}}
         </a>
       {{- end -}}
+
+      {{- if $overflow }}
+      <div class="nav-more" id="nav-more">
+        <button class="nav-more-btn header-icon-btn" id="nav-more-btn" aria-haspopup="true" aria-expanded="false">
+          more ▾
+        </button>
+        <div class="nav-more-dropdown" id="nav-more-dropdown" role="menu">
+          {{- range $overflow -}}
+            <a href="{{ .URL | relURL }}" role="menuitem"
+               {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+              {{- .Name -}}
+            </a>
+          {{- end -}}
+        </div>
+      </div>
+      {{- end }}
     </nav>
 
-    <div class="header-spacer"></div>
+
 
     <!-- Controls -->
     <div class="header-controls">
-      <!-- Layout toggle (grid ↔ list) — only on list pages -->
-      {{- if .IsSection }}
-      <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
-        <span id="layout-icon">⊞</span>
+      <!-- Theme switcher -->
+      <button id="theme-toggle" class="header-icon-btn" aria-label="Switch accent theme">
+        <span class="theme-dot"></span>
       </button>
-      {{- end }}
 
       <!-- Search -->
       <a href="{{ "/" | relURL }}" class="header-icon-btn" title="Search" aria-label="Search">
@@ -49,7 +75,7 @@
 
   </div>
 
-  <!-- Mobile navigation -->
+  <!-- Mobile navigation — all items -->
   <nav class="nav-mobile" id="mobile-nav" aria-label="Mobile navigation">
     <a href="{{ "/" | relURL }}">Search</a>
     {{- range $menuItems -}}

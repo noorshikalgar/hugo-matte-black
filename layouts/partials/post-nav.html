@@ -1,12 +1,13 @@
-{{- $mainSections := .Site.Params.mainSections | default (slice "guides" "posts") -}}
+{{- $mainSections := .Site.Params.mainSections | default .Site.Params.showCountSections | default (slice "guides" "posts") -}}
 {{- $section := .Section -}}
 {{- $isMain := in $mainSections $section -}}
+{{- $publicPages := partial "public-pages.html" .Site.RegularPages -}}
 
 {{- $allPosts := slice -}}
 {{- if $isMain -}}
-  {{- $allPosts = (where .Site.RegularPages "Section" $section).ByDate.Reverse -}}
+  {{- $allPosts = (where $publicPages "Section" $section).ByDate.Reverse -}}
 {{- else -}}
-  {{- $allPosts = (where .Site.RegularPages "Section" $section).ByParam "weight" -}}
+  {{- $allPosts = (where $publicPages "Section" $section).ByParam "weight" -}}
 {{- end -}}
 
 {{- $total := len $allPosts -}}

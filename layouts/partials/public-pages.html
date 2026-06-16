@@ -1,0 +1,8 @@
+{{- $pages := . -}}
+{{- $pages = where $pages "Params.noindex" "ne" true -}}
+{{- $pages = where $pages "Params.private" "ne" true -}}
+{{- $pages = where $pages "Params.searchExclude" "ne" true -}}
+{{- $pages = where $pages "Params.noSearch" "ne" true -}}
+{{- $pages = where $pages "Section" "not in" (slice "" "disclaimer" "privacy" "privacy-policy" "contact" "corrections" "editorial-policy" "ai-transparency" "offline" "sections") -}}
+{{- $pages = where $pages "File.BaseFileName" "not in" (slice "disclaimer" "privacy" "privacy-policy" "contact" "corrections" "editorial-policy" "ai-transparency" "offline") -}}
+{{- return $pages -}}

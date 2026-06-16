@@ -1,11 +1,42 @@
 {{ define "main" }}
-{{- $sections := .Site.Params.showCountSections | default (slice "guides" "posts" "cheatsheets") -}}
+{{- $statSections  := .Site.Params.showCountSections | default (slice "guides" "posts" "cheatsheets") -}}
+{{- $filterSections := .Site.Params.searchSections | default $statSections -}}
+{{- $publicPages := partial "public-pages.html" .Site.RegularPages -}}
 
 <div class="search-page">
 
+  <!-- Terminal typewriter (hidden for now) -->
+  <!-- <div class="hero-tagline">
+    <span class="hero-tagline-prefix">
+      <span class="hero-tagline-bracket">[</span><span id="ascii-spinner" class="hero-tagline-spinner">-</span><span class="hero-tagline-bracket">]</span>
+      <span class="hero-tagline-brand">AI_VOID_CORE</span> 
+      <span class="hero-tagline-sep">::</span>
+    </span>
+    <span id="tw-text" class="hero-tagline-text"></span><span class="hero-tagline-cursor"></span>
+  </div> -->
+  
+  <!-- OLD TERMINAL TYPEWRITER (Hidden for now) -->
+  <!-- <div class="terminal-typewriter"><span class="tw-prompt" style="color: #8A8A8D; margin-right: 6px;">$</span><span id="tw-text-old"></span><span class="tw-cursor"></span></div> -->
+
+  {{- if (.Site.Params.showBrandLab | default true) }}
+  <section class="brand-lab brand-lab-featured" aria-label="AI VOID branding">
+    <div class="brand-concept brand-concept-graph brand-concept-graph-compact">
+      <div class="brand-graph-copy">
+        <span class="brand-kicker">compression log</span>
+        <strong>Long reads in. Clear systems out.</strong>
+      </div>
+      <div class="brand-dot-grid" aria-hidden="true">
+        {{- range seq 1 56 }}
+          <span style="--i:{{ . }}"></span>
+        {{- end }}
+      </div>
+    </div>
+  </section>
+  {{- end }}
+
   <!-- Header -->
   <div class="search-header">
-    <h1><span class="site-name">{{ .Site.Params.shortName | default .Site.Title }}</span> / search</h1>
+    <h1><span class="ssh-user">visitor</span><span class="ssh-sep">@</span><span class="site-name">{{ .Site.Params.shortName | default .Site.Title | lower | replaceRE " " "-" }}</span><span class="ssh-path">:~$</span> <span class="ssh-cmd">./search</span></h1>
 
     <!-- Search form -->
     <form class="search-form" id="search-form" role="search" autocomplete="off">
@@ -13,48 +44,40 @@
         type="search"
         id="search-input"
         class="search-input"
-        placeholder="Search {{ len .Site.RegularPages }}+ articles, guides, cheatsheets..."
+        placeholder="Search {{ len $publicPages }}+ articles, guides, cheatsheets..."
         aria-label="Search content"
         autofocus
         spellcheck="false"
       >
-      <button type="submit" class="search-submit">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:middle;margin-right:0.2rem;">
-          <circle cx="6.5" cy="6.5" r="4.5"/>
-          <path d="M10.5 10.5L14 14"/>
-        </svg>
-        Search
-      </button>
     </form>
 
-    <!-- Filter chips -->
-    <div class="search-filters" id="search-filters">
+    <!-- Search help hints -->
+    <div class="search-help">
+      <span class="search-help-flag">--help</span>
+      <span class="search-help-tip"><kbd>react</kbd> searches react in titles.</span>
+      <span class="search-help-sep">·</span>
+      <span class="search-help-tip"><kbd>content:react</kbd> searches react in full text.</span>
+      <span class="search-help-tip"><kbd>ai:queues retries</kbd> runs semantic search.</span>
+    </div>
+
+    <!-- Filter chips (hidden until a search query is active) -->
+    <div class="search-filters" id="search-filters" style="display:none">
       <span class="filter-label">type:</span>
-      {{- range $sections }}
+      {{- range $filterSections }}
         <button class="filter-chip" data-filter="section" data-value="{{ . }}">{{ . }}</button>
       {{- end }}
-      <span class="filter-label" style="margin-left:0.5rem;">sort:</span>
-      <select class="sort-select" id="sort-select">
-        <option value="relevance">relevance</option>
-        <option value="date-desc">newest</option>
-        <option value="date-asc">oldest</option>
-        <option value="title-asc">a → z</option>
-      </select>
     </div>
-  </div>
-
-  <!-- Search tabs -->
-  <div class="search-tabs" id="search-tabs" style="display:none">
-    <button class="search-tab active" data-tab="all">All</button>
-    {{- range $sections }}
-      <button class="search-tab" data-tab="{{ . }}">{{ . | title }}</button>
-    {{- end }}
-    <button class="search-tab" data-tab="tags">Tags</button>
   </div>
 
   <!-- Results meta bar -->
   <div class="search-meta-bar" id="results-meta" style="display:none">
     <span class="results-count" id="results-count"></span>
+    <select class="sort-select" id="sort-select">
+      <option value="relevance">relevance</option>
+      <option value="date-desc">newest</option>
+      <option value="date-asc">oldest</option>
+      <option value="title-asc">a → z</option>
+    </select>
   </div>
 
   <!-- Results container -->
@@ -71,50 +94,268 @@
 
   <!-- Stats / Quick nav (shown when no query) -->
   <div id="browse-section">
-    <!-- Stats bar -->
-    <div class="stats-bar">
-      {{- range $sections }}
-        {{- $count := 0 }}
-        {{- range $.Site.RegularPages }}
-          {{- if eq .Section $ }}{{- $count = add $count 1 }}{{- end }}
-        {{- end }}
-        <div class="stat-item">
-          <a href="{{ printf "/%s/" $ | relURL }}" style="text-decoration:none;">
-            <span class="stat-number">{{ $count }}+</span>
-            <span class="stat-label">{{ $ }}</span>
+    <!-- Quick nav sections -->
+    <div class="quick-nav" style="margin-top:1.25rem;">
+      <div class="quick-nav-title-block">
+        <span class="title-prompt">~/sections$</span>
+        <p class="quick-nav-title sections-header-desc">pick a topic, start digging</p>
+      </div>
+      <div class="quick-nav-grid">
+        {{- range $sec := $statSections }}
+          {{- $sectionPages := where $publicPages "Section" $sec }}
+          <a href="{{ printf "/%s/" $sec | relURL }}" class="quick-nav-item">
+            <span class="quick-nav-name">{{ $sec | humanize }}</span>
+            <span class="quick-nav-count">{{ len $sectionPages }} articles</span>
           </a>
-        </div>
-      {{- end }}
-      <div class="stat-item">
-        <a href="{{ "/tags/" | relURL }}" style="text-decoration:none;">
-          <span class="stat-number">{{ len .Site.Taxonomies.tags }}+</span>
-          <span class="stat-label">tags</span>
+        {{- end }}
+        <a href="{{ "/sections/" | relURL }}" class="quick-nav-item quick-nav-more">
+          <span class="quick-nav-name">More sections</span>
+          <span class="quick-nav-count">browse full list</span>
         </a>
       </div>
     </div>
 
-    <!-- Quick nav sections -->
-    <div class="quick-nav" style="margin-top:1.25rem;">
-      <p class="quick-nav-title">Browse sections</p>
-      <div class="quick-nav-grid">
-        {{- range $sections }}
-          {{- $pages := where $.Site.RegularPages "Section" . }}
-          <a href="{{ printf "/%s/" $ | relURL }}" class="quick-nav-item">
-            <span class="quick-nav-name">{{ . | title }}</span>
-            <span class="quick-nav-count">{{ len $pages }} articles</span>
-          </a>
+    <!-- Hot Topics / Highlights -->
+    {{- $hotTopicsConfig := .Site.Params.hotTopics | default slice -}}
+    {{- $hotTopicsCount := .Site.Params.hotTopicsCount | default 3 -}}
+    {{- $highlighted := slice -}}
+    {{- $highlightedPermalinks := slice -}}
+    
+    {{- /* Add config URLs first (highest priority) */}}
+    {{- if and $hotTopicsConfig (gt (len $hotTopicsConfig) 0) }}
+      {{- range first $hotTopicsCount $hotTopicsConfig }}
+        {{- $path := . }}
+        {{- $page := $.Site.GetPage $path }}
+        {{- if $page }}
+          {{- $highlighted = $highlighted | append $page }}
+          {{- $highlightedPermalinks = $highlightedPermalinks | append $page.Permalink }}
         {{- end }}
-        <a href="{{ "/tags/" | relURL }}" class="quick-nav-item">
-          <span class="quick-nav-name">Tags</span>
-          <span class="quick-nav-count">{{ len .Site.Taxonomies.tags }} tags</span>
-        </a>
+      {{- end }}
+    {{- end }}
+    
+    {{- /* Fill remaining slots with featured posts (if not at limit) */}}
+    {{- if lt (len $highlighted) $hotTopicsCount }}
+      {{- $featured := where $publicPages "Params.featured" true -}}
+      {{- $featured = $featured.ByDate.Reverse -}}
+      {{- range $featured }}
+        {{- if lt (len $highlighted) $hotTopicsCount }}
+          {{- /* Skip if already in highlighted */}}
+          {{- if not (in $highlightedPermalinks .Permalink) }}
+            {{- $highlighted = $highlighted | append . }}
+            {{- $highlightedPermalinks = $highlightedPermalinks | append .Permalink }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    
+    {{- if $highlighted }}
+    <div class="highlights-section">
+      <div class="highlights-header">
+        <div class="highlights-header-main">
+          <span class="title-prompt">~/highlights$</span>
+          <p class="quick-nav-title highlights-header-desc">trending now</p>
+        </div>
+        <span class="highlights-count">{{ len $highlighted }} pinned</span>
+      </div>
+      <div class="highlights-grid">
+        {{- range $highlighted }}
+          <article class="featured-card">
+            <div class="featured-card-header" style="align-items: center; margin-bottom: 0.3rem;">
+              <div class="featured-card-meta" style="margin: 0; color: var(--mb-text-faint); font-family: 'JetBrains Mono', monospace;">
+                <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
+              </div>
+              <span class="badge badge-section">{{ .Section }}</span>
+            </div>
+            <div class="featured-card-title">
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </div>
+            {{- with .Params.tags }}
+              <ul class="tag-list featured-tags" style="margin-top: 0.4rem;">
+                {{- range first 2 . }}
+                  <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+                {{- end }}
+              </ul>
+            {{- end }}
+          </article>
+        {{- end }}
       </div>
     </div>
+    {{- end }}
+
+    <!-- Fresh this week -->
+    {{- $cutoff := now.AddDate 0 0 -7 -}}
+    {{- $mainSections := .Site.Params.searchSections | default (slice "guides") -}}
+    {{- $recent := where $publicPages "Section" "in" $mainSections -}}
+    {{- $recent  = where $recent "Date" "ge" $cutoff -}}
+    {{- $recent  = $recent.ByDate.Reverse -}}
+    {{- if $recent }}
+    <div class="week-section">
+      <div class="week-section-header">
+        <div class="week-header-main">
+          <span class="title-prompt">~/feed$</span>
+          <p class="quick-nav-title week-header-desc">published in the last 7 days</p>
+        </div>
+        <span class="week-section-count">{{ len $recent }} new</span>
+      </div>
+      <div class="posts-grid">
+        {{- range $recent }}
+          <article class="post-card">
+            <div class="post-card-meta">
+              <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
+              <span class="badge badge-section">{{ .Section }}</span>
+              {{- partial "status-badge.html" . -}}
+            </div>
+            <div class="post-card-title">
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </div>
+            {{- with .Params.tags }}
+              <ul class="tag-list" style="margin-bottom:0.4rem;">
+                {{- range first 3 . }}
+                  <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+                {{- end }}
+              </ul>
+            {{- end }}
+            <div class="post-card-summary">
+              {{- if .Params.description -}}
+                {{ .Params.description | truncate 140 }}
+              {{- else -}}
+                {{ .Summary | plainify | truncate 140 }}
+              {{- end }}
+            </div>
+            <div class="post-card-footer">
+              <a href="{{ .RelPermalink }}" class="read-more">read →</a>
+              {{- with .ReadingTime }}<span class="meta-text">{{ . }}m</span>{{- end }}
+            </div>
+          </article>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
   </div>
 
 </div>
 {{ end }}
 
 {{ define "scripts" }}
+<script>
+  window.searchSections = {{ .Site.Params.searchSections | default (.Site.Params.showCountSections | default (slice)) | jsonify | safeJS }};
+  window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
+  window.searchIndexURL = '{{ "/index.json" | relURL }}';
+  window.searchContentIndexURL = '{{ "/content-index.json" | relURL }}';
+  window.searchSemanticIndexURL = '{{ "/semantic-index.json" | relURL }}';
+</script>
+<script>
+(function() {
+  function seedBrandGrid() {
+    var dots = document.querySelectorAll('.brand-dot-grid span');
+    if (!dots.length) return;
+
+    var classes = [
+      'is-fill-accent',
+      'is-fill-green',
+      'is-border-accent',
+      'is-border-green',
+      'is-faint',
+      ''
+    ];
+
+    dots.forEach(function(dot) {
+      var roll = Math.random();
+      var className =
+        roll < 0.16 ? classes[0] :
+        roll < 0.28 ? classes[1] :
+        roll < 0.44 ? classes[2] :
+        roll < 0.58 ? classes[3] :
+        roll < 0.74 ? classes[4] :
+        classes[5];
+
+      dot.className = className;
+      dot.style.setProperty('--dot-delay', (-Math.random() * 8).toFixed(2) + 's');
+      dot.style.setProperty('--dot-duration', (5.5 + Math.random() * 5.5).toFixed(2) + 's');
+    });
+  }
+
+  seedBrandGrid();
+
+  var PHRASES = [
+    'Want to learn new things for free? Just search.',
+    'AI generated zero-fluff learning guides. Start learning.',
+    'Don\'t just watch videos, learn by reading.',
+    'Read, learn, and improve your skills over time.',
+    'Master complex frameworks in minutes, not hours.',
+    'Stop browsing endless docs. Get instant, exact answers.',
+    '100% free developer knowledge base, curated by AI models.',
+    'Say goodbye to outdated tutorials. Always fresh, always accurate.',
+    'Level up your career with free AI-powered cheatsheets.',
+    'Deep-dive tech guides synthesized for maximum clarity.'
+  ];
+
+  var txtEl = document.getElementById('tw-text');
+  if (!txtEl) return;
+
+  var spinnerEl = document.getElementById('ascii-spinner');
+  var chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  var sIdx = 0;
+  if (spinnerEl) {
+    setInterval(function() {
+      sIdx = (sIdx + 1) % chars.length;
+      spinnerEl.textContent = chars[sIdx];
+    }, 80);
+  }
+
+  function shuffle(arr) {
+    return arr.slice().sort(function() { return Math.random() - 0.5; });
+  }
+
+  var queue = shuffle(PHRASES);
+  var qi = 0;
+
+  var kw = "free|search|learn|learning|reading|skills|videos|read|master|expert|minutes|hours|answers|tutorials|career|unlock|developer|guides|cheatsheets|frameworks".split('|');
+  var st = "start|improve|level|outdated|fresh|accurate|maximum|clarity|instant|exact".split('|');
+  var cm = "ai|generated|models|synthesized|powered".split('|');
+
+  function hl(text) {
+    return text.split(/("[^"]*"?|\b(?:[0-9]+(?:\.[0-9]+)?|free|search|learn|learning|reading|skills|videos|read|master|expert|minutes|hours|answers|tutorials|career|unlock|developer|guides|cheatsheets|frameworks|start|improve|level|outdated|fresh|accurate|maximum|clarity|instant|exact|ai|generated|models|synthesized|powered)\b)/gi).map(function(t) {
+        if (!t) return '';
+        if (t.startsWith('"')) return '<span style="color: var(--mb-text-faint);">' + t + '</span>';
+        if (/^[0-9]+(\.[0-9]+)?$/.test(t)) return '<span style="color: var(--mb-info, #EFBF04);">' + t + '</span>';
+        
+        var lower = t.toLowerCase();
+        if (kw.indexOf(lower) !== -1) return '<span style="color: var(--mb-green, #059669); font-weight: 500;">' + t + '</span>';
+        if (st.indexOf(lower) !== -1) return '<span style="color: var(--mb-accent-bright, #FBBF24);">' + t + '</span>';
+        if (cm.indexOf(lower) !== -1) return '<span style="color: var(--mb-accent, #F59E0B);">' + t + '</span>';
+        
+        return t.replace(/(\[|\]|=+|>|\/|-X|-f|\?|\.|,|')/g, '<span style="color: var(--mb-text-muted);">$1</span>');
+    }).join('');
+  }
+
+  function next() {
+    var phrase = queue[qi++ % queue.length];
+    var i = 0;
+
+    (function typeStep() {
+      txtEl.innerHTML = hl(phrase.slice(0, i));
+      if (i < phrase.length) {
+        i++;
+        setTimeout(typeStep, 42);
+      } else {
+        setTimeout(eraseStep, 1600);
+      }
+    })();
+
+    function eraseStep() {
+      if (i > 0) {
+        i--;
+        txtEl.innerHTML = hl(phrase.slice(0, i));
+        setTimeout(eraseStep, 22);
+      } else {
+        setTimeout(next, 400);
+      }
+    }
+  }
+
+  next();
+})();
+</script>
 <script src="{{ "js/search.js" | relURL }}" defer></script>
 {{ end }}

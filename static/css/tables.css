@@ -17,6 +17,19 @@ table {
   margin-bottom: 1.5rem;
 }
 
+/* post-content tables: fill width, wrap text — no overflow */
+.post-content table {
+  width: 100%;
+  min-width: 0;
+}
+.post-content table td,
+.post-content table th {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
 thead {
   background: var(--mb-surface-2);
   border-bottom: 1px solid var(--mb-border);
@@ -101,13 +114,37 @@ thead th[data-sort="desc"]::after { content: " ↓"; opacity: 0.8; }
 
 /* ── 3. Responsive scroll wrapper ────────────────────────────── */
 .table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: visible;          /* large + medium: no scroll, wrap text  */
   border: 1px solid var(--mb-border);
   border-radius: var(--pico-border-radius);
   margin-bottom: 1.5rem;
+  max-width: 100%;
 }
 .table-wrapper table {
   margin-bottom: 0;
   border: none;
+  width: 100%;
+  min-width: 0;
+}
+
+/* mobile only: scroll instead of squishing */
+@media (max-width: 600px) {
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-wrapper table {
+    width: max-content;
+    min-width: 100%;
+  }
+  .post-content table {
+    width: max-content;
+    min-width: 100%;
+  }
+  .post-content table td,
+  .post-content table th {
+    white-space: nowrap;
+    word-break: normal;
+    min-width: 80px;
+  }
 }

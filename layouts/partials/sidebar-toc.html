@@ -1,8 +1,17 @@
-{{- if gt (len .TableOfContents) 100 -}}
-<nav style="font-size:0.8rem;">
-  <p style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--mb-text-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">on this page</p>
-  <div style="color:var(--mb-text-muted);border-left:1px solid var(--mb-border);padding-left:0.75rem;">
+{{- $hasToc := isset .Params "toc" -}}
+{{- $tocValue := "" -}}
+{{- if $hasToc -}}
+  {{- $tocValue = lower (printf "%v" .Params.toc) -}}
+{{- end -}}
+
+{{- if and $hasToc (eq $tocValue "true") (gt (len .TableOfContents) 100) -}}
+<div class="sidebar-toc">
+  <div class="sidebar-toc-header">
+    <span class="sidebar-toc-label">// Table of Contents</span>
+    <button class="sidebar-toc-close" id="sidebar-toc-close" aria-label="Close table of contents">&#x2715;</button>
+  </div>
+  <div class="sidebar-toc-content toc-content">
     {{ .TableOfContents }}
   </div>
-</nav>
+</div>
 {{- end -}}

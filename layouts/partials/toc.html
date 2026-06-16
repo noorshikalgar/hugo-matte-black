@@ -1,18 +1,13 @@
-{{- $showToc := false -}}
-{{- if isset .Params "toc" -}}
-  {{- $showToc = .Params.toc -}}
-{{- else if .Site.Params.toc -}}
-  {{- $showToc = .Site.Params.toc -}}
-{{- end -}}
-
-{{- if and $showToc (gt (len .TableOfContents) 100) -}}
-<div class="toc-section">
-  <div class="toc-header" id="toc-header" role="button" tabindex="0" aria-expanded="true" aria-controls="toc-content">
-    <h3>table of contents</h3>
-    <span class="toc-toggle" id="toc-toggle">▼</span>
+{{- if (eq .Params.toc true) -}}
+  {{- if gt (len .TableOfContents) 100 -}}
+  <div class="toc-section toc-inline">
+    <div class="toc-header" id="toc-header" role="button" tabindex="0" aria-expanded="false" aria-controls="toc-content">
+      <h3>Table of Contents</h3>
+      <span class="toc-toggle" id="toc-toggle" aria-hidden="true">▶</span>
+    </div>
+    <div class="toc-content collapsed" id="toc-content">
+      {{ .TableOfContents }}
+    </div>
   </div>
-  <div class="toc-content" id="toc-content">
-    {{ .TableOfContents }}
-  </div>
-</div>
+  {{- end -}}
 {{- end -}}

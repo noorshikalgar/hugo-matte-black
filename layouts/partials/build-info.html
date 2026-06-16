@@ -1,0 +1,10 @@
+{{- $buildNow := now.UTC -}}
+{{- $cfg := or (index .Site.Params "buildInfo") (index .Site.Params "buildinfo") (dict) -}}
+{{- $enabled := default true (index $cfg "enabled") -}}
+{{- if ne (lower (printf "%v" $enabled)) "false" -}}
+  {{- $version := or (index $cfg "version") (index .Site.Params "buildVersion") (index .Site.Params "assetVersion") (printf "%d" $buildNow.Unix) -}}
+  {{- $time := or (index $cfg "time") (index .Site.Params "buildTime") ($buildNow.Format "2006-01-02 15:04 UTC") -}}
+  <span class="build-info" title="Last build: {{ $time }}">
+    build v{{ $version }} · {{ $time }}
+  </span>
+{{- end -}}

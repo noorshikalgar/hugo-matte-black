@@ -1,0 +1,50 @@
+{{/*
+  breadcrumbs.html — Breadcrumb nav with animated folder/file icons.
+  SVG paths: feather-icons style (MIT). Folder swaps closed→open on hover.
+  Usage: {{ partial "breadcrumbs.html" . }}
+  Override last crumb: {{ partial "breadcrumbs.html" (dict "Page" . "CurrentLabel" "quiz") }}
+*/}}
+{{- $page         := . -}}
+{{- $currentLabel := .Title | truncate 48 -}}
+{{- if reflect.IsMap . -}}
+  {{- $page         = .Page -}}
+  {{- $currentLabel = .CurrentLabel -}}
+{{- end -}}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+
+  {{/* ── Home ── */}}
+  <a href="{{ "/" | relURL }}">
+    <span class="bc-icon">
+      <svg class="bc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g class="icon-closed"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></g>
+        <g class="icon-open"><path d="M2 9h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9z"/><path d="M2 9l2-4h7l2 2h7a2 2 0 0 1 2 2"/></g>
+      </svg>
+    </span>home
+  </a>
+
+  <span class="sep">/</span>
+
+  {{/* ── Section ── */}}
+  <a href="{{ $page.Section | relURL }}">
+    <span class="bc-icon">
+      <svg class="bc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g class="icon-closed"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></g>
+        <g class="icon-open"><path d="M2 9h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9z"/><path d="M2 9l2-4h7l2 2h7a2 2 0 0 1 2 2"/></g>
+      </svg>
+    </span>{{ $page.Section }}
+  </a>
+
+  <span class="sep">/</span>
+
+  {{/* ── Current page ── */}}
+  <span class="current">
+    <span class="bc-icon">
+      <svg class="bc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
+      </svg>
+    </span>{{ $currentLabel }}
+  </span>
+
+</nav>

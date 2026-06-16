@@ -1,23 +1,30 @@
 {{ define "main" }}
-{{- $mainSections := .Site.Params.mainSections | default (slice "guides" "posts") -}}
+{{- $mainSections := .Site.Params.mainSections | default .Site.Params.showCountSections | default (slice "guides" "posts") -}}
 {{- $isMain := in $mainSections .Section -}}
-{{- $pages := .Pages -}}
+{{- $pages := partial "public-pages.html" .Pages -}}
 {{- if $isMain -}}
   {{- $pages = .Pages.ByDate.Reverse -}}
 {{- else -}}
   {{- $pages = .Pages.ByParam "weight" -}}
 {{- end -}}
-{{- $paginator := .Paginate $pages (.Site.Params.paginate | default 30) -}}
+{{- $paginator := .Paginate $pages (.Site.Params.postsPerPage | default .Site.Params.paginate | default 12) -}}
 
 <div>
   <!-- Section header -->
+
   <div class="section-header">
-    <h1>{{ .Title | upper }}</h1>
-    <div style="display:flex;align-items:center;gap:0.5rem;">
+    {{- with .Title }}
+      <h1 class="section-title">
+        <span class="bc-icon">
+          <svg class="bc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.1em;height:1.1em;vertical-align:-0.15em;">
+            <g class="icon-closed"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></g>
+            <g class="icon-open"><path d="M2 9h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9z"/><path d="M2 9l2-4h7l2 2h7a2 2 0 0 1 2 2"/></g>
+          </svg>
+        </span>{{ . }}
+      </h1>
+    {{- end }}
+    <div class="section-header-meta">
       <span class="meta-text">{{ len .Pages }} articles</span>
-      <button id="layout-toggle" class="header-icon-btn" title="Toggle layout" aria-label="Toggle layout">
-        <span id="layout-icon">⊞</span>
-      </button>
     </div>
   </div>
 
@@ -30,8 +37,11 @@
     {{- range $paginator.Pages }}
       <article class="post-card">
         <div class="post-card-meta">
-          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          <span class="post-date meta-text">{{ partial "date-ordinal.html" .Date }}</span>
           {{- partial "status-badge.html" . -}}
+          {{- with .Params.difficulty }}
+            <span class="badge badge-section">{{ . }}</span>
+          {{- end }}
         </div>
 
         <div class="post-card-title">
@@ -42,6 +52,10 @@
           <ul class="tag-list" style="margin-bottom:0.4rem;">
             {{- range first 3 . }}
               <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag-chip">{{ . }}</a></li>
+            {{- end }}
+            {{- $extra := sub (len .) 3 }}
+            {{- if gt $extra 0 }}
+              <li><span class="tag-chip tag-chip-more">+{{ $extra }}</span></li>
             {{- end }}
           </ul>
         {{- end }}

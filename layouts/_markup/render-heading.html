@@ -1,0 +1,13 @@
+{{- $text  := .Text | plainify | replaceRE `&#?\w+;` "" | lower | replaceRE `[^a-z0-9 ]` "" | strings.TrimSpace -}}
+{{- $title := .Page.Title              | replaceRE `&#?\w+;` "" | lower | replaceRE `[^a-z0-9 ]` "" | strings.TrimSpace -}}
+{{- if or (eq .Level 1) (eq $text $title) }}{{- /* suppress: template renders the page title */}}{{- else -}}
+<h{{ .Level }} id="{{ .Anchor }}"{{ with .Attributes.class }} class="{{ . }}"{{ end }}>
+  {{- .Text | safeHTML -}}
+  <a href="#{{ .Anchor }}" class="heading-anchor" aria-label="Link to this section">
+    <svg class="heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </svg>
+  </a>
+</h{{ .Level }}>
+{{- end -}}

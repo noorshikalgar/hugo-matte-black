@@ -1,9 +1,21 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en" }}" data-theme="dark">
+<html lang="{{ .Site.Language.Lang | default "en" }}" data-theme="dark">
   <head>
     {{- partial "head.html" . -}}
   </head>
   <body>
+    <div class="ambient-shadow" aria-hidden="true">
+      <video
+        id="ambient-shadow-video"
+        class="ambient-shadow-video"
+        muted
+        loop
+        playsinline
+        preload="none"
+        data-webm-src="{{ .Site.Params.ambientShadowVideoWebm | default "videos/tree-shadow.webm" | relURL }}"
+        data-mp4-src="{{ .Site.Params.ambientShadowVideoMp4 | default "videos/tree-shadow.mp4" | relURL }}"></video>
+    </div>
+
     {{- partial "header.html" . -}}
 
     <main class="site-main">
@@ -11,6 +23,9 @@
     </main>
 
     {{- partial "footer.html" . -}}
+
+    <!-- Screen-reader announcements -->
+    <div id="sr-announce" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
 
     <!-- Scroll to top -->
     <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top" title="Back to top">↑</button>
@@ -20,9 +35,6 @@
       <div class="lightbox-overlay" id="lightbox-overlay"></div>
       <div class="lightbox-content">
         <div class="lightbox-controls">
-          <button class="lightbox-zoom-out" id="lb-zoom-out">−</button>
-          <button class="lightbox-zoom-reset" id="lb-zoom-reset">⊙</button>
-          <button class="lightbox-zoom-in" id="lb-zoom-in">+</button>
           <button class="lightbox-close" id="lb-close">✕ close</button>
         </div>
         <div class="lightbox-image-container" id="lb-image-container">
@@ -33,6 +45,11 @@
 
     <!-- Core scripts -->
     <script src="{{ "js/main.js" | relURL }}" defer></script>
+    {{- if .Page.Store.Get "hasCodeBlocks" }}
+    <script src="{{ "js/code-actions.js" | relURL }}" defer></script>
+    {{- end }}
+    <script src="{{ "js/cookie-consent.js" | relURL }}" defer></script>
+    <script src="{{ "js/pwa.js" | relURL }}" defer></script>
 
     {{- if .Site.Params.kroki.enabled }}
     <script>

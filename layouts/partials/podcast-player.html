@@ -1,0 +1,75 @@
+{{- $podcast := .Param "podcast" -}}
+{{- $audioFile := .Param "audioFile" | default (.Param "audiofile") | default "" -}}
+{{- $ttsStatus := .Param "ttsStatus" | default (.Param "ttsstatus") | default "" -}}
+{{- $transcriptAvailable := .Param "transcriptAvailable" | default (.Param "transcriptavailable") -}}
+{{- $audioFile = replaceRE "^\\s+|\\s+$" "" (printf "%v" $audioFile) -}}
+{{- $ttsStatus = lower (replaceRE "^\\s+|\\s+$" "" (printf "%v" $ttsStatus)) -}}
+{{- $hasTtsStatus := ne $ttsStatus "" -}}
+{{- $showPlayer := and $podcast (ne $audioFile "") (or (not $hasTtsStatus) (eq $ttsStatus "generated")) -}}
+{{- $playerId := printf "podcast-seek-%s" (.RelPermalink | anchorize) -}}
+
+{{- if $showPlayer -}}
+  <section class="podcast-player" data-podcast-player>
+    <div class="podcast-player-header">
+      <div>
+        <p class="podcast-player-kicker">Podcast audio</p>
+        <h2 class="podcast-player-title">Listen to this article</h2>
+      </div>
+      {{- if $transcriptAvailable }}
+        <span class="badge badge-section podcast-player-badge">Transcript in article</span>
+      {{- end }}
+    </div>
+
+    <audio
+      class="podcast-player-media"
+      preload="metadata"
+      controls
+      src="{{ $audioFile | relURL }}">
+      Your browser does not support the audio element.
+    </audio>
+
+    <div class="podcast-player-controls" hidden>
+      <button type="button" class="podcast-player-toggle" data-podcast-toggle aria-label="Play podcast audio" title="Play audio">
+        <span class="podcast-control-icon" aria-hidden="true">
+          <svg class="podcast-control-svg podcast-control-svg-play" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g class="podcast-icon-play">
+              <path d="M16.6582 9.28638C18.098 10.1862 18.8178 10.6361 19.0647 11.2122C19.2803 11.7152 19.2803 12.2847 19.0647 12.7878C18.8178 13.3638 18.098 13.8137 16.6582 14.7136L9.896 18.94C8.29805 19.9387 7.49907 20.4381 6.83973 20.385C6.26501 20.3388 5.73818 20.0469 5.3944 19.584C5 19.053 5 18.1108 5 16.2264V7.77357C5 5.88919 5 4.94701 5.3944 4.41598C5.73818 3.9531 6.26501 3.66111 6.83973 3.6149C7.49907 3.5619 8.29805 4.06126 9.896 5.05998L16.6582 9.28638Z"/>
+            </g>
+            <g class="podcast-icon-pause">
+              <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"/>
+              <path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"/>
+            </g>
+          </svg>
+        </span>
+        <span class="sr-only" data-podcast-toggle-label>Play</span>
+      </button>
+
+      <button type="button" class="podcast-player-reset" data-podcast-reset aria-label="Reset podcast audio to start" title="Reset audio">
+        <span class="podcast-control-icon" aria-hidden="true">
+          <svg class="podcast-control-svg podcast-control-svg-reset" fill="none" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
+            <path d="M960 0v213.333c411.627 0 746.667 334.934 746.667 746.667S1371.627 1706.667 960 1706.667 213.333 1371.733 213.333 960c0-197.013 78.4-382.507 213.334-520.747v254.08H640V106.667H53.333V320h191.04C88.64 494.08 0 720.96 0 960c0 529.28 430.613 960 960 960s960-430.72 960-960S1489.387 0 960 0" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+        </span>
+        <span class="sr-only podcast-player-reset-label">Reset</span>
+      </button>
+
+      <span class="podcast-player-time podcast-player-time-current" data-podcast-current>0:00</span>
+
+      <div class="podcast-player-timeline">
+        <label class="sr-only" for="{{ $playerId }}">Seek podcast audio</label>
+        <input
+          id="{{ $playerId }}"
+          class="podcast-player-seek"
+          data-podcast-seek
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          step="0.1"
+          aria-label="Seek podcast audio">
+      </div>
+
+      <span class="podcast-player-time podcast-player-time-duration" data-podcast-duration aria-live="off">0:00</span>
+    </div>
+  </section>
+{{- end -}}

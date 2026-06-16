@@ -1,41 +1,154 @@
 {{- $title := .Title -}}
 {{- if .IsHome -}}{{- $title = .Site.Title -}}{{- end -}}
+{{- $description := .Description | default .Site.Params.description -}}
+{{- $siteName := .Site.Params.siteName | default .Site.Title -}}
+{{- $author := .Params.author | default .Site.Params.author | default $siteName -}}
+{{- $isAiAssisted := or .Params.ai_disclosure .Params.generation_type -}}
+
+{{/* ── Smart og:image: page image → site fallback ── */}}
+{{- $ogImage := "" -}}
+{{- with .Params.image -}}
+  {{- $ogImage = . | absURL -}}
+{{- else }}
+  {{- with .Params.images -}}
+    {{- $ogImage = (index . 0) | absURL -}}
+  {{- else }}
+    {{- with $.Site.Params.ogImage -}}
+      {{- $ogImage = . | absURL -}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>{{ $title }}{{ if not .IsHome }} · {{ .Site.Title }}{{ end }}</title>
+<meta name="theme-color" content="{{ .Site.Params.themeColor | default "#121212" }}">
+<meta name="application-name" content="{{ $siteName }}">
+<meta name="apple-mobile-web-app-title" content="{{ .Site.Params.pwaShortName | default .Site.Params.shortName | default $siteName }}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>{{ $title }}{{ if not .IsHome }} · {{ $siteName }}{{ end }}</title>
 
-{{- with .Description }}<meta name="description" content="{{ . }}">
-{{- else with .Site.Params.description }}<meta name="description" content="{{ . }}">
-{{- end }}
-
-<meta name="robots" content="index, follow">
-
-{{- with .Params.tags }}
-<meta name="keywords" content="{{ delimit . ", " }}">
-{{- end }}
+{{- with $description }}<meta name="description" content="{{ . }}">{{ end }}
+<meta name="robots" content="{{ if or .Params.noindex .Params.private }}noindex, nofollow{{ else }}index, follow{{ end }}">
+{{- with .Params.tags }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
+<meta name="author" content="{{ $author }}">
 
 <!-- Canonical -->
 <link rel="canonical" href="{{ .Permalink }}">
 
-<!-- Open Graph -->
+<!-- Open Graph ─────────────────────────────────────────── -->
+<meta property="og:site_name"   content="{{ $siteName }}">
+<meta property="og:locale"      content="{{ .Site.Language.Lang | default "en" | replaceRE "-" "_" }}">
 <meta property="og:type"        content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:title"       content="{{ $title }}">
 <meta property="og:url"         content="{{ .Permalink }}">
-<meta property="og:site_name"   content="{{ .Site.Title }}">
-{{- with .Description }}<meta property="og:description" content="{{ . }}">{{- end }}
-{{- with .Site.Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{- end }}
+{{- with $description }}<meta property="og:description" content="{{ . }}">{{ end }}
+{{- with $ogImage }}
+<meta property="og:image"       content="{{ . }}">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"   content="{{ $title }}">
+{{- end }}
 
-<!-- Twitter Card -->
-<meta name="twitter:card"  content="summary">
-<meta name="twitter:title" content="{{ $title }}">
-{{- with .Description }}<meta name="twitter:description" content="{{ . }}">{{- end }}
+{{- if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+<meta property="article:modified_time"  content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+<meta property="article:author"         content="{{ $author }}">
+{{- with .Section }}<meta property="article:section" content="{{ . | title }}">{{ end }}
+{{- range .Params.tags }}<meta property="article:tag" content="{{ . }}">
+{{- end }}
+{{- end }}
 
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
-<link rel="icon" type="image/png"     href="{{ "favicon.png" | relURL }}">
+<!-- Twitter Card ────────────────────────────────────────── -->
+<meta name="twitter:card"        content="{{ if $ogImage }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title"       content="{{ $title }}">
+{{- with $description }}<meta name="twitter:description" content="{{ . }}">{{ end }}
+{{- with $ogImage }}<meta name="twitter:image" content="{{ . }}">{{ end }}
+{{- with .Site.Params.twitterSite }}<meta name="twitter:site" content="{{ . }}">{{ end }}
+
+{{- $adsClient := or (index .Site.Params "googleadsclient") (index .Site.Params "googleAdsClient") (index .Site.Params "adsenseClient") (index .Site.Params "adsense_client_id") (index .Site.Params "googleAdsense") | default "" -}}
+{{- with $adsClient }}
+<meta name="google-adsense-account" content="{{ . }}">
+{{- end }}
+
+<!-- JSON-LD Structured Data ─────────────────────────────── -->
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ $siteName | jsonify | safeJS }},
+  "url": {{ .Site.BaseURL | jsonify | safeJS }},
+  "description": {{ $description | jsonify | safeJS }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": {{ (print .Site.BaseURL "search/?q={search_term_string}") | jsonify | safeJS }} },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{{- else if .IsPage }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ $title | jsonify | safeJS }},
+  "url": {{ .Permalink | jsonify | safeJS }},
+  "datePublished": {{ .Date.Format "2006-01-02T15:04:05Z07:00" | jsonify | safeJS }},
+  "dateModified": {{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" | jsonify | safeJS }},
+  "description": {{ $description | jsonify | safeJS }},
+  "author": { "@type": {{ cond $isAiAssisted "Organization" "Person" | jsonify | safeJS }}, "name": {{ cond $isAiAssisted $siteName $author | jsonify | safeJS }} },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ $siteName | jsonify | safeJS }}
+    {{- with .Site.Params.ogImage }}, "logo": { "@type": "ImageObject", "url": {{ . | absURL | jsonify | safeJS }} }{{ end }}
+  }
+  {{- with $ogImage }}, "image": { "@type": "ImageObject", "url": {{ . | jsonify | safeJS }}, "width": 1200, "height": 630 }{{ end }}
+  {{- with .Params.tags }}, "keywords": {{ . | jsonify | safeJS }}{{ end }}
+  {{- with .ReadingTime }}, "timeRequired": {{ printf "PT%dM" . | jsonify | safeJS }}{{ end }}
+  {{- with .WordCount }}, "wordCount": {{ . }}{{ end }}
+}
+</script>
+{{- end }}
+
+<!-- Favicons and app manifest -->
+<link rel="icon" type="image/svg+xml"
+      href="{{ .Site.Params.faviconSvg | default "favicon.svg" | relURL }}">
+{{- with .Site.Params.faviconPng }}
+<link rel="icon" type="image/png" sizes="96x96"
+      href="{{ . | relURL }}">
+{{- end }}
+{{- with .Site.Params.appleTouchIcon }}
+<link rel="apple-touch-icon" href="{{ . | relURL }}">
+{{- else }}
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
+{{- end }}
+{{- with .Site.Home.OutputFormats.Get "WEBMANIFEST" }}
+<link rel="manifest" href="{{ .RelPermalink }}">
+{{- else }}
+<link rel="manifest" href="{{ .Site.Params.webmanifest | default "site.webmanifest" | relURL }}">
+{{- end }}
+
+<!-- Apply saved accent theme before CSS renders (prevents flash) -->
+<script>
+  (function(){
+    var t = localStorage.getItem('accentTheme') || {{ .Site.Params.defaultAccentTheme | default "paper-diary" | jsonify | safeJS }};
+    if (t) document.documentElement.setAttribute('data-accent', t);
+  })();
+</script>
 
 <!-- Pico CSS -->
+{{- with .Site.Params.fontsCss }}
+<link rel="stylesheet" href="{{ . | relURL }}">
+{{- else }}
+{{- if not (.Site.Params.disableGoogleFonts | default false) }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+{{- end }}
+{{- end }}
 <link rel="stylesheet" href="{{ "css/pico/pico.min.css" | relURL }}">
 
 <!-- Theme CSS — modular, in load order -->
@@ -45,12 +158,59 @@
 <link rel="stylesheet" href="{{ "css/components.css" | relURL }}">
 <link rel="stylesheet" href="{{ "css/tables.css"     | relURL }}">
 <link rel="stylesheet" href="{{ "css/code.css"       | relURL }}">
-<link rel="stylesheet" href="{{ "css/search.css"     | relURL }}">
+{{- if or .IsHome (eq .Type "search") }}
+{{- $searchCssVersion := .Site.Params.assetVersion | default now.Unix -}}
+<link rel="stylesheet" href="{{ "css/search.css"     | relURL }}?v={{ $searchCssVersion }}">
+{{- end }}
 <link rel="stylesheet" href="{{ "css/animations.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/themes.css"     | relURL }}">
+<link rel="stylesheet" href="{{ "css/cookie-consent.css" | relURL }}">
 
 {{- block "head" . }}{{- end }}
 
 <!-- Search index preload on search/home page -->
 {{- if or .IsHome (eq .Type "search") }}
-<link rel="preload" href="{{ "index.json" | relURL }}" as="fetch" crossorigin>
+<link rel="preload" href="{{ "/index.json" | relURL }}" as="fetch" crossorigin>
 {{- end }}
+
+{{- $gaID := "" -}}
+{{- with .Site.Config.Services.GoogleAnalytics.ID -}}
+  {{- $gaID = . -}}
+{{- else -}}
+  {{- with .Site.Params.googleAnalytics -}}{{- $gaID = . -}}{{- end -}}
+{{- end -}}
+{{- $adsSlot := or (index .Site.Params "googleadsslot") (index .Site.Params "googleAdsSlot") (index .Site.Params "adsenseSlot") (index .Site.Params "adsense_slot_id") | default "" -}}
+{{- $adsAuto := true -}}
+{{- if isset .Site.Params "googleadsauto" -}}
+  {{- $adsAuto = index .Site.Params "googleadsauto" -}}
+{{- else if isset .Site.Params "adsenseautoads" -}}
+  {{- $adsAuto = index .Site.Params "adsenseautoads" -}}
+{{- end -}}
+{{- $consentConfig := dict
+  "storageKey" "hugo-pico-cookie-consent"
+  "version" 2
+  "siteName" $siteName
+  "privacyUrl" ("/privacy-policy/" | relURL)
+  "disclaimerUrl" ("/disclaimer/" | relURL)
+  "googleAnalyticsId" $gaID
+  "googleAdsClient" $adsClient
+  "googleAdsSlot" $adsSlot
+  "autoAdsEnabled" $adsAuto
+  "adsEnabled" (ne $adsClient "")
+-}}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  window.gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    wait_for_update: 500
+  });
+  window.HugoPicoConsent = {{ $consentConfig | jsonify | safeJS }};
+  window.HugoPicoPWA = {
+    installHintEnabled: {{ .Site.Params.pwaInstallHintEnabled | default true | jsonify | safeJS }},
+    installHintStorageKey: {{ .Site.Params.pwaInstallHintStorageKey | default "hugo-pico-ios-install-hint-dismissed" | jsonify | safeJS }}
+  };
+</script>
