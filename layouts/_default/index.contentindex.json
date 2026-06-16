@@ -1,5 +1,9 @@
 {{- $pages := partial "public-pages.html" .Site.RegularPages -}}
 {{- $contentChars := .Site.Params.searchContentChars | default 3000 -}}
+{{- $searchSections := .Site.Params.searchSections | default (.Site.Params.showCountSections | default slice) -}}
+{{- if gt (len $searchSections) 0 -}}
+  {{- $pages = where $pages "Section" "not in" $searchSections -}}
+{{- end -}}
 [
   {{- range $i, $p := $pages }}
   {{- if $i }},{{ end }}

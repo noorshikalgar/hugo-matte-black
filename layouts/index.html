@@ -57,7 +57,7 @@
       <span class="search-help-tip"><kbd>react</kbd> searches react in titles.</span>
       <span class="search-help-sep">·</span>
       <span class="search-help-tip"><kbd>content:react</kbd> searches react in full text.</span>
-      <span class="search-help-tip"><kbd>content:react,angular</kbd> searches react & angular in full text.</span>
+      <span class="search-help-tip"><kbd>ai:queues retries</kbd> runs semantic search.</span>
     </div>
 
     <!-- Filter chips (hidden until a search query is active) -->
@@ -238,10 +238,11 @@
 
 {{ define "scripts" }}
 <script>
-  window.searchSections = {{ .Site.Params.searchSections | default (slice) | jsonify | safeJS }};
+  window.searchSections = {{ .Site.Params.searchSections | default (.Site.Params.showCountSections | default (slice)) | jsonify | safeJS }};
   window.showCountSections = {{ .Site.Params.showCountSections | default (slice) | jsonify }};
   window.searchIndexURL = '{{ "/index.json" | relURL }}';
   window.searchContentIndexURL = '{{ "/content-index.json" | relURL }}';
+  window.searchSemanticIndexURL = '{{ "/semantic-index.json" | relURL }}';
 </script>
 <script>
 (function() {

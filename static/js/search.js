@@ -47,11 +47,22 @@
     filtersContainer.appendChild(chip);
   }
 
+  function removeChaptersChipIfIdle() {
+    if (!filtersContainer || contentIndex || semanticIndex) return;
+    var chip = filtersContainer.querySelector('[data-value="chapters"]');
+    if (!chip) return;
+    if (activeSection === 'chapters') activeSection = '';
+    chip.remove();
+  }
+
   /* ── State ───────────────────────────────────────────────────── */
   let index            = null;
   let contentIndex     = null;
+  let semanticIndex    = null;
+  let semanticEngine   = null;
   let isLoading        = false;   // guard against duplicate metadata fetches
   let isContentLoading = false;   // guard against duplicate full-text fetches
+  let isSemanticLoading = false;  // guard against duplicate semantic fetches
   let query            = '';
   let activeSection    = '';   // '' = all
   let activeSort       = 'relevance';
@@ -82,6 +93,38 @@
     ]
   };
 
+  const SEMANTIC_DIMS = 256;
+  const SEMANTIC_SYNONYMS = {
+    ai: ['agent', 'agents', 'llm', 'model', 'automation'],
+    agent: ['ai', 'workflow', 'automation', 'assistant'],
+    agents: ['ai', 'workflow', 'automation', 'assistant'],
+    async: ['background', 'queue', 'job', 'worker'],
+    auth: ['authentication', 'authorization', 'login', 'security'],
+    background: ['async', 'queue', 'job', 'worker', 'scheduled'],
+    cache: ['caching', 'memoization', 'store'],
+    cloud: ['aws', 'gcp', 'azure', 'infrastructure'],
+    deploy: ['deployment', 'release', 'production', 'ship'],
+    durable: ['reliable', 'resilient', 'persistent', 'fault'],
+    error: ['bug', 'failure', 'exception', 'debug'],
+    errors: ['bugs', 'failures', 'exceptions', 'debugging'],
+    gpu: ['cuda', 'graphics', 'accelerated', 'parallel'],
+    jobs: ['queue', 'worker', 'background', 'tasks'],
+    llm: ['ai', 'model', 'agent', 'prompt'],
+    queue: ['queues', 'worker', 'job', 'background', 'async'],
+    queues: ['queue', 'worker', 'job', 'background', 'async'],
+    reliable: ['durable', 'resilient', 'fault', 'retry'],
+    retries: ['retry', 'failure', 'durable', 'reliable'],
+    retry: ['retries', 'failure', 'durable', 'reliable'],
+    schedule: ['scheduled', 'cron', 'background', 'job'],
+    scheduled: ['schedule', 'cron', 'background', 'job'],
+    security: ['auth', 'authentication', 'authorization', 'safe'],
+    test: ['testing', 'unit', 'integration', 'verify'],
+    tests: ['testing', 'unit', 'integration', 'verify'],
+    workflow: ['pipeline', 'orchestration', 'automation', 'agent'],
+    workflows: ['pipeline', 'orchestration', 'automation', 'agent'],
+    worker: ['queue', 'job', 'background', 'async']
+  };
+
   /* ── Load index ──────────────────────────────────────────────── */
   /* silent=true: fetch in background without showing the spinner  */
   function loadIndex(silent) {
@@ -101,7 +144,7 @@
       .then(function (data) {
         index = data;
         isLoading = false;
-        injectChaptersChip();
+        removeChaptersChipIfIdle();
         if (!silent) showLoading(false);
         if (query || activeSection) runSearch();
       })
@@ -142,6 +185,36 @@
       });
   }
 
+  function loadSemanticIndex(silent) {
+    if (semanticIndex || isSemanticLoading) {
+      if (semanticIndex && query) runSearch();
+      return;
+    }
+
+    isSemanticLoading = true;
+    const indexURL = (window.searchSemanticIndexURL) || '/semantic-index.json';
+    if (!silent) showLoading(true, 'loading semantic index...');
+
+    fetch(indexURL)
+      .then(function (r) {
+        if (!r.ok) throw new Error('fetch failed');
+        return r.json();
+      })
+      .then(function (data) {
+        semanticIndex = data;
+        semanticEngine = buildSemanticEngine(data);
+        isSemanticLoading = false;
+        injectChaptersChip();
+        if (!silent) showLoading(false);
+        if (query || activeSection) runSearch();
+      })
+      .catch(function () {
+        isSemanticLoading = false;
+        if (!silent) showLoading(false);
+        if (!silent) showError('Could not load semantic search index.');
+      });
+  }
+
   /* ── Scoring ─────────────────────────────────────────────────── */
 
   const STOP_WORDS = new Set([
@@ -164,6 +237,164 @@
       .filter(function (token) {
         return token.length > 1 && !STOP_WORDS.has(token);
       });
+  }
+
+  function stemToken(token) {
+    if (!token || token.length < 4) return token;
+    return token
+      .replace(/(?:ization|isation)$/i, 'ize')
+      .replace(/(?:ing|ers|ies|ied|ed|es|s)$/i, function (suffix) {
+        if (suffix === 'ies' || suffix === 'ied') return 'y';
+        return '';
+      });
+  }
+
+  function semanticTokens(value) {
+    var base = tokenize(value).map(stemToken).filter(Boolean);
+    var expanded = [];
+    base.forEach(function (token) {
+      expanded.push(token);
+      var synonyms = SEMANTIC_SYNONYMS[token];
+      if (synonyms) {
+        synonyms.forEach(function (synonym) {
+          expanded.push(stemToken(synonym));
+        });
+      }
+    });
+    return expanded;
+  }
+
+  function hashToken(token) {
+    var hash = 2166136261;
+    for (var i = 0; i < token.length; i += 1) {
+      hash ^= token.charCodeAt(i);
+      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    }
+    return Math.abs(hash >>> 0) % SEMANTIC_DIMS;
+  }
+
+  function addVectorValue(vector, key, value) {
+    vector[key] = (vector[key] || 0) + value;
+  }
+
+  function normalizeVector(vector) {
+    var sum = 0;
+    Object.keys(vector).forEach(function (key) {
+      sum += vector[key] * vector[key];
+    });
+    if (!sum) return vector;
+    var length = Math.sqrt(sum);
+    Object.keys(vector).forEach(function (key) {
+      vector[key] = vector[key] / length;
+    });
+    return vector;
+  }
+
+  function vectorizeText(value, idf) {
+    var vector = {};
+    semanticTokens(value).forEach(function (token) {
+      var key = hashToken(token);
+      addVectorValue(vector, key, idf && idf[token] ? idf[token] : 1);
+    });
+    return normalizeVector(vector);
+  }
+
+  function cosineSimilarity(a, b) {
+    var score = 0;
+    var small = Object.keys(a).length < Object.keys(b).length ? a : b;
+    var large = small === a ? b : a;
+    Object.keys(small).forEach(function (key) {
+      if (large[key]) score += small[key] * large[key];
+    });
+    return score;
+  }
+
+  function buildSemanticEngine(pages) {
+    var docs = pages.map(function (page) {
+      var text = [
+        page.title,
+        page.description,
+        Array.isArray(page.tags) ? page.tags.join(' ') : '',
+        Array.isArray(page.categories) ? page.categories.join(' ') : '',
+        page.topic,
+        page.difficulty,
+        page.contentType,
+        page.content
+      ].join(' ');
+      return {
+        page: page,
+        text: text,
+        tokens: Array.from(new Set(semanticTokens(text)))
+      };
+    });
+
+    var df = {};
+    docs.forEach(function (doc) {
+      doc.tokens.forEach(function (token) {
+        df[token] = (df[token] || 0) + 1;
+      });
+    });
+
+    var count = Math.max(1, docs.length);
+    var idf = {};
+    Object.keys(df).forEach(function (token) {
+      idf[token] = Math.log(1 + (count / (1 + df[token]))) + 1;
+    });
+
+    docs.forEach(function (doc) {
+      doc.vector = vectorizeText(doc.text, idf);
+    });
+
+    return { docs: docs, idf: idf };
+  }
+
+  function semanticScore(page, q) {
+    var base = scoreGroup(page, q, true);
+    return base ? Math.min(0.2, base / 1000) : 0;
+  }
+
+  function runSemanticSearch(q) {
+    if (!semanticIndex || !semanticEngine) {
+      loadSemanticIndex(false);
+      return;
+    }
+
+    var queryVector = vectorizeText(q, semanticEngine.idf);
+    var allMatches = semanticEngine.docs.map(function (doc) {
+      var semantic = cosineSimilarity(queryVector, doc.vector);
+      var lexical = semanticScore(doc.page, q);
+      var recency = recentBoost(doc.page) / 500;
+      return {
+        page: doc.page,
+        score: semantic + lexical + recency
+      };
+    }).filter(function (item) {
+      return item.score > 0.08;
+    });
+
+    const sectionCounts = {};
+    allMatches.forEach(function (item) {
+      const key = isChapter(item.page) ? 'chapters' : item.page.section;
+      sectionCounts[key] = (sectionCounts[key] || 0) + 1;
+    });
+
+    let filtered;
+    if (activeSection === 'chapters') {
+      filtered = allMatches.filter(function (item) { return isChapter(item.page); });
+    } else if (activeSection) {
+      filtered = allMatches.filter(function (item) { return item.page.section === activeSection; });
+    } else {
+      filtered = allMatches.slice();
+    }
+
+    filtered.sort(function (a, b) {
+      if (activeSort === 'date-desc') return (b.page.date || '') > (a.page.date || '') ? 1 : -1;
+      if (activeSort === 'date-asc')  return (a.page.date || '') > (b.page.date || '') ? 1 : -1;
+      if (activeSort === 'title-asc') return (a.page.title || '').localeCompare(b.page.title || '');
+      return b.score - a.score;
+    });
+
+    renderResults(filtered.map(function (item) { return item.page; }), q, sectionCounts, true, 'AI');
   }
 
   function hasWord(text, token) {
@@ -312,10 +543,17 @@
     const raw   = query.trim();
     let   q     = raw;
     let   includeContent = false;
+    let   includeSemantic = false;
 
     if (raw.toLowerCase().startsWith('content:')) {
       includeContent = true;
       q = raw.slice('content:'.length).trim();
+    } else if (raw.toLowerCase().startsWith('ai:')) {
+      includeSemantic = true;
+      q = raw.slice('ai:'.length).trim();
+    } else if (raw.toLowerCase().startsWith('semantic:')) {
+      includeSemantic = true;
+      q = raw.slice('semantic:'.length).trim();
     }
 
 
@@ -341,8 +579,17 @@
       return;
     }
 
+    if (includeSemantic && groups.length) {
+      showBrowse(false);
+      showFilters(true);
+      runSemanticSearch(q);
+      return;
+    }
+
     showBrowse(false);
     showFilters(true);
+    if (includeContent) injectChaptersChip();
+    else removeChaptersChipIfIdle();
 
     const searchIndex = includeContent && contentIndex ? contentIndex : index;
 
@@ -493,7 +740,7 @@
   }
 
   /* ── Render ──────────────────────────────────────────────────── */
-  function renderResults(results, q, sectionCounts, includeContent) {
+  function renderResults(results, q, sectionCounts, includeContent, modeLabel) {
     updateChipCounts(sectionCounts || {});
 
     if (!results.length) {
@@ -513,7 +760,8 @@
         resultsCount.innerHTML =
           '<strong>' + results.length + '</strong> result' +
           (results.length === 1 ? '' : 's') +
-          (q ? ' for "' + escHtml(q) + '"' : '');
+          (q ? ' for "' + escHtml(q) + '"' : '') +
+          (modeLabel ? ' · ' + escHtml(modeLabel) : '');
       }
     }
 
@@ -614,8 +862,10 @@
     if (filtersContainer) filtersContainer.style.display = show ? '' : 'none';
   }
 
-  function showLoading(show) {
+  function showLoading(show, message) {
     if (loadingEl) loadingEl.style.display = show ? '' : 'none';
+    if (loadingEl && message) loadingEl.textContent = message;
+    if (loadingEl && !show) loadingEl.textContent = 'loading index...';
   }
 
   function showError(msg) {

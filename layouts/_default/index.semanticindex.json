@@ -1,0 +1,28 @@
+{{- $pages := partial "public-pages.html" .Site.RegularPages -}}
+[
+  {{- range $i, $p := $pages }}
+  {{- if $i }},{{ end }}
+  {{- $description := $p.Params.description | default $p.Summary | plainify -}}
+  {{- $tags := delimit ($p.Params.tags | default slice) " " -}}
+  {{- $categories := delimit ($p.Params.categories | default slice) " " -}}
+  {{- $topic := $p.Params.topic | default "" -}}
+  {{- $difficulty := $p.Params.difficulty | default "" -}}
+  {{- $contentType := $p.Params.contentType | default $p.Section -}}
+  {{- $semanticText := printf "%s. %s. %s %s %s %s %s" $p.Title $description $tags $categories $topic $difficulty $contentType -}}
+  {
+    "title":       {{ $p.Title       | jsonify }},
+    "permalink":   {{ $p.Permalink   | jsonify }},
+    "date":        {{ $p.Date.Format "2006-01-02" | jsonify }},
+    "section":     {{ $p.Section     | jsonify }},
+    "description": {{ $description | truncate 220 | jsonify }},
+    "tags":        {{ $p.Params.tags | default slice | jsonify }},
+    "categories":  {{ $p.Params.categories | default slice | jsonify }},
+    "topic":       {{ $topic | jsonify }},
+    "difficulty":  {{ $difficulty | jsonify }},
+    "contentType": {{ $contentType | jsonify }},
+    "readingTime": {{ $p.ReadingTime | jsonify }},
+    "featured":    {{ $p.Params.featured | default false | jsonify }},
+    "content":     {{ $semanticText | plainify | jsonify }}
+  }
+  {{- end }}
+]
